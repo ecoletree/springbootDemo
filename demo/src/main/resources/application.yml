@@ -1,0 +1,17 @@
+mybatis:
+  configuration:
+    multiple-result-sets-enabled: false
+  mapper-locations:
+  - classpath:mybatis/mapper/*.xml
+  
+spring:
+  datasource:
+      url: jdbc:log4jdbc:mysql://106.10.34.69:3306/blueswitch2?characterEncoding=UTF-8&serverTimezone=UTC&allowMultiQueries=true
+      driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy 
+      username: blueswitch
+      password: blueswitch001!
+
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
