@@ -4,12 +4,16 @@ mybatis:
   mapper-locations:
   - classpath:mybatis/mapper/*.xml
   
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
+  
 spring:
   datasource:
-      url: jdbc:log4jdbc:mysql://106.10.34.69:3306/blueswitch2?characterEncoding=UTF-8&serverTimezone=UTC&allowMultiQueries=true
       driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy 
-      username: blueswitch
-      password: blueswitch001!
+      url: ENC(Xx1o3OD9F9n6HTyGHPpFfXoFe5DYJSGmJmqemUDjh9wSh3lDj0+8jQyehDX+lWGrSwCnrpgssRbzQ8EH6whsvERLRJRNqf4rbkcO6XRC1oxpKefxqa8cnl6z71HOM88Gm24pqOz8bkrPhbLl76PtUlElbuev0v5jDpSIDzHihpo=)
+      username: ENC(wdyzu3LwIA00Eol/TaEQE9R5JWW9GG+i)
+      password: ENC(QchBObceCp4XRj5R9dV9Gz++P+0wEB30)
 
   mvc:
     view:
