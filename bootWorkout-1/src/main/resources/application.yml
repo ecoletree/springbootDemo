@@ -1,0 +1,2 @@
+server:  port: 8080
+#자동 리로드 true spring:  devtools:    livereload:      enabled: true  datasource:    url: jdbc:mysql://106.10.34.69:3306/blueswitch2?characterEncoding=UTF-8&serverTimezone=UTC&allowMultiQueries=true    username: blueswitch    password: blueswitch001!     
