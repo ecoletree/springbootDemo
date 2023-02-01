@@ -58,6 +58,10 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -72,6 +76,8 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+					<jvmArguments>-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n</jvmArguments>
+					
 				</configuration>
 			</plugin>
 		</plugins>
