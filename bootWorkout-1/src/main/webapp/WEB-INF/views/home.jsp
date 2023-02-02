@@ -8,16 +8,16 @@
 <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
 
+
 	/*
-	 * 버튼 클릭 - 컨트롤러에서 시간, 입력여부 가져오기
+	 * 버튼 클릭 
 	 */
 	var btnTest = function(){
 		
 		$("#divResult").empty();
-		var txt = $("#iptTest").val();
+		var menu_name = $("#iptTest").val();
 		var param = {};
-		param.test = "test";
-		param.text = txt;
+		param.menu_name = menu_name;
 		 $.ajax({
 		        url : "/getTest",
 		        type : "POST",
@@ -36,21 +36,42 @@
 	 * 버튼 클릭 - success function
 	 */
 	var btnTestSuccessHandler = function(result){
-		var sp = ""
+		var sp = $("<div></div>")
+         	console.log(result.message);
+		
             if(result.message === "success"){
-            	sp = '<span>'+result.now+'</span><br><span>입력값: '+result.text+'</span>';
+            	var ol = $('<ol></ol>');
+            	var data = result.data;
+            	for(var i in data){
+            		var li = $("<li>"+JSON.stringify(data[i])+"</li>");
+            		ol.append(li);
+            	}                   
+            	 var result = $("<h3>검색결과: "+data.length+"건</h3>");
+            	 sp.append(result).append(ol);
+            	
             }else{
-            	sp = '<span>'+result.now+'</span><br><span>입력없음</span>';
+            	 var result = $("<h3>검색결과 없음</h3>");
+            	 sp.append(result);
             }
     	$("#divResult").append(sp)
 	}
+	/*
+	 * 엔터키
+	 */	
+	var enterKeyPress = function() {
+		if (window.event.keyCode == 13) {
+	    	$("#btnSearch").trigger("click");
+	    }
+	}	
 </script>
-</head>
+</head> 
 <body>
 <h1>Spring boot</h1>
-<input id="iptTest">
-<button onclick="btnTest()">ajax test</button>
-<div id="divResult"></div>
+<div>
+	메뉴명 : <input id="iptTest"  onkeydown="enterKeyPress()">
+	<button id="btnSearch" onclick="btnTest()">메뉴명 조회</button>
+	<div id="divResult"></div>
+</div>
 </body>
 
 </html>

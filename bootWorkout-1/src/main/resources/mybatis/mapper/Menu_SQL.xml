@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.bootWorkout.demo1.test.mapper.BootWorkoutTestMapper">
+	
+	<!-- 메뉴 조회 -->
+	<select id="getMenuList" parameterType="map" resultType="Map">
+		select 
+			menu_cd 
+			,menu_name as '메뉴명'
+			,menu_url as 'url'
+		from TBL_MENU_MST
+		where 1=1
+			<if test='menu_name != null and menu_name != ""' >
+				and menu_name like concat('%',#{menu_name},'%')
+			</if>
+		order by menu_cd
+	</select>	
+</mapper>
