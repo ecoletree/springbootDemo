@@ -48,6 +48,7 @@ public class LoginServiceImpl implements LoginService {
 				SessionVO session = (SessionVO) request.getSession().getAttribute("sessionVO");
 				
 				if((session.getUser_id()).equals( userInfo.get("user_id"))) {
+					// 원래 있던 세션과 같음
 					resultMsg = "logged_in_data";
 					userInfo = (Map<String, Object>) session.getUser_info();
 				}else {
