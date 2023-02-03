@@ -63,14 +63,24 @@
 	    	$("#btnSearch").trigger("click");
 	    }
 	}	
+	var doLogout = function(){
+		var view = window.location.origin + "/logout";
+		window.location = view;
+	}
 </script>
 </head> 
 <body>
 <h1>Spring boot</h1>
 <div>
+아이디 : ${sessionVO.user_id}
+</div>
+<div>
 	메뉴명 : <input id="iptTest"  onkeydown="enterKeyPress()">
 	<button id="btnSearch" onclick="btnTest()">메뉴명 조회</button>
 	<div id="divResult"></div>
+</div>
+<div > 
+	<button id="btnLogout" onclick="doLogout()">로그아웃</button>
 </div>
 </body>
 

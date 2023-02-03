@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,12 +17,14 @@ import com.bootWorkout.demo1.test.service.BootWorkoutTestService;
 @Controller
 public class BootWorkoutTestController {
 	
+	Logger logger = LoggerFactory.getLogger(getClass());
+	
 	@Autowired
 	BootWorkoutTestService service;
 	
-	@RequestMapping("/")
-	public String home() {
-		System.out.println("open home");
+	@RequestMapping("/main")
+	public String main() {
+		logger.info("============>>>open main");
 		return "home";
 	}
 	
@@ -34,4 +38,8 @@ public class BootWorkoutTestController {
 		
 		return resultMap;
 	}
+	
+	
+	
+	
 }
