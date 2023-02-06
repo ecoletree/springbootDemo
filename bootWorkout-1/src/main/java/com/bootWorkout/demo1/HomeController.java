@@ -17,4 +17,10 @@ public class HomeController {
 		return sessionAttribute == null ? "redirect:/login":"redirect:/main";
 	}
 	
+	@RequestMapping(value = "/timeout")
+	public String sessionTimeout(HttpServletRequest request) {
+		//세션유무 확인
+		return "sessionTimeout";
+	}
+	
 }

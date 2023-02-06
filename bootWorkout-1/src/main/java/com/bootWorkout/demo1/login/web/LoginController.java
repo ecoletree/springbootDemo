@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.bootWorkout.demo1.login.service.LoginService;
 
 @Controller
+@RequestMapping("/login")
 public class LoginController {
 
 	Logger logger = LoggerFactory.getLogger(getClass());
@@ -26,7 +27,7 @@ public class LoginController {
 	@Autowired
 	LoginService service;
 	
-	@RequestMapping("/login")
+	@RequestMapping("")
 	public String login(HttpServletRequest request) {
 		logger.info("============>>>open login");
 		return "login";
@@ -52,5 +53,11 @@ public class LoginController {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	@RequestMapping(value = "/timeout")
+	public String sessionTimeout(HttpServletRequest request) {
+		//세션유무 확인
+		return "sessionTimeout";
 	}
 }
