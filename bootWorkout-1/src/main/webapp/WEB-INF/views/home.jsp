@@ -64,7 +64,7 @@
 	    }
 	}	
 	var doLogout = function(){
-		var view = window.location.origin + "/logout";
+		var view = window.location.origin + "/login/logout";
 		window.location = view;
 	}
 </script>

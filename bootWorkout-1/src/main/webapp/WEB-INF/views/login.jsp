@@ -13,14 +13,13 @@
 	 * 버튼 클릭 
 	 */
 	var doLogin = function(){
-		
 		var user_id = $("#iptUserID").val();
 		var user_pwd = $("#iptUserPwd").val();
 		var param = {};
 		param.user_id = user_id;
 		param.user_pw = user_pwd;
 		 $.ajax({
-		        url : "/doLogin",
+		        url : "/login/doLogin",
 		        type : "POST",
 		        data : JSON.stringify(param) ,
 		        dataType: 'text',
@@ -39,6 +38,8 @@
 	var doLoginSuccessHandler = function(result){
 		
 		var msg = result.resultMsg;
+
+		console.log(msg);
 		
 		var mainView = window.location.origin + "/main";
 		

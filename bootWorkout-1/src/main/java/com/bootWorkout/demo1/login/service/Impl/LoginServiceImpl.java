@@ -27,16 +27,23 @@ public class LoginServiceImpl implements LoginService {
 	@Override
 	public Map<String, Object> doLogin(Map<String, Object> param, HttpServletRequest request) {
 		logger.info("============ doLogin");
-		String resultMsg = "user_data_present";
+		String resultMsg = "log_in_success";
 		
 		Map<String, Object> resultMap = new HashMap<>();
-		Map<String, Object> userInfo = mapper.selectLoginUser(param);
+		Map<String, Object> userInfo = new HashMap<>();
+		
+		String user_id = param.get("user_id").toString();
+		String user_pw = param.get("user_pw").toString();
+		
+		if(!user_id.equals("admin") || !user_pw.equals("admin") ) {
+			userInfo = null;
+		}else {
+			userInfo.put("user_id", user_id);
+			userInfo.put("user_pw", user_pw);
+		}
 		
 		/*
 		 * 1.로그인 체크 : 있는 회원 인지, 있는 회원이면 중복된 세션인지  
-		 */
-		
-		/*
 		 * 2. 로그인 세션 저장 : 세션에 담긴 정보가 있으면 기존 세션 정보 삭제 하고 로그인
 		 */
 		if(userInfo == null) {
