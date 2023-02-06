@@ -1,3 +1,4 @@
+server:  servlet:    context-path: /demo  error:    include-stacktrace: always
 # mybatis  설정
 mybatis:
   configuration:
@@ -23,8 +24,12 @@ spring:
       prefix: /WEB-INF/views/
       suffix: .jsp
       
+      
 # Spring 파일 수정시 자동 리로드 설정
   devtools:
     livereload:
       enabled: true
+    restart:      enabled: true
+  freemarker:    cache: false
+# Spring resources 파일 경로(파일 리로드때문에설정)        web:    resources:      static-locations:      - classpath:/static/
       

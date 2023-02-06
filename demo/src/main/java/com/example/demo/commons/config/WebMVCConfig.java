@@ -10,12 +10,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.example.demo.commons.interceptor.LoggerInterceptor;
 
+import kr.co.ecoletree.common.auth.ETLoginCheckInterceptor;
+
 @Configuration
 public class WebMVCConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors (InterceptorRegistry registry) {
-		registry.addInterceptor(new LoggerInterceptor())
+		registry.addInterceptor(new ETLoginCheckInterceptor())
 				.addPathPatterns("/**")
 				.excludePathPatterns("/resources/**")
 				.excludePathPatterns("/jslib/**");

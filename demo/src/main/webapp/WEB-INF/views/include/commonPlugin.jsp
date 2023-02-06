@@ -68,16 +68,6 @@
 <!-- App VIEW Controller -->
 <script src="${cp }/jslib/ecoletreeLibraryJS/common/common.js"></script>
 
-<!-- Project Plugin -->
-<script src="${cp }/resources/service/js/common/common.js"></script>
-
-<!-- mediaelement-and-player Plugin -->
-<script src="${cp }/resources/plugin/mediaElements_5.1/build/mediaelement-and-player.js"></script>
-<script src="${cp }/resources/plugin/mediaElements_5.1/build/lang/ko.js"></script>
-<script src="${cp }/resources/plugin/mediaElements_5.1/plugin/speed/speed.js"></script>
-<script src="${cp }/resources/plugin/mediaElements_5.1/plugin/speed/speed-i18n.js"></script>
-
-
 <script type="text/javascript">
 	/**
 	 * 컨텍스트 패스 획득

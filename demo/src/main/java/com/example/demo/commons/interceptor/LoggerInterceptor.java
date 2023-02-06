@@ -17,13 +17,11 @@ public class LoggerInterceptor implements HandlerInterceptor {
 	
 	 @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-		 System.out.println("log1");
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-    	System.out.println("log2");
         HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
     }
 
