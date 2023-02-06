@@ -1,10 +1,13 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
+<meta charset="UTF-8">
 <title>Insert title here</title>
+<!-- ecoletree CSS -->
+<link rel="stylesheet" href="${cp }/ecoletree/css/ecoletree_global.css">
+
 <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="/jslib/ecoletreeLibraryJS/plugin/lodash/lodash.min.js"></script>
 <script src="/jslib/ecoletreeLibraryJS/plugin/jquery-validation_1.19.3/jquery.validate.js"></script>
@@ -21,15 +24,17 @@ function getContextPath() {
 	return '';
 }
 
+
 	function test () {
+			debugger;
 		var params = {value:"data"};
 		new ETService().setSuccessFunction(function(result){
-			debugger;
 		}).callService("/getList", params);
 	}
 </script>
 <body>
 test
-<button onclick="test()"> test1</button>
+<button onclick="test()"> test3333</button>
+<img  src="${cp}/ecoletree/img/btn_cal.png">
 </body>
 </html>

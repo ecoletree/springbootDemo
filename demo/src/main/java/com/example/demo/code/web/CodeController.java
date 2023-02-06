@@ -3,8 +3,6 @@ package com.example.demo.code.web;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,22 +10,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.code.service.CodeService;
-import com.example.demo.utils.ResultUtil;
+
+import kr.co.ecoletree.common.base.web.ETBaseController;
+import kr.co.ecoletree.common.util.ResultUtil;
+
 
 @Controller
-public class CodeController {
+public class CodeController extends ETBaseController{
 
-	Logger log = LoggerFactory.getLogger(getClass());
-	
 	@Autowired
 	CodeService service;
 	
 	@RequestMapping("/")
 	public String hello() {
-		log.debug("TEST");
-		log.info("TEST");
-		log.error("TEST");
-		log.warn("TTT");
+		logDebug("test");
+		logError("test");
+		logInfo("test");
 		return "index";
 	}
 	

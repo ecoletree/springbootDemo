@@ -24,7 +24,7 @@ public class WebMVCConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**")
-                .addResourceLocations("classpath:/ecoletree/")
+                .addResourceLocations("classpath:/static/")
                 ;
         
         registry.addResourceHandler("/jslib/**")
