@@ -35,11 +35,13 @@ public class LoginInterceptor implements HandlerInterceptor{
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+    	System.out.println("post");
         logger.info("[postHandle]");
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object object, Exception ex) throws Exception {
+    	System.out.println("afterCompletion");
         logger.info("[afterCompletion]");
     }
 }

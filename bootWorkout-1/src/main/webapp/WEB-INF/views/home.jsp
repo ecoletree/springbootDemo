@@ -27,7 +27,17 @@
 		        success : function (data) {
 		        	var result = JSON.parse(data);
 		        	btnTestSuccessHandler(JSON.parse(data));
-		            }//success
+		            },//success
+		        error: function(request,status,error,response){
+		        	console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+		        	if(status === "error"){
+		        		if (request.status === 500) {
+		        			var view =window.location.origin +"/error/500";
+		        			window.location = view;
+						}
+		        	}
+
+		        }
 		        });  //ajax
 		
 			
