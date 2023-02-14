@@ -9,4 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface CodeMapper {
 
 	public List<Map<String, Object>> selectList (Map<String, Object> params);
+	
+	public int insertCode ();
+	public List<Map<String, Object>> selectCode ();
 }

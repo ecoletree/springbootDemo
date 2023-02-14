@@ -37,6 +37,7 @@
 		var self = et.vc;
 		$("#btn").click(self.clickHandler);
 		$("#btnList").click(self.btnListHandler);
+		$("#btnList2").click(self.btnListHandler);
 		
 		
 	};
@@ -45,13 +46,31 @@
 		et.alert.show(ETCONST.ALERT_TYPE_INFO, "", et.message("button.delete_faile"));
 	}
 	
-	ctrl.btnListHandler = function() {
+	ctrl.btnListHandler = function(e) {
 		var self = et.vc;
 		var code_list = [{code_cd:"ANI001"},{code_cd:"ANI002"},{code_cd:"ANI003"},{code_cd:"ANI004"}];
 		var params = {code_list:code_list};
-		new ETService().setSuccessFunction(function(result){
-			
-		}).callService("/getList", params);
+		var url = "/demo/getList";
+//		new ETService().setSuccessFunction(function(result){
+//		}).callService("/getList", params);
+		if ($(this).prop("id") === "btnList") {
+			url = "/demo/getList";
+		} else {
+			url = "/demo/getList2";
+		}
+		$.ajax({
+			url : url,
+			type : "POST",
+			data : JSON.stringify(params) ,
+			dataType: 'text',
+			contentType : "application/json; charset=UTF-8",
+			success : function (data) {
+				debugger;
+			},
+			error : function (a,b,c) {
+				debugger;
+			}
+		});  //ajax
 	}
 	
 	// ============================== 동작 컨트롤 ==============================

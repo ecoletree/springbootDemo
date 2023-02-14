@@ -1,22 +1,22 @@
 package com.example.demo.commons.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import com.example.demo.commons.interceptor.LoggerInterceptor;
 
 import kr.co.ecoletree.common.auth.ETLoginCheckInterceptor;
 
 @Configuration
 public class WebMVCConfig implements WebMvcConfigurer {
+	
+	Logger log = LoggerFactory.getLogger(getClass());
 
 	@Override
 	public void addInterceptors (InterceptorRegistry registry) {
+		log.info("addInterceptors 시작");
 		registry.addInterceptor(new ETLoginCheckInterceptor())
 				.addPathPatterns("/**")
 				.excludePathPatterns("/resources/**")
@@ -25,6 +25,7 @@ public class WebMVCConfig implements WebMvcConfigurer {
 	
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    	log.info("addResourceHandlers 시작");
         registry.addResourceHandler("/resources/**")
                 .addResourceLocations("classpath:/static/")
                 ;

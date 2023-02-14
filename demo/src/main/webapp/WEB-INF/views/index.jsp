@@ -13,6 +13,7 @@
 
 test
 <button id="btnList"> btngetList</button>
+<button id="btnList2"> btngetList2</button>
 <button id="btn"> testalert</button>
 <img  src="${cp}/resources/ecoletree/img/btn_cal.png">
 

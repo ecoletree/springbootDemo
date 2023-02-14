@@ -29,4 +29,37 @@
         </if>
 		order by code_cd,order_num
 	</select>
+	
+	<insert id="insertCode" parameterType="map">
+		insert into TBL_CODE(
+			code_cd
+			, p_code_cd
+			, code_name
+			, code_value
+			, description
+			, is_active
+			, order_num
+		) values (
+			'ZEST000'
+			, null
+			,'TEST000'
+			,'TEST000'
+			,'TEST000'
+			,'N'
+			, 100
+		)
+	</insert>
+	
+	<select id="selectCode" parameterType="map" resultType="map">
+		select 
+			code_cd
+			, p_code_cd
+			, code_name
+			, code_value
+			, description
+			is_active
+			order_num
+		from 
+			TBL_CODE
+	</select>
 </mapper>

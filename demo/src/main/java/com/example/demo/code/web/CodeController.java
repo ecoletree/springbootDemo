@@ -40,8 +40,15 @@ public class CodeController extends ETBaseController{
 	
 	
 	@RequestMapping("/getList")
-	public @ResponseBody Map<String, Object> getList(@RequestBody Map<String, Object> params) {
+	public @ResponseBody Map<String, Object> getList(@RequestBody Map<String, Object> params) throws Exception {
 		List<Map<String, Object>> list = service.selectList(params);
+		
+		return ResultUtil.getResultMap(true,list);
+	}
+	
+	@RequestMapping("/getList2")
+	public @ResponseBody Map<String, Object> getList2(@RequestBody Map<String, Object> params) throws Exception {
+		int list = service.insertCode(params);
 		
 		return ResultUtil.getResultMap(true,list);
 	}
