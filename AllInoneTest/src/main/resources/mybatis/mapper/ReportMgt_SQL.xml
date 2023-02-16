@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 	
+	* Created : 2022. 10. 05
+	* DESC :  [과금관리] 내선별 리포트 관리
+-->
+<mapper namespace="com.example.demo.service.chargeMgt.mapper.PayReportMapper">
+	
+	<select id="selectRecordList" parameterType="map" resultType="map">
+		select 
+			'총 합계' as phone
+			,'cener_id' as tenant_id
+            ,'' as view_tenant_name
+			, round(coalesce(sum(case when a.bill_type = 'CA001' then amount end),0)) as ca001
+			, round(coalesce(sum(case when a.bill_type = 'CA002' then amount end),0)) as ca002
+			, round(coalesce(sum(case when a.bill_type = 'CA003' then amount end),0)) as ca003
+			, round(coalesce(sum(case when a.bill_type = 'CA004' then amount end),0)) as ca004
+			, round(coalesce(sum(case when a.bill_type = 'CA005' then amount end),0)) as ca005
+			, round(coalesce(sum(case when a.bill_type = 'CA006' then amount end),0)) as ca006
+			, round(coalesce(sum(case when a.bill_type = 'CA007' then amount end),0)) as ca007
+			, round(coalesce(sum(case when a.bill_type = 'CA008' then amount end),0)) as ca008
+			, round(coalesce(sum(case when a.bill_type = 'CA009' then amount end),0)) as ca009
+			, round(coalesce(sum(case when a.bill_type = 'CA010' then amount end),0)) as ca010 
+			, round(coalesce(sum(amount),0)) as casum
+			FROM TBL_BILL a
+			where 1=1
+			<choose>
+				<when test='sphone != null and sphone != "" and ephone != null and ephone != ""'>
+					and a.phone between #{sphone} and #{ephone}
+				</when>
+				<when test='sphone != null and sphone != ""'>
+					and a.phone = #{sphone}
+				</when>
+				<when test='ephone != null and ephone != ""'>
+					and a.phone = #{ephone}
+				</when>
+			</choose>
+			<choose>
+				<when test="sdate != null and edate != null">
+					<![CDATA[
+					and date_format(#{sdate}, '%Y.%m.%d %H:%i:%s')  <= date_format(a.start_stamp, '%Y.%m.%d %H:%i:%s')
+					and date_format(a.end_stamp, '%Y.%m.%d %H:%i:%s')  <= date_format(#{edate}, '%Y.%m.%d %H:%i:%s')
+					]]>
+				</when>
+				<when test="sdate != null">
+					<![CDATA[
+						and date_format(#{sdate}, '%Y.%m.%d %H:%i:%s') <= date_format(a.start_stamp, '%Y.%m.%d %H:%i:%s')
+					]]>
+				</when>
+				<when test="edate != null">
+					<![CDATA[
+						and date_format(a.end_stamp, '%Y.%m.%d %H:%i:%s') <= date_format(#{edate}, '%Y.%m.%d %H:%i:%s')
+					]]>
+				</when>
+			</choose>
+			<if test='amount != "" and amount != null'>
+				<choose>
+					<when test='above == "above"'>
+					<![CDATA[
+						and #{amount} <= a.amount
+					]]> 
+					</when>
+					<otherwise>
+					<![CDATA[
+						and a.amount <= #{amount} 
+					]]> 
+					</otherwise>
+				</choose>
+			</if>
+			<if test="call_type != null and call_type.length !=0 ">
+				and a.bill_type in
+				<foreach collection="call_type" open="(" close=")" index="i" separator="," item="data">
+					 #{data}
+				</foreach>
+			</if>
+			union all
+			SELECT 
+			a.phone
+			,if(a.phone = "" or a.phone is null,"",a.tenant_id) as tenant_id
+            ,if(a.phone = "" or a.phone is null,"",(select concat(group_name,"(",tenant_id,")") from TBL_GROUP_MST WHERE tenant_id = a.tenant_id and team_id is null AND IS_DELETE = "N" group by tenant_id )) as view_tenant_name
+			, round(coalesce(sum(case when a.bill_type = 'CA001' then amount end),0)) as ca001
+			, round(coalesce(sum(case when a.bill_type = 'CA002' then amount end),0)) as ca002
+			, round(coalesce(sum(case when a.bill_type = 'CA003' then amount end),0)) as ca003
+			, round(coalesce(sum(case when a.bill_type = 'CA004' then amount end),0)) as ca004
+			, round(coalesce(sum(case when a.bill_type = 'CA005' then amount end),0)) as ca005
+			, round(coalesce(sum(case when a.bill_type = 'CA006' then amount end),0)) as ca006
+			, round(coalesce(sum(case when a.bill_type = 'CA007' then amount end),0)) as ca007
+			, round(coalesce(sum(case when a.bill_type = 'CA008' then amount end),0)) as ca008
+			, round(coalesce(sum(case when a.bill_type = 'CA009' then amount end),0)) as ca009
+			, round(coalesce(sum(case when a.bill_type = 'CA010' then amount end),0)) as ca010
+			, round(coalesce(sum(amount),0)) as casum
+			FROM TBL_BILL a
+			where 1=1
+			<choose>
+				<when test='sphone != null and sphone != "" and ephone != null and ephone != ""'>
+					and a.phone between #{sphone} and #{ephone}
+				</when>
+				<when test='sphone != null and sphone != ""'>
+					and a.phone = #{sphone}
+				</when>
+				<when test='ephone != null and ephone != ""'>
+					and a.phone = #{ephone}
+				</when>
+			</choose>
+			<choose>
+				<when test="sdate != null and edate != null">
+					<![CDATA[
+					and date_format(#{sdate}, '%Y.%m.%d %H:%i:%s')  <= date_format(a.start_stamp, '%Y.%m.%d %H:%i:%s')
+					and date_format(a.end_stamp, '%Y.%m.%d %H:%i:%s')  <= date_format(#{edate}, '%Y.%m.%d %H:%i:%s')
+					]]>
+				</when>
+				<when test="sdate != null">
+					<![CDATA[
+						and date_format(#{sdate}, '%Y.%m.%d %H:%i:%s') <= date_format(a.start_stamp, '%Y.%m.%d %H:%i:%s')
+					]]>
+				</when>
+				<when test="edate != null">
+					<![CDATA[
+						and date_format(a.end_stamp, '%Y.%m.%d %H:%i:%s') <= date_format(#{edate}, '%Y.%m.%d %H:%i:%s')
+					]]>
+				</when>
+			</choose>
+			<if test='amount != "" and amount != null'>
+				<choose>
+					<when test='above == "above"'>
+					<![CDATA[
+						and #{amount} <= a.amount
+					]]> 
+					</when>
+					<otherwise>
+					<![CDATA[
+						and a.amount <= #{amount} 
+					]]> 
+					</otherwise>
+				</choose>
+			</if>
+			<if test="call_type != null and call_type.length !=0 ">
+				and a.bill_type in
+				<foreach collection="call_type" open="(" close=")" index="i" separator="," item="data">
+					#{data}
+				</foreach>
+			</if>
+			<if test="group_id != null and group_id.length !=0 ">
+				and a.group_id = #{group_id}
+			</if>
+			<if test="tenant_id != null and tenant_id.length !=0 ">
+				and a.tenant_id = #{tenant_id}
+			</if>
+			group by a.phone
+			
+	</select>
+	
+</mapper>

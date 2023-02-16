@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 김경현	
+	* Created : 2022. 04. 11
+	* DESC :  국선관리(trunk)
+-->
+<mapper namespace="com.example.demo.service.trunkMgt.mapper.TrunkMgtMapper">
+	
+	<!-- 국선관리 ID 조회 -->
+	<select id="selectTrunkList" parameterType="map" resultType="map">
+		select 
+			a.tenant_id 
+            , b.group_id 
+            , b.group_cd 
+            , FN_GROUP_NAME(a.tenant_id) as group_name
+			, concat(b.group_name,'(',a.tenant_id,')') as center_name
+			, a.trunk 
+			, a.transfer_id 
+			, a.memo 
+			,DATE_FORMAT(a.register,'%Y.%m.%d') register
+		from TRUNK a , TBL_GROUP_MST b
+		where 1=1
+		and a.tenant_id = b.tenant_id
+        and b.tenant_id is not null
+        and b.team_id is null
+        and b.is_delete = 'N'
+		<if test='group_id != "" and group_id != null'>
+			and b.group_id = #{group_id}
+		</if>
+		<if test='tenant_id != "" and tenant_id != null'>
+			and b.tenant_id = #{tenant_id}
+		</if>
+		<if test='trunk != "" and trunk != null '>
+			and a.trunk like concat('%',#{trunk},'%')
+		</if>
+		<if test='transfer_id != "" and transfer_id != null '>
+			and a.transfer_id like concat('%',#{transfer_id},'%')
+		</if>
+		order by a.tenant_id asc
+	</select>
+	
+	<!-- 국선관리 ID 수정 -->
+	<update id="updateTrunk" parameterType="map">
+		update TRUNK set 
+			transfer_id =  #{transfer_id}
+			, memo  =  #{memo}
+			, register  =  DATE_FORMAT(now(),'%Y%m%d')
+		where trunk = #{trunk}
+	</update>
+	
+	<!-- 국선관리 ID 추가 -->
+	<insert id="insertTrunk" parameterType="map">
+		insert into
+		TRUNK (
+			tenant_id
+			, trunk 
+			, transfer_id 
+			, memo 
+			, register 
+		)values(
+			#{tenant_id}
+			, #{trunk}
+			, #{transfer_id}
+			, #{memo}
+			, DATE_FORMAT(now(),'%Y%m%d')
+		)
+	</insert>
+	
+	<!-- 국선관리 ID 삭제 -->
+	<delete id="deleteTrunk" parameterType="map">
+		delete from TRUNK
+		where trunk = #{trunk} 
+	</delete>
+	
+	<!-- 국선관리 ID 체크 -->
+	<select id="selectTrunkCheck" parameterType="map" resultType="int">
+		select 
+			count(*) as cnt
+		from TRUNK
+		where trunk = #{trunk}
+	</select>
+	<!-- 내선 list -->
+	<select id="selectStationList" parameterType="java.util.Map" resultType="map">
+		select
+			tenant_id  
+			,phone  
+			,password  
+			,display_num  
+			,station_grp  
+			,gateway 
+			,pstate  
+			,pstate_tm  
+			,station_ip
+			,phone as view_transfer_id
+			,phone as transfer_id
+		from STATION
+		<if test='tenant_id != null and tenant_id != ""'>
+			where tenant_id = #{tenant_id}
+		</if>
+	</select>
+	<!-- 헌트그룹 list -->
+	<select id="selectStationGrpList" parameterType="java.util.Map" resultType="map">
+		select
+			tenant_id 
+			,grp_id  
+			,name 
+			,noanswer_timeout
+			,grp_id transfer_id 
+			,concat(name,'(',grp_id,')') as view_transfer_id 
+		from STATION_GRP
+		<if test='tenant_id != null and tenant_id != ""'>
+			where tenant_id = #{tenant_id}
+		</if>
+		
+	</select>
+	<!-- 내선 list -->
+	<select id="selectSkillGrpList" parameterType="java.util.Map" resultType="map">
+		select
+			tenant_id 
+			,grp_id 
+			,name 
+			,noanswer_timeout  
+			,enter_announce  
+			,reenter_announce 
+			,recording 
+			,acd 
+			,connect_announce
+			,grp_id transfer_id
+			,concat(name,'(',grp_id,')') as view_transfer_id 
+		from AGENT_SKILL
+		<if test='tenant_id != null and tenant_id != ""'>
+			where tenant_id = #{tenant_id}
+		</if>
+	</select>
+	<!-- tenant_id 별 list -->
+	<resultMap type="java.util.HashMap" id="selectTenantId">
+		<result property="tenant_id" column="tenant_id" />
+		<collection property="extension" column="{tenant_id=tenant_id}" select="com.example.demo.service.trunkMgt.mapper.TrunkMgtMapper.selectStationList" javaType="java.util.ArrayList" ofType="java.util.HashMap" />
+		<collection property="hunt" column="{tenant_id=tenant_id}" select="com.example.demo.service.trunkMgt.mapper.TrunkMgtMapper.selectStationGrpList" javaType="java.util.ArrayList" ofType="java.util.HashMap" />
+		<collection property="skill" column="{tenant_id=tenant_id}" select="com.example.demo.service.trunkMgt.mapper.TrunkMgtMapper.selectSkillGrpList" javaType="java.util.ArrayList" ofType="java.util.HashMap" />
+	</resultMap>
+	<select id="selectRoutesList" parameterType="map" resultMap="selectTenantId">
+		select 
+			id as tenant_id
+		FROM TENANT
+	</select>
+</mapper>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 	
+	* Created : 2022. 10. 13
+	* DESC :  권한 관리
+-->
+<mapper namespace="com.example.demo.service.systemadmin.mapper.SystemAuthorityMapper">
+	
+	<!-- 권한 조회 -->
+	<select id="selectAuthList" parameterType="map" resultType="map">
+		SELECT 
+			a.menu_cd 
+			, a.p_menu_cd 
+			, a.menu_name 
+			, a.menu_url 
+			, a.is_parent 
+			, a.order_num 
+			, b.user_type 
+			, b.create_dttm  
+			, b.create_user
+			, ifnull(b.is_write,'N') as is_write
+            , ifnull(b.is_delete,'N') as is_delete
+			, ifnull(b.is_use,'N') as is_use
+			, ifnull(b.is_update,'N') is_update
+			, ifnull(b.is_search,'N') is_search
+			, ifnull(b.is_upload,'N') is_upload
+			, ifnull(b.is_download,'N') is_download
+			, ifnull(b.is_rec_download,'N') is_rec_download
+			, ifnull(b.is_transfer,'N') is_transfer
+			, ifnull(b.is_encrypt_download,'N') is_encrypt_download
+			, ifnull(b.is_play,'N') is_play
+			, ifnull(b.is_column,'N') is_column
+			, ifnull(b.is_search_option,'N') is_search_option
+			, ifnull(b.is_certification,'N') is_certification
+			
+		FROM TBL_MENU_MST a left outer join TBL_USER_MENU_R b
+			on a.MENU_CD = b.MENU_CD
+				and b.user_type = #{user_type}
+		where 1=1 
+		and a.is_delete = "N"
+		and a.is_parent = 'N'
+		order by order_num asc
+	</select>
+	
+	<!-- 유저 타입 조회 -->
+	<select id="selectUserTypeList" parameterType="map" resultType="map">
+		select 
+	        date_format(a.create_dttm, '%Y.%m.%d') as view_create_dttm
+	        , a.create_user
+	        , a.user_type
+        from TBL_USER_MENU_R a
+        where 1=1
+        group by a.user_type, a.create_user, a.create_dttm
+	</select>
+	
+	<!-- 권한 설정 추가 -->
+	<insert id="insertAuthList" parameterType="map" >
+		insert into TBL_USER_MENU_R
+		(
+			user_type 
+			, menu_cd 
+			, is_use 
+			, is_write 
+			, is_delete 
+			, is_update 
+			, is_search 
+			, is_upload 
+			, is_download 
+			, is_rec_download 
+			, is_transfer 
+			, is_encrypt_download 
+			, is_play 
+			, is_column 
+			, is_search_option 
+			, is_certification 
+			, create_dttm 
+			, create_user
+		)
+		values
+		<foreach collection="list" open="(" close=")" index="i" separator="),(" item="data">
+			#{user_type} 
+			, #{data.menu_cd} 
+			, #{data.is_use} 
+			, #{data.is_write} 
+			, #{data.is_delete} 
+			, #{data.is_update} 
+			, #{data.is_search} 
+			, #{data.is_upload} 
+			, #{data.is_download} 
+			, #{data.is_rec_download} 
+			, #{data.is_transfer} 
+			, #{data.is_encrypt_download} 
+			, #{data.is_play} 
+			, #{data.is_column} 
+			, #{data.is_search_option} 
+			, #{data.is_certification} 
+			, now() 
+			, #{create_user}
+		</foreach>
+		on duplicate key update
+			is_use = values(is_use )
+			, is_write = values(is_write )
+			, is_delete = values(is_delete ) 
+			, is_update = values(is_update ) 
+			, is_search = values(is_search ) 
+			, is_upload = values(is_upload ) 
+			, is_download = values(is_download ) 
+			, is_rec_download = values(is_rec_download ) 
+			, is_transfer = values(is_transfer ) 
+			, is_encrypt_download = values(is_encrypt_download ) 
+			, is_play = values(is_play ) 
+			, is_column = values(is_column ) 
+			, is_search_option = values(is_search_option ) 
+			, is_certification = values(is_certification ) 
+			, create_dttm = now() 
+			, create_user = values(create_user )
+	</insert>
+	
+	
+	
+</mapper>

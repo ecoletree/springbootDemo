@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 김경현	
+	* Created : 2022. 04. 11
+	* DESC :  스킬그룹관리
+-->
+<mapper namespace="com.example.demo.service.skilGroupMgt.mapper.SkillGroupMgtMapper">
+	
+	<!-- 스킬그룹관리 조회 -->
+	<select id="selectAgentSkillList" parameterType="map" resultType="map">
+		select
+			a.tenant_id
+			,b.group_id
+            ,(select concat(group_name,'(',group_id,')') from TBL_GROUP_MST WHERE group_id = b.group_id limit 0,1) group_name 
+			, concat(b.group_name,'(',a.tenant_id,')') as tenant_name  
+			, a.grp_id 
+			, a.name 
+			, a.noanswer_timeout 
+			, a.enter_announce 
+			, a.reenter_announce 
+			, a.recording 
+			, a.acd 
+			, a.connect_announce
+		from
+		AGENT_SKILL a, TBL_GROUP_MST b
+		where 1=1
+		and a.tenant_id = b.tenant_id
+		and b.is_delete = "N"
+		and b.team_id is null
+		<if test='group_id != "" and group_id != null'>
+			and b.group_id = #{group_id}
+		</if>
+		<if test='tenant_id != "" and tenant_id != null'>
+			and a.tenant_id = #{tenant_id}
+		</if>
+		<if test='grp_id != "" and grp_id != null'>
+			and a.grp_id like concat('%',#{grp_id},'%')
+		</if>
+		<if test='name != "" and name != null'>
+			and a.name like concat('%',#{name},'%')
+		</if>
+		order by a.tenant_id asc
+	</select>
+	
+	<!-- 스킬그룹관리 수정 -->
+	<update id="updateAgentSkill" parameterType="map">
+		update AGENT_SKILL set 
+			name =  #{name}
+			, noanswer_timeout =  #{noanswer_timeout} 
+			, enter_announce =  #{enter_announce} 
+			, reenter_announce =  #{reenter_announce} 
+			, recording =  #{recording} 
+			, acd =  #{acd} 
+			, connect_announce =  #{connect_announce}
+		where tenant_id = #{tenant_id}
+		and grp_id = #{grp_id}
+	</update>
+	
+	<!-- 스킬그룹관리 추가 -->
+	<insert id="insertAgentSkill" parameterType="map">
+		insert into
+		AGENT_SKILL (
+			tenant_id 
+			, grp_id 
+			, name 
+			, noanswer_timeout 
+			, enter_announce 
+			, reenter_announce 
+			, recording 
+			, acd 
+			, connect_announce
+		)values(
+			#{tenant_id}
+			, #{grp_id}
+			, #{name}
+			, #{noanswer_timeout}
+			, #{enter_announce}
+			, #{reenter_announce}
+			, #{recording}
+			, #{acd}
+			, #{connect_announce}
+		)
+	</insert>
+	
+	<!-- 스킬그룹관리 삭제 -->
+	<delete id="deleteAgentSkill" parameterType="map">
+		delete from AGENT_SKILL
+		where tenant_id = #{tenant_id}
+		and grp_id = #{grp_id}
+	</delete>
+	
+	<!-- 스킬그룹관리 ID 체크 -->
+	<select id="selectAgentSkillCheck" parameterType="map" resultType="int">
+		select
+			count(*) as cnt
+		from
+		AGENT_SKILL
+		where 1=1
+			and grp_id = #{grp_id}
+	</select>
+	<!-- tenant_id 별 멘트리스트 -->
+	<select id="getSoundList" parameterType="map" resultType="map">
+		select
+			a.soundsource_id 
+			,a.soundsource_cd 
+			,a.tenant_id 
+			,(select group_id from TBL_GROUP_MST where tenant_id = a.tenant_id limit 0,1) group_id
+			,a.source_type 
+			,a.file_path 
+			,a.file_name 
+			,a.file_size 
+			,a.insert_dttm
+		from
+		TBL_SOUNDSOURCE a
+		where 1=1
+		and SOURCE_TYPE = "pbx"
+    <if test='tenant_id != null and tenant_id != ""'>
+	    and tenant_id = #{tenant_id}
+    </if>
+	group by tenant_id , file_name
+;
+	</select>
+	
+</mapper>

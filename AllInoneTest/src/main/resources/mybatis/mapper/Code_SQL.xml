@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 장윤석	
+	* Created : 2021. 06. 01.
+	* DESC :  코드 조회
+-->
+<mapper namespace="com.example.demo.service.code.mapper.CodeMapper">
+	<!--
+		코드 리스트 조회
+	 -->
+	<select id="selectCodeList" parameterType="map" resultType="map">
+		select 
+			code_cd
+			, p_code_cd
+			, code_name
+			, code_value
+			, description
+			, is_active
+			, order_num
+		from 
+			TBL_CODE
+		where 
+			1=1
+		and is_active = 'Y'
+		<if test="code_list != null">
+			and p_code_cd in
+			<foreach collection="code_list" open="(" close=")" index="i" separator="," item="code">
+        		#{code.code_cd}
+        	</foreach>
+        </if>
+		order by code_cd,order_num
+	</select>
+	
+	<!--
+		전체 코드 리스트 조회
+	 -->
+<!-- 	<select id="selectCodeAllList" parameterType="map" resultType="map"> -->
+<!-- 		select -->
+<!-- 			code_cd -->
+<!-- 			, p_code_cd -->
+<!-- 			, item_nm -->
+<!-- 			, code_value -->
+<!-- 		from  -->
+<!-- 			TBL_CODE  -->
+<!-- 		where 1=1 -->
+<!--         <if test="code_list != null"> -->
+<!-- 			and p_code_cd in -->
+<!-- 			<foreach collection="code_list" open="(" close=")" index="i" separator="," item="code"> -->
+<!--         		#{code.code_cd} -->
+<!--         	</foreach> -->
+<!--         </if> -->
+<!--         order by p_code_cd, code_cd, order_num -->
+<!-- 	</select> -->
+	
+	
+	<select id="selectCodeAllList" parameterType="map" resultType="map">
+		select
+			code_cd
+			, p_code_cd
+			, code_name
+			, code_value
+			, description
+		from 
+			TBL_CODE 
+		where 1=1
+        order by p_code_cd, code_cd, order_num
+	</select>
+	
+	<select id="selectAreaCodeList" parameterType="map" resultType="map">
+		select
+			area_code
+			, area_name
+		from 
+			TBL_AREA_CODE 
+		where 1=1
+        order by area_code
+	</select>
+	
+	<select id="selectBroadbandCodeList" parameterType="map" resultType="map">
+		select
+			broadband_code
+			, broadband_name
+			,concat(broadband_name,'(',broadband_code,")") view_broadband_name
+		from 
+			TBL_BROADBAND_CODE 
+		where 1=1
+        order by broadband_code
+	</select>
+	
+	<select id="selectCenterLocationList" parameterType="map" resultType="map">
+		select
+			loc_code
+			, loc_name
+		from 
+			TBL_CENTER_LOCATION 
+		where 1=1
+        order by loc_code
+	</select>
+	
+	<select id="selectHolydayList" parameterType="map" resultType="map">
+		select
+			holiday_id
+			, holiday_date
+			, holiday_name
+		from 
+			TBL_HOLIDAY 
+		where 1=1
+        order by holiday_id
+	</select>
+	
+	<select id="selectNationCodeList" parameterType="map" resultType="map">
+		select
+			nation_code
+			, nation_name
+		from 
+			TBL_NATION_CODE 
+		where 1=1
+        order by nation_code
+	</select>
+	
+	<select id="selectSaleTimeList" parameterType="map" resultType="map">
+		select
+			sale_time_code
+			, sale_time_name
+			, start_time1
+			, end_time1
+			, start_time2 
+			, end_time2 
+			, start_time3 
+			, end_time3 
+			, start_time4 
+			, end_time4 
+			, start_time5 
+			, end_time5
+		from 
+			TBL_SALE_TIME 
+		where 1=1
+        order by sale_time_code
+	</select>
+	
+	<select id="selectTelecomCodeList" parameterType="map" resultType="map">
+		select
+			telecom_code
+			, telecom_name
+		from 
+			TBL_TELECOM_CODE 
+		where 1=1
+        order by telecom_code
+	</select>
+	
+</mapper>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 	
+	* Created : 2022. 10. 31
+	* DESC :  [녹취관리] 통화 모니터링 관리
+-->
+<mapper namespace="com.example.demo.service.recordMgt.mapper.RecordMonitoringMgtMapper">
+	<select id="getRecordMonirotingList" parameterType="map" resultType="map">
+		select 
+			agent.*
+			,if(agent.status = 'Available',cs.pstatus,null) calltype
+			,if(cs.pstate = 'answer',cs.now_call,null) now_call
+			,if(cs.pstate = 'answer',cs.other,null) other
+			,sec_to_time(IFNULL((SELECT sum(TIMESTAMPDIFF(SECOND,c.start_stamp,c.end_stamp)) FROM CDR c
+				where 1=1 and date(c.start_stamp) = date(now()) and c.agent_id = agent.agent_id and c.start_stamp <![CDATA[<]]> now()
+				group by c.agent_id
+				),0)) today_call
+			,sec_to_time(IFNULL((SELECT sum(TIMESTAMPDIFF(SECOND,c.start_stamp,c.end_stamp)) FROM CDR c
+				where 1=1 and date(c.start_stamp) = date(now() - INTERVAL 1 DAY) and c.agent_id = agent.agent_id
+				group by c.agent_id
+				),0)) yesterday_call
+			,cs.pstatus
+			,cs.pstate
+		from (
+			select
+				a.grp_id 
+				,a.agent_id 
+				,concat(a.name ,'(',a.agent_id ,')') view_agent_name 
+				,FN_GROUP_NAME(g.tenant_id) view_group_name 
+				, concat((select group_name from TBL_GROUP_MST where tenant_id = g.tenant_id limit 0,1),"(",tenant_id,")") as view_center_name 
+				,a.status 
+				,a.state  
+				,a.phone 
+				,a.is_delete 
+			from AGENT a, TBL_GROUP_MST g
+			where 1=1
+			and a.group_cd = g.group_cd
+			and a.is_delete = 'N'
+			<if test='group_id != "" and group_id != null '>
+				and g.group_id = #{group_id}
+			</if>
+			<if test='tenant_id != "" and tenant_id != null '>
+				and g.tenant_id = #{tenant_id}
+			</if>
+			<if test='team_id != "" and team_id != null '>
+				and g.team_id = #{team_id}
+			</if>
+		) agent left outer join (
+			select 
+				c.calltype
+				,c.agent_id
+				,c.other
+				,s.pstatus
+				,s.pstate
+				,date(start_stamp)
+				,max(c.answer_stamp)
+				,sec_to_time(IFNULL(timestampdiff(second,time(max(c.answer_stamp)),time(now())),0)) now_call
+			from CDR c, STATION s
+			where 1=1
+				and c.phone = s.phone
+				and date(c.start_stamp) = date(now())
+				and time(c.end_stamp) <![CDATA[<]]> time(now())
+				group by c.agent_id
+				order by c.start_stamp desc
+		) cs
+		
+		on agent.agent_id = cs.agent_id
+		where 1=1 
+		;
+	
+	</select>
+	
+	
+</mapper>

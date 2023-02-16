@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 	
+	* Created : 2022. 10. 05
+	* DESC :  [과금관리] 요율 관리
+-->
+<mapper namespace="com.example.demo.service.chargeMgt.mapper.RateMgtMapper">
+
+	<select id="selectRateInfoList" parameterType="map" resultType="map">
+		SELECT
+			a.info_id 
+			, a.info_type 
+			, a.rate_group 
+			, a.route 
+			, a.prefix 
+			, DATE_FORMAT(a.apply_dttm,'%Y.%m.%d') as apply_dttm 
+			, (select telecom_name from TBL_TELECOM_CODE where telecom_code = a.telecom_code) as telecom_name
+			, a.telecom_code 
+			, a.rate_code 
+			, a.prefix_name
+			, b.code_name as rate_name
+		FROM
+			TBL_RATE_INFO a, TBL_CODE b
+		where 1=1
+		and a.rate_code = b.code_cd
+		<if test='prefix_name != "" and prefix_name != null'>
+			and a.prefix_name like concat('%',#{prefix_name},'%')
+		</if>
+		<if test='prefix != "" and prefix != null'>
+			and a.prefix like concat('%',#{prefix},'%')
+		</if>
+		<if test='telecom_code != "" and telecom_code != null'>
+			and a.telecom_code = #{telecom_code}
+		</if>
+		<if test='rate_code != "" and rate_code != null'>
+			and a.rate_code = #{rate_code}
+		</if>
+		order by a.apply_dttm
+		
+	</select>
+	
+	<select id="selectRateCodeList" parameterType="map" resultType="map">
+		select
+			b.telecom_code
+			, b.bill_type
+			, c.code_name
+		from 
+		TBL_RATE b, TBL_CODE c
+		where 1=1
+		and c.code_cd = b.bill_type
+		<if test='telecom_code != "" and telecom_code != null'>
+			and b.telecom_code = #{telecom_code}
+		</if>
+		group by b.telecom_code, b.bill_type
+		order by c.order_num
+	</select>
+	
+	<insert id="insertRateInfo" parameterType="map">
+		insert into 
+		TBL_RATE_INFO (
+			info_type 
+			, rate_group 
+			, route 
+			, prefix 
+			, apply_dttm 
+			, telecom_code 
+			, rate_code 
+			, prefix_name
+		)values(
+			#{info_type} 
+			, #{rate_group} 
+			, #{route} 
+			, #{prefix} 
+			, #{apply_dttm} 
+			, #{telecom_code} 
+			, #{rate_code} 
+			, #{prefix_name}
+		)
+	</insert>
+	
+	<update id="updateRateInfo" parameterType="map">
+		update TBL_RATE_INFO set 
+			rate_group = #{rate_group} 
+			, route = #{route} 
+			, prefix = #{prefix} 
+			, apply_dttm = #{apply_dttm} 
+			, telecom_code = #{telecom_code} 
+			, rate_code = #{rate_code} 
+			, prefix_name = #{prefix_name}
+		where info_id = #{info_id}
+	</update>
+	
+	<delete id="deleteRateInfo" parameterType="map">
+		delete from TBL_RATE_INFO
+		where info_id in
+		<foreach collection="deleteList" open="(" close=")" index="i" separator="," item="data">
+       		#{data.info_id}
+   		</foreach>
+	</delete>
+	
+	<select id="selectRateList" parameterType="map" resultType="map">
+		SELECT
+			a.id
+			, a.telecom_code
+			, a.bill_type
+			, a.bill_range 
+			, a.holiday 
+			, a.start_time 
+			, a.end_time
+			, time_format(a.start_time,'%i:%s') as view_start_time
+            , time_format(a.end_time,'%i:%s') as view_end_time 
+			, a.time 
+			, a.rate 
+			, a.rate_name 
+			, b.telecom_name
+			, concat(c.code_name,'(',a.bill_type,')') as view_code_name
+		FROM
+			TBL_RATE a
+			, TBL_TELECOM_CODE b
+			, TBL_CODE c
+		where 1=1
+		and a.telecom_code = b.telecom_code
+		and a.bill_type = c.code_cd
+		<if test='telecom_code != "" and telecom_code != null'>
+			and a.telecom_code = #{telecom_code}
+		</if>
+		<if test='bill_type != "" and bill_type != null'>
+			and a.bill_type = #{bill_type}
+		</if>
+		order by a.telecom_code, a.bill_type, a.bill_range, a.start_time  asc
+	</select>
+	
+	<insert id="insertRate" parameterType="map">
+		insert into 
+		TBL_RATE (
+			telecom_code
+			, bill_type
+			, bill_range 
+			, holiday 
+			, start_time 
+			, end_time 
+			, time 
+			, rate 
+			, rate_name 
+		)values(
+			#{telecom_code}
+			, #{bill_type}
+			, #{bill_range} 
+			, #{holiday} 
+			, #{start_time} 
+			, #{end_time} 
+			, #{time} 
+			, #{rate} 
+			, #{rate_name} 
+		) 
+	</insert>
+	
+	<update id="updateRate" parameterType="map">
+		update TBL_RATE set
+			telecom_code = #{telecom_code}
+			, bill_type = #{bill_type}
+			, bill_range = #{bill_range}
+			, holiday = #{holiday}
+			, start_time = #{start_time}
+			, end_time = #{end_time}
+			, time = #{time}
+			, rate = #{rate}
+			, rate_name = #{rate_name}
+		where 1=1
+		and id = #{id}
+	</update>
+	
+	<delete id="deleteRate" parameterType="map">
+		delete from TBL_RATE 
+		where 1=1 
+		and id in 
+		<foreach collection="deleteList" open="(" close=")" index="i" separator="," item="data">
+       		#{data.id}
+   		</foreach>
+	</delete>
+	
+	
+</mapper>

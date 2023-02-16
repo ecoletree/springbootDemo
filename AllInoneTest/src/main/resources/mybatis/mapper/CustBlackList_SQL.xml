@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 김경현	
+	* Created : 2022. 04. 11
+	* DESC :  고객사블랙리스트
+-->
+<mapper namespace="com.example.demo.service.custBlackList.mapper.CustBlackListMapper">
+	
+	<!-- 고객사블랙리스트 조회 -->
+	<select id="selectBlackList" parameterType="map" resultType="map">
+		select
+			a.blacklist_id
+			, a.tenant_id 
+            , b.group_id 
+            , b.group_cd 
+            , FN_GROUP_NAME(a.tenant_id) as group_name
+			, concat(b.group_name,'(',a.tenant_id,')') as center_name
+			, a.phone 
+			, a.memo 
+			, a.register
+			, DATE_FORMAT(a.register, '%Y.%m.%d') as view_register
+		from 
+		BLACKLIST a, TBL_GROUP_MST b
+		where 1=1 
+		and b.is_delete = "N"
+		and a.tenant_id = b.tenant_id
+        and b.tenant_id is not null
+        and b.team_id is null
+        
+		<if test='group_id != "" and group_id != null'>
+			and b.group_id = #{group_id}
+		</if>
+		<if test='tenant_id != "" and tenant_id != null'>
+			and b.tenant_id = #{tenant_id}
+		</if>
+		<if test='phone != "" and phone != null'>
+			and a.phone like concat('%',#{phone},'%')
+		</if>
+		order by a.tenant_id asc
+	</select>
+	
+	<!-- 고객사블랙리스트 수정 -->
+	<update id="updateBlackList" parameterType="map">
+		update BLACKLIST set 
+			memo =  #{memo}
+			, phone = #{phone}
+			, register = DATE_FORMAT(curdate(),'%Y%m%d')
+		where blacklist_id = #{blacklist_id}
+	</update>
+	
+	<!-- 고객사블랙리스트 추가 -->
+	<insert id="insertBlackList" parameterType="map">
+		insert ignore into
+		BLACKLIST (
+			tenant_id 
+			, phone 
+			, memo
+			, register
+		)values
+		<foreach collection="blackList" open="(" close=")" index="i" separator="),(" item="data">
+       		#{data.tenant_id}
+			,#{data.phone}
+			,#{data.memo}
+			,DATE_FORMAT(curdate(),'%Y%m%d')
+       	</foreach>
+	</insert>
+	
+	<!-- 고객사블랙리스트 삭제 -->
+	<delete id="deleteBlackList" parameterType="map">
+		delete from BLACKLIST
+		where blacklist_id = #{blacklist_id} 
+	</delete>
+	
+</mapper>

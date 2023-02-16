@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 김경현	
+	* Created : 2022. 04. 11
+	* DESC :  음원업로드
+-->
+<mapper namespace="com.example.demo.service.recordUpload.mapper.RecordUploadMapper">
+	
+	<!-- 음원업로드 조회 -->
+	<select id="selectRecordUploadList" parameterType="map" resultType="map">
+		select 
+			a.soundsource_id 
+			, a.tenant_id
+			<if test='source_type == "pbx"'>
+			, b.group_id 
+            , b.group_cd 
+            , FN_GROUP_NAME(a.tenant_id) as group_name
+			, concat(b.group_name,'(',a.tenant_id,')') as center_name
+			</if> 
+			, a.soundsource_cd 
+			, a.source_type
+			, a.file_path 
+			, a.file_path as ori_file_path 
+			, a.file_name 
+			, a.file_size 
+			, a.insert_dttm
+		from TBL_SOUNDSOURCE a
+		<if test='source_type == "pbx"'>
+			, TBL_GROUP_MST b
+		</if>
+		where 1=1
+		and a.source_type = #{source_type}
+		
+		<if test='source_type == "pbx"'>
+			and a.tenant_id = b.tenant_id
+	        and b.tenant_id is not null
+	        and b.team_id is null
+			<if test='group_id != "" and group_id != null'>
+				and b.group_id = #{group_id}
+			</if>
+		</if> 
+		
+		<if test='tenant_id != "" and tenant_id != null '>
+			and a.tenant_id = #{tenant_id}
+		</if>
+		<if test='file_name != "" and file_name != null '>
+			and a.file_name like concat('%',#{file_name},'%')
+		</if>
+		order by a.tenant_id asc, a.insert_dttm desc
+
+	</select>
+
+	<!-- 음원업로드 추가 -->
+	<update id="upsertRecordUpload" parameterType="map">
+		insert into TBL_SOUNDSOURCE(
+			tenant_id 
+			, soundsource_cd
+			, source_type 
+			, file_path 
+			, file_name 
+			, file_size 
+			, insert_dttm
+		)
+		values(
+			#{tenant_id }
+			, #{soundsource_cd}
+			, #{source_type }
+			, #{file_path }
+			, #{file_name }
+			, #{file_size }
+			, now()
+		)
+		on duplicate key update
+			tenant_id = #{tenant_id}
+			, file_path = #{file_path} 			 
+			, file_size = #{file_size} 
+			, file_name = #{file_name}
+			, insert_dttm = now()
+
+	</update>
+	
+	<!-- 음원업로드 삭제 -->
+	<delete id="deleteRecordUpload" parameterType="map">
+		delete from TBL_SOUNDSOURCE where 1=1
+		and soundsource_id in
+		<foreach collection="sources" open="(" close=")" index="i" separator="," item="item">
+       		#{item.soundsource_id}
+       	</foreach>
+	</delete>
+	
+</mapper>

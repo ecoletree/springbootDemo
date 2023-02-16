@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 김경현	
+	* Created : 2022. 04. 11
+	* DESC :  TRUNK_GATEWAY
+-->
+<mapper namespace="com.example.demo.service.trunkGW.mapper.TrunkGWMapper">
+	
+	<!-- TRUNK GW 조회 -->
+	<select id="selectTrunkGWList" parameterType="map" resultType="map">
+		select 
+			a.prefix4
+            ,a.group_gw_id
+            ,c.group_gw_name
+            , a.gw_id
+			, a.tenant_id 
+            , b.group_id 
+            , b.group_cd 
+            , FN_GROUP_NAME(a.tenant_id) as group_name
+			, concat(b.group_name,'(',a.tenant_id,')') as center_name 
+			, a.gateway 
+			, a.gateway_prefix 
+		from  TBL_GROUP_MST b,TRUNK_GATEWAY a left outer join TBL_GROUP_GATEWAY c
+        on a.GROUP_GW_ID = c.GROUP_GW_ID
+		where 1=1
+		and a.tenant_id = b.tenant_id
+        and b.tenant_id is not null
+        and b.team_id is null
+        and b.is_delete = 'N'
+        and (c.is_trunk ="Y" or c.is_trunk is null)
+		<if test='group_id != "" and group_id != null'>
+			and b.group_id = #{group_id}
+		</if>
+		<if test='tenant_id != "" and tenant_id != null'>
+			and b.tenant_id = #{tenant_id}
+		</if>
+		<if test='gateway != "" and gateway != null '>
+			and a.gateway like concat('%',#{gateway},'%')
+		</if>
+		<if test='group_gw_id != "" and group_gw_id != null '>
+			and a.group_gw_id = #{group_gw_id}
+		</if>
+		order by a.tenant_id asc
+	</select>
+	
+	<!-- TRUNK GW 수정 -->
+	<update id="updateTrunkGW" parameterType="map">
+		update TRUNK_GATEWAY set 
+			gateway =  #{gateway}
+			, gateway_prefix  =  #{gateway_prefix}
+			, group_gw_id  =  #{group_gw_id}
+			, gw_id  =  #{gw_id}
+		where prefix4 = #{prefix4}
+	</update>
+
+	<!-- TRUNK GW 추가 -->
+	<insert id="insertTrunkGW" parameterType="map">
+		insert into 
+		TRUNK_GATEWAY(
+			group_gw_id 
+			,gw_id  
+			,prefix4 
+			,tenant_id 
+			,gateway 
+			,gateway_prefix
+		)VALUES(
+			#{group_gw_id }
+			,#{gw_id  }
+			,#{prefix4 }
+			,#{tenant_id }
+			,#{gateway }
+			,#{gateway_prefix}
+		)
+	</insert>
+	
+	<!-- TRUNK GW 삭제 -->
+	<delete id="deleteTrunkGW" parameterType="map">
+		delete from TRUNK_GATEWAY
+		where prefix4 = #{prefix4} 
+	</delete>
+	
+	<!-- TRUNK GW ID 체크 -->
+	<select id="selectTrunkGWCheck" parameterType="map" resultType="int">
+		select
+			count(*) as cnt 
+		from TRUNK_GATEWAY
+		where 1=1
+		and prefix4 = #{prefix4}
+	</select>
+	<!-- TRUNK GW ID 체크 -->
+	<select id="selectTrunkGWGroupCheck" parameterType="map" resultType="int">
+		select
+			count(*) as cnt 
+		from TBL_GROUP_GATEWAY
+		where 1=1
+		and group_gw_id = #{group_gw_id}
+	</select>
+
+	<select id="selectTrunkGWGroupList" parameterType="map" resultType="map">
+		select 
+			a.group_gw_id 
+			,a.group_gw_name 
+			,concat(a.group_gw_name ,'(',a.group_gw_id,')') view_group_gw_name 
+			,a.is_trunk 
+			,a.create_dttm 
+			,a.create_user 
+			,a.update_dttm 
+			,a.update_user
+		from 
+		TBL_GROUP_GATEWAY a
+		where a.is_trunk = "Y"
+		;
+	</select>
+	<update id="insertTrunkGWGroup" parameterType="map">
+
+	insert into 
+	TBL_GROUP_GATEWAY
+	(
+		group_gw_id 
+		,group_gw_name 
+		,is_trunk 
+		,create_dttm 
+		,create_user 
+	)values(
+		#{group_gw_id }
+		,#{group_gw_name }
+		,"Y"
+		,now()
+		,#{create_user }
+	)	
+	on duplicate key update
+		group_gw_name =#{group_gw_name }	
+		,is_trunk = "Y"	
+		,create_dttm = now()	
+		,create_user = #{create_user}	
+	</update>
+	
+</mapper>

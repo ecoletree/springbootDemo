@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 김경현	
+	* Created : 2022. 04. 11
+	* DESC :  내선관리
+-->
+<mapper namespace="com.example.demo.service.extensionMgt.mapper.ExtensionMgtMapper">
+
+	<!-- 내선관리 조회 -->
+	<select id="selectStationList" parameterType="map" resultType="map">
+		SELECT 
+			FN_GROUP_NAME(a.tenant_id) group_name
+			,concat(b.group_name,'(',b.tenant_id ,')' ) tenant_name
+			,a.tenant_id
+			,a.phone 
+			,a.password 
+			,a.display_num 
+			,a.station_grp 
+			,c.name as grp_name
+			,a.gateway  
+			,a.pstate  
+			, DATE_FORMAT(a.pstate_tm,'%Y.%m.%d %H:%i:%s') pstate_tm
+			,a.station_ip
+		FROM TBL_GROUP_MST b ,STATION a left outer join  STATION_GRP c
+        on a.station_grp = c.grp_id
+		where 1=1
+		and a.tenant_id = b.tenant_id
+		and b.team_id is null
+		and b.is_delete = "N"
+		<if test='group_id != "" and group_id != null '>
+			and b.group_id = #{group_id}
+		</if>
+		<if test='tenant_id != "" and tenant_id != null '>
+			and b.tenant_id = #{tenant_id}
+		</if>
+		<if test='phone != "" and phone != null '>
+			and a.phone like concat('%',#{phone},'%') 
+		</if>
+		<if test='display_num != "" and display_num != null '>
+			and a.display_num like concat('%',#{display_num},'%')
+		</if>
+		<if test='gateway != "" and gateway != null '>
+			and a.gateway like concat('%',#{gateway},'%')
+		</if>
+		<if test='station_grp != "" and station_grp != null '>
+			and a.station_grp = #{station_grp}
+		</if>
+		order by a.tenant_id asc
+	</select>
+	
+	<!-- 내선관리 수정 -->
+	<update id="updateStation" parameterType="map">
+		update STATION set 
+			password =  #{password}
+			, display_num  =  #{display_num}
+			, gateway  =  #{gateway}
+			, station_grp  =  #{station_grp}
+			, station_ip = #{station_ip} 
+		where tenant_id = #{tenant_id}
+		and phone = #{phone}
+	</update>
+	
+	<!-- 내선관리 추가 -->
+	<insert id="insertStation" parameterType="map">
+		insert into
+		STATION (
+			tenant_id
+			, phone 
+			, password 
+			, display_num 
+			, station_grp 
+			, gateway 
+			, pstate 
+			, pstate_tm
+			, station_ip
+		)values
+		<foreach collection="stationList" open="(" close=")" index="i" separator="),(" item="data">
+       		#{data.tenant_id}
+			, #{data.phone}
+			, #{data.password}
+			, #{data.display_num}
+			, #{data.grp_id}
+			, #{data.gateway}
+			, #{data.pstate}
+			, #{data.pstate_tm}
+			, #{data.station_ip}
+       	</foreach>
+	</insert>
+	
+	<!-- 내선관리 삭제 -->
+	<delete id="deleteStation" parameterType="map">
+		delete from STATION
+		where tenant_id = #{tenant_id}
+		and phone = #{phone}
+	</delete>
+	
+	<!-- 내선관리 ID 체크 -->
+	<select id="selectStationCheck" parameterType="map" resultType="int">
+		select
+			count(*) as cnt
+		from
+		STATION
+		where 1=1
+		and phone = #{phone} 
+	</select>
+	
+<!-- 헌트그룹 리스트 -->
+	<select id="selectHuntGroupList"  parameterType="map" resultType="map">
+		select 
+			tenant_id,
+			grp_id,
+			name as grp_name,
+		    concat(name,'(',grp_id,')') as view_grp_name
+		from STATION_GRP
+		where 1=1
+		<if test='tenant_id != null and tenant_id != ""'>
+			and tenant_id = #{tenant_id}
+		</if>
+		order by tenant_id asc
+	</select>
+<!-- 내선번호 중복 조회 -->
+<select id="selectPhoneDupCheck" parameterType="map" resultType="int">
+	select
+		count(*) as cnt
+	from STATION
+	where 1=1
+	and phone in 
+	<foreach collection="stationList" open="(" close=")" index="i" separator="," item="data">
+       		#{data.phone}
+   	</foreach>
+	; 
+</select>
+<!-- 고객사 유무 조회 -->
+<select id="selectTenantCheck" parameterType="map" resultType="int">
+	select
+		count(*) as cnt
+	from TENANT
+	where 1=1
+	and id in 
+	<foreach collection="checkList" open="(" close=")" index="i" separator="," item="data">
+       		#{data.tenant_id}
+   	</foreach>
+</select>
+<!-- 헌트그룹 유무 조회 -->
+<select id="selectHuntCheck" parameterType="map" resultType="int">
+	select
+		count(*) as cnt
+	from STATION_GRP
+	where 1=1
+	and grp_id in 
+	<foreach collection="checkList" open="(" close=")" index="i" separator="," item="data">
+       		#{data.grp_id}
+   	</foreach>
+</select>
+</mapper>

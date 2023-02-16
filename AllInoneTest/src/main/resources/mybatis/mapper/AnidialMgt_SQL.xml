@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 	
+	* Created : 2022. 10. 05
+	* DESC :  [애니매니저] 리스트관리
+-->
+<mapper namespace="com.example.demo.service.aniManager.mapper.AnidialMgtMapper">
+
+	<!-- 애니매니저 리스트 조회 -->
+	<select id="selectAniManagerList" parameterType="map" resultType="map">
+	
+		SELECT
+			a.animanger_cd
+			,concat(a.group_name,'(',a.group_id ,')') view_group_name 
+			,concat(a.center_name,'(',a.center_id ,')') view_center_name 
+			,a.group_id 
+			,a.center_id 
+			,a.center_name 
+			,a.group_name 
+			,a.center_code 
+			,a.dialer_cd 
+			,a.broadband_code 
+			,a.broadband_name 
+			,a.out_no 
+			,a.in_no 
+			,a.status_code 
+			,a.memo 
+			,a.is_use 
+            ,DATE_FORMAT(a.start_date ,'%Y.%m.%d') start_date
+            ,DATE_FORMAT(a.end_date ,'%Y.%m.%d') end_date
+			,a.create_dttm 
+            ,DATE_FORMAT(a.create_dttm ,'%Y.%m.%d %H:%i') view_create_dttm
+			,a.update_dttm 
+            ,DATE_FORMAT(a.update_dttm ,'%Y.%m.%d %H:%i') view_update_dttm
+			,a.create_user 
+			,a.update_user	
+		from TBL_ANIMANAGER a left outer join TBL_DIALER b 
+
+		on a.dialer_cd = b.dialer_cd
+		where 1=1 
+        <if test='group_id != "" and group_id != null '>
+			and a.group_id = #{group_id}
+		</if>
+		<if test='tenant_id != "" and tenant_id != null '>
+			and a.center_id = #{tenant_id}
+		</if>
+		<if test='broadband_code != "" and broadband_code != null '>
+			and a.broadband_code = #{broadband_code}
+		</if>
+		<if test='status_code != "" and status_code != null '>
+			and a.status_code = #{status_code}
+		</if>
+		<if test='is_use != "" and is_use != null '>
+			and a.is_use = #{is_use}
+		</if>
+		<if test='out_no != "" and out_no != null '>
+			and a.out_no like concat('%',#{out_no},'%')
+		</if>
+		order by a.group_id, a.center_id, a.dialer_cd, a.center_code, a.broadband_code asc
+	</select>
+
+	<!-- 애니매니저 수정 -->
+	<update id="updateAnidialerList" parameterType="map">
+		update TBL_ANIMANAGER set
+			group_id =#{group_id }	
+			,center_id =#{center_id }	
+			,center_name =#{center_name }	
+			,group_name =#{group_name }	
+			,center_code =#{center_code }	
+			<if test='dialer_cd != null and dialer_cd != ""'>
+				,dialer_cd =#{dialer_cd }	
+			</if>
+			,broadband_code =#{broadband_code }	
+			,broadband_name =#{broadband_name }	
+			,out_no =#{out_no }	
+			,in_no =#{in_no }	
+			,status_code =#{status_code }	
+			,memo =#{memo }	
+			,is_use =#{is_use }	
+			,start_date =#{start_date }	
+			,end_date =#{end_date }	
+			,update_dttm = now()	
+			,update_user=#{user_id}	
+		where animanger_cd = #{animanger_cd}
+	
+	</update>
+	<!-- 애니매니저 추가 -->
+	<insert id="insertAnidialerList" parameterType="map">
+		insert ignore into TBL_ANIMANAGER(
+			animanger_cd 
+			,group_id 
+			,center_id 
+			,center_name 
+			,group_name 
+			,center_code 
+			,dialer_cd 
+			,broadband_code 
+			,broadband_name 
+			,out_no 
+			,in_no 
+			,status_code 
+			,memo 
+			,is_use 
+			,start_date 
+			,end_date 
+			,create_dttm 
+			,update_dttm 
+			,create_user 
+			,update_user	
+		)values
+		<foreach collection="anidialList" open="(" close=")" index="i" separator="),(" item="data">
+			#{data.animanger_cd }
+			,#{data.group_id }
+			,#{data.center_id }
+			,(select group_name from TBL_GROUP_MST WHERE tenant_id = #{data.center_id } and team_id is null and is_delete ="N")
+			,(select group_name from TBL_GROUP_MST WHERE group_id = #{data.group_id } and tenant_id is null and is_delete ="N")
+			<choose>
+				<when test='data.center_code != "" and data.center_code != null '>
+					,#{data.center_code }
+				</when>
+				<otherwise>
+					,NULL
+				</otherwise>
+			</choose>
+			,#{data.dialer_cd }
+			,#{data.broadband_code }
+			,(SELECT broadband_name from TBL_BROADBAND_CODE where BROADBAND_CODE = #{data.broadband_code } limit 0,1)
+			,#{data.out_no }
+			,#{data.in_no }
+			<choose>
+				<when test='data.status_code != "" and data.status_code != null '>
+					,#{data.status_code }
+				</when>
+				<otherwise>
+					,"ANI001"
+				</otherwise>
+			</choose>
+			,#{data.memo }
+			,#{data.is_use }
+			,#{data.start_date }
+			,#{data.end_date }
+			,now()
+			,now()
+			,#{user_id}
+			,#{user_id}
+		</foreach>
+	</insert>
+	
+	<!-- 애니매니저 삭제 -->
+	<delete id="deleteAnidialerList" parameterType="map">
+		DELETE FROM TBL_ANIMANAGER
+		WHERE
+			animanger_cd IN
+	    <foreach collection="anidialList" item="data" index="i" open="(" separator="," close=")">
+			#{data.animanger_cd}
+	    </foreach>
+	</delete>
+	
+	<select id="selectDialerList" parameterType="map" resultType="map">
+	SELECT   
+			a.dialer_cd  
+			,a.group_cd 
+			,b.group_id
+			,a.dialer_name 
+			,concat(a.dialer_name,'(',a.dialer_cd,')') view_dialer_name
+			,a.dialer_type 
+			,a.dialer_ip 
+			,a.dialer_port 
+			,a.dialer_user 
+			,a.dialer_pw 
+			,a.dialer_dir 
+			,a.is_use 
+			,a.create_dttm 
+			,a.create_user 
+			,a.update_dttm 
+			,a.update_user 
+		FROM TBL_DIALER a,TBL_GROUP_MST b
+		where 1=1
+        and a.group_cd = b.group_cd
+        and a.is_use = "Y"
+        
+	</select>
+	
+	
+</mapper>

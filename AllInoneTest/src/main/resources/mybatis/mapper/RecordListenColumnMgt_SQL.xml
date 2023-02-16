@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 	kkh
+	* Created : 2022. 11. 15
+	* DESC :  [녹취관리] 녹음 청취 조회 컬럼 설정
+-->
+<mapper namespace="com.example.demo.service.recordMgt.mapper.RecordListenColumnMapper">
+	
+	<select id="selectRecordColumnList" parameterType="map" resultType="map">
+		select
+			a.column_id 
+			,a.rec_column 
+			,a.col_name  
+			,a.is_use  
+			,a.masking_type  
+			,a.order_num  
+			,a.create_dttm
+			,a.create_user
+		from TBL_RECORD_COLUMN a
+		where 1=1
+		order by a.order_num asc
+	</select>
+	
+	
+	<update id="updateRecordColumnList" parameterType="map">
+	
+		<foreach collection="list"  item="item" index="index">
+		UPDATE TBL_RECORD_COLUMN SET
+			col_name = #{item.col_name},
+			is_use = #{item.is_use},
+			masking_type = #{item.masking_type}
+		where column_id = #{item.column_id};
+		</foreach>
+		
+	</update>
+	
+</mapper>

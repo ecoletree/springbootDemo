@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 	
+	* Created : 2022. 10. 13
+	* DESC :  시스템 어드민 관리자 관리
+-->
+<mapper namespace="com.example.demo.service.systemadmin.mapper.SystemAdminMapper">
+	
+	<!-- 시스템 관리자 조회 -->
+	<select id="selectAdminList" parameterType="map" resultType="map">
+		select
+			a.id 
+			, a.password 
+			, a.is_super 
+			, a.user_ip 
+			, a.user_name 
+			, (select date_format(max(log.log_dttm), '%Y.%m.%d %H:%i:%s') from TBL_SYSTEM_LOG log where log.agent_id = a.id and log.log_msg = '로그인') as log_dttm
+		from
+		SYSTEM_ADMIN a
+		where 1=1
+		and a.is_super = 'N'
+		<if test='id != "" and id != null'>
+			and a.id like concat('%',#{id},'%')
+		</if>
+		<if test='user_name != "" and user_name != null'>
+			and a.user_name like concat('%',#{user_name},'%')
+		</if>
+		order by a.id asc
+	</select>
+	
+	<!-- 시스템 관리자 수정 -->
+	<update id="updateAdmin" parameterType="map">
+		update SYSTEM_ADMIN set
+			user_ip  =  #{user_ip}
+			, user_name  =  #{user_name}
+		where 1=1
+		and id = #{id} 
+	</update>
+	
+	<!-- 시스템 관리자 비밀번호 수정 -->
+	<update id="updateAdminPW" parameterType="map">
+		update SYSTEM_ADMIN set 
+			password  =  #{password}
+		where 1=1
+		and id = #{id} 
+	</update>
+	
+	<!-- 관리자 추가 -->
+	<insert id="insertAdmin" parameterType="map">
+		insert into
+		SYSTEM_ADMIN (
+			id 
+			, password 
+			, is_super 
+			, user_ip 
+			, user_name
+		)values(
+			#{id} 
+			, #{password} 
+			, 'N' 
+			, #{user_ip} 
+			, #{user_name} 
+		);
+	</insert>
+	
+	<!-- 시스템 관리자 삭제 -->
+	<delete id="deleteAdmin" parameterType="map">
+		delete from SYSTEM_ADMIN 
+		where 1=1
+		and id = #{id} 
+	</delete>
+	
+	<!-- 시스템 관리자 ID 체크 -->
+	<select id="selectAdminCheck" parameterType="map" resultType="int">
+		select
+			count(*) as cnt 
+		from SYSTEM_ADMIN
+		where 1=1
+		and id = #{id} 
+	</select>
+</mapper>

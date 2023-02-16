@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 	
+	* Created : 2022. 10. 05
+	* DESC :  [녹취관리] 녹음청취관리
+-->
+<mapper namespace="com.example.demo.service.recordMgt.mapper.RecordListeningMgtMapper">
+	
+	<select id="selectRecordList" parameterType="map" resultType="map">
+		select
+			a.group_id 
+			, a.tenant_id 
+			, a.team_id
+			, concat(a.group_name,'(',a.group_id,')') view_group_name
+			, concat(a.center_name,'(',a.tenant_id,')') view_center_name
+			, concat(a.team_name,'(',a.team_id,')') view_team_name
+			, a.id 
+			, a.uuid 
+			, date_format(a.start_stamp, '%Y.%m.%d %H:%i:%s') as start_stamp
+			, date_format(a.end_stamp, '%Y.%m.%d %H:%i:%s') as end_stamp 
+			, sec_to_time(a.duration) as  duration
+			, a.calltype 
+			, a.rec_type 
+			, a.rec_id 
+			, a.phone 
+			, a.other 
+			, a.agent_id 
+			, a.rec_file 
+			, a.trans_status
+			, a.user_data 
+			, a.user_data_1 
+			, a.user_data_2 
+			, a.user_data_3 
+			, a.user_data_4 
+			, a.user_data_5 
+			, a.user_data_6 
+			, a.user_data_7 
+			, a.user_data_8 
+			, a.user_data_9 
+			, a.user_data_10 
+			, a.user_data_11 
+			, a.user_data_12 
+			, a.user_data_13 
+			, a.user_data_14 
+			, a.user_data_15 
+			, a.user_data_16 
+			, a.user_data_17 
+			, a.user_data_18 
+			, a.user_data_19 
+			, a.user_data_20  
+			, a.view_agent_name
+			, a.client_name
+		from 
+		(
+			select
+				a.id 
+				, a.uuid 
+				, a.start_stamp 
+				, a.end_stamp 
+				, a.duration 
+				, a.calltype 
+				, a.rec_type 
+				, a.rec_id 
+				, a.phone 
+				, a.other 
+				, a.agent_id 
+				, a.rec_file 
+				, a.group_id
+                , a.tenant_id
+                , a.team_id
+				, a.user_data 
+				, c.trans_status
+				, FN_DECRYPT(a.user_data_1) as user_data_1  
+				, FN_DECRYPT(a.user_data_2) as user_data_2 
+				, FN_DECRYPT(a.user_data_3) as user_data_3 
+				, FN_DECRYPT(a.user_data_4) as user_data_4 
+				, FN_DECRYPT(a.user_data_5) as user_data_5 
+				, FN_DECRYPT(a.user_data_6) as user_data_6 
+				, FN_DECRYPT(a.user_data_7) as user_data_7 
+				, FN_DECRYPT(a.user_data_8) as user_data_8 
+				, FN_DECRYPT(a.user_data_9) as user_data_9 
+				, FN_DECRYPT(a.user_data_10) as user_data_10 
+				, FN_DECRYPT(a.user_data_11) as user_data_11 
+				, FN_DECRYPT(a.user_data_12) as user_data_12 
+				, FN_DECRYPT(a.user_data_13) as user_data_13 
+				, FN_DECRYPT(a.user_data_14) as user_data_14 
+				, FN_DECRYPT(a.user_data_15) as user_data_15 
+				, FN_DECRYPT(a.user_data_16) as user_data_16 
+				, FN_DECRYPT(a.user_data_17) as user_data_17 
+				, FN_DECRYPT(a.user_data_18) as user_data_18 
+				, FN_DECRYPT(a.user_data_19) as user_data_19 
+				, FN_DECRYPT(a.user_data_20) as user_data_20 
+				, (select c.group_name from TBL_GROUP_MST c where a.group_id = c.group_id and a.tenant_id = c.tenant_id and a.team_id = c.team_id) as team_name
+                , (select c.group_name from TBL_GROUP_MST c where a.group_id = c.group_id and a.tenant_id = c.tenant_id and c.team_id is null) as center_name
+                , (select c.group_name from TBL_GROUP_MST c where a.group_id = c.group_id and c.tenant_id is null and c.team_id is null) as group_name
+                , concat(b.name,'(',a.agent_id,')') view_agent_name
+                , a.client_name
+			from TBL_REC a 
+				left join (select c.rec_id, group_concat(c.trans_status separator '|') as trans_status from TBL_REC_TRANS_CERT c group by c.rec_id) c
+                on a.id = c.rec_id
+				, AGENT b
+			where 1=1
+			and a.agent_id = b.agent_id
+			
+			<choose>
+				<when test="sdate != null and edate != null">
+					<![CDATA[
+					and date_format(#{sdate}, '%Y.%m.%d %H:%i:%s')  <= date_format(a.start_stamp, '%Y.%m.%d %H:%i:%s')
+					and date_format(a.end_stamp, '%Y.%m.%d %H:%i:%s')  <= date_format(#{edate}, '%Y.%m.%d %H:%i:%s')
+					]]>
+				</when>
+				<when test="sdate != null">
+					<![CDATA[
+						and date_format(#{sdate}, '%Y.%m.%d %H:%i:%s') <= date_format(a.start_stamp, '%Y.%m.%d %H:%i:%s')
+					]]>
+				</when>
+				<when test="edate != null">
+					<![CDATA[
+						and date_format(a.end_stamp, '%Y.%m.%d %H:%i:%s') <= date_format(#{edate}, '%Y.%m.%d %H:%i:%s')
+					]]>
+				</when>
+			</choose>
+			<choose>
+				<when test="sDuration != null and eDuration != null">
+					and a.duration between #{sDuration} and #{eDuration}
+				</when>
+				<when test="sDuration != null">
+					<![CDATA[
+						and  #{sDuration} <= a.duration
+					]]>
+				</when>
+				<when test="eDuration != null">
+					<![CDATA[
+						and a.duration <= #{eDuration}
+					]]>
+				</when>
+			</choose>
+			<!-- 인바운드 아웃바운드 -->
+			<choose>
+				<when test='call_type == ""'>
+				</when>
+				<when test='call_type == "ALL"'>
+					AND (a.calltype = 'INBOUND' or  a.calltype = 'OUTBOUND')
+				</when>
+				<otherwise>
+					AND a.calltype = #{call_type}
+				</otherwise>
+			</choose>
+			<!-- 상태 -->
+			<if test='status != "" and status != null'>
+				AND c.trans_status like concat('%',#{status},'%') 
+			</if>
+			<!-- 내선번호 -->
+			<if test='phone != "" and phone != null'>
+				AND a.phone = #{phone}
+			</if>
+			<!-- 상담사 -->
+			<if test='agent_name != "" and agent_name != null'>
+				AND b.name like concat('%',#{agent_name},'%')
+			</if>
+			<!-- 전화번호 -->
+			<if test='other != "" and other != null'>
+				AND a.other like concat('%',#{other},'%')
+			</if>
+			<!-- 녹취 아이디 -->
+			<if test='rec_id != "" and rec_id != null'>
+				AND a.rec_id = #{rec_id}
+			</if>
+			<!-- 로거 아이디 -->
+			<if test='uuid != "" and uuid != null'>
+				AND a.uuid = #{uuid}
+			</if>
+			
+			<if test='group_id != "" and group_id != null '>
+				and a.group_id = #{group_id}
+			</if>
+			<if test='tenant_id != "" and tenant_id != null '>
+				and a.tenant_id = #{tenant_id}
+			</if>
+			<if test='team_id != "" and team_id != null '>
+				and a.team_id = #{team_id}
+			</if>
+		) a
+		order by a.start_stamp
+			
+	</select>
+	
+	<select id="selectRECTransList" parameterType="map" resultType="map">
+		select
+			certificate_cd
+			, rec_id 
+			, internal_index 
+			, certificate_num 
+			, gubun 
+			, is_trans 
+			, trans_status 
+			, rec_file 
+			, create_dttm 
+			, create_user 
+			, update_dttm 
+			, update_user 
+		from
+		TBL_REC_TRANS_CERT a
+		where 1=1
+		and rec_id = #{id} 
+	</select>
+	
+	<insert id="insertRECTrans" parameterType="map">
+		insert into TBL_REC_TRANS_CERT (
+			certificate_cd
+			, rec_id 
+			, certificate_num
+			, internal_index 
+			, gubun 
+			, is_trans 
+			, trans_status 
+			, rec_file 
+			, create_dttm 
+			, create_user 
+			, update_dttm 
+			, update_user
+		) values (
+			#{certificate_cd}
+			, #{id} 
+			, #{certificate_num} 
+			, #{internal_index}
+			, #{gubun} 
+			, #{is_trans} 
+			, #{trans_status} 
+			, #{rec_file} 
+			, now() 
+			, #{session_user_id} 
+			, now() 
+			, #{session_user_id}
+		)
+		ON DUPLICATE KEY UPDATE
+			certificate_num = #{certificate_num} 
+			, gubun = #{gubun} 
+			, is_trans = #{is_trans} 
+			, update_dttm = now()
+			, update_user = #{session_user_id}
+	</insert>
+	
+	<update id="updateRECTrans" parameterType="map">
+		update TBL_REC set
+			client_name = #{client_name}
+		where id = #{id}		
+	</update>
+	
+	<select id="selectRecordColumnList" parameterType="map" resultType="map">
+		select 
+			a.column_id
+			, a.rec_column
+			, a.col_name
+			, b.is_view
+			, b.user_type
+			, a.class_name
+			, a.masking_type
+		from 
+			TBL_RECORD_COLUMN a
+		    left join
+		    TBL_CUSTOM_RECORD_COL b
+		on a.column_id = b.column_id
+		and b.user_type = #{user_type}
+		where 1=1
+		and a.is_use = 'Y'
+		and b.is_view = 'Y'
+		order by order_num,column_id
+	</select>
+	
+	<select id="selectRecordSearchList" parameterType="map" resultType="map">
+		select 
+			a.code_cd
+		    , a.code_name
+		    , a.code_value
+		    , b.user_type
+		    , b.is_view
+		    , a.description
+		from 
+			TBL_CODE a
+		    left join
+		    TBL_CUSTOM_RECORD_SEARCH b
+		on a.code_cd = b.code_cd
+		and b.user_type = #{user_type}
+		where 1=1
+		and a.p_code_cd = 'RES000'
+		and a.is_active = 'Y'
+		and b.is_view = 'Y'
+		order by order_num
+	</select>
+	
+</mapper>

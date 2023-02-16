@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 	
+	* Created : 2022. 10. 13
+	* DESC :  시스템 로그 관리
+-->
+<mapper namespace="com.example.demo.service.systemlog.mapper.SystemLogMapper">
+	
+	<!-- 시스템 로그 조회 -->
+	<select id="selectLogList" parameterType="map" resultType="map">
+		select
+			a.log_id 
+			, date_format(a.log_dttm, '%Y.%m.%d %H:%i:%s') as log_dttm
+			, a.agent_id 
+			, a.group_id 
+			, a.tenant_id 
+			, a.team_id 
+			, a.log_msg 
+			, a.login_ip 
+		from
+		TBL_SYSTEM_LOG a
+		where 1=1
+		<if test='agent_id != "" and agent_id != null'>
+			and a.agent_id = #{agent_id}
+		</if>
+		<choose>
+			<when test="sdate != null and edate != null">
+				and date_format(a.log_dttm, '%Y.%m.%d') between date_format(#{sdate}, '%Y.%m.%d') and date_format(#{edate}, '%Y.%m.%d') 
+			</when>
+			<when test="sdate != null">
+				<![CDATA[
+					and date_format(#{sdate}, '%Y.%m.%d') <= date_format(a.log_dttm, '%Y.%m.%d')
+				]]>
+			</when>
+			<when test="edate != null">
+				<![CDATA[
+					and date_format(a.log_dttm, '%Y.%m.%d') <= date_format(#{edate}, '%Y.%m.%d')
+				]]>
+			</when>
+		</choose>
+		order by a.log_dttm desc
+	</select>
+	
+</mapper>

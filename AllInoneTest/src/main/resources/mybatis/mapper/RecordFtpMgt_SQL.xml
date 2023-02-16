@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 김경현	
+	* Created : 2023. 01. 25
+	* DESC : 녹취전송 FTP 관리 
+-->
+<mapper namespace="com.example.demo.service.recordMgt.mapper.RecordFtpMgtMapper">
+
+	<select id="selectFtpList" parameterType="map" resultType="map">
+		SELECT 
+			a.ftp_id 
+			,a.group_id 
+			,FN_GROUP_NAME(a.center_id) view_group_name
+			,a.center_id 
+			, (select concat(group_name,'(',tenant_id,')') from TBL_GROUP_MST where tenant_id = a.center_id limit 0,1) view_center_name
+			,a.ftp_type 
+			,a.ftp_ip 
+			,a.ftp_port 
+			,a.ftp_user 
+			,a.ftp_pw 
+			,a.ftp_dir
+		FROM TBL_CENTER_FTP_INFO a , TBL_GROUP_MST b
+		where 1=1
+			and a.group_id = b.group_id
+			and a.center_id = b.tenant_id
+			and b.is_delete = 'N'
+			and b.team_id is null
+		<if test='group_id != "" and group_id != null '>
+			and a.group_id = #{group_id}
+		</if>
+		<if test='center_id != "" and center_id != null '>
+			and a.center_id = #{center_id}
+		</if>
+		<if test='ftp_type != "" and ftp_type != null '>
+			and a.ftp_type = #{ftp_type}
+		</if>
+		order by a.group_id, a.center_id
+	</select>
+	
+	<!-- check duplicated info -->
+	<select id="selectFtpDupCheck" parameterType="map" resultType="int">
+		SELECT 
+			count(*)
+		FROM TBL_CENTER_FTP_INFO a , TBL_GROUP_MST b
+		where 1=1
+			and a.group_id = b.group_id
+			and a.center_id = b.tenant_id
+			and b.is_delete = 'N'
+			and b.team_id is null
+		<if test='group_id != "" and group_id != null '>
+			and a.group_id = #{group_id}
+		</if>
+		<if test='center_id != "" and center_id != null '>
+			and a.center_id = #{center_id}
+		</if>
+		<if test='ftp_type != "" and ftp_type != null '>
+			and a.ftp_type = #{ftp_type}
+		</if>
+	</select>
+	
+	<!-- insert ftp info -->
+	<insert id="insertFtpInfo" parameterType="map">
+		insert into TBL_CENTER_FTP_INFO(
+			group_id 
+			,center_id 
+			,ftp_type 
+			,ftp_ip 
+			,ftp_port 
+			,ftp_user 
+			,ftp_pw 
+			,ftp_dir		
+		)values(
+			#{group_id }		
+			,#{center_id }		
+			,#{ftp_type }		
+			,#{ftp_ip }		
+			,#{ftp_port }		
+			,#{ftp_user }		
+			,#{ftp_pw }		
+			,#{ftp_dir}		
+		)
+	</insert>
+	
+	<!-- update ftp info -->
+	<update id="updateFtpInfo" parameterType="map">
+		update TBL_CENTER_FTP_INFO set
+			ftp_ip =#{ftp_ip}
+			,ftp_port =#{ftp_port}
+			,ftp_user =#{ftp_user}
+			,ftp_pw =#{ftp_pw}
+			,ftp_dir=#{ftp_dir}
+		where 
+			ftp_id =#{ftp_id}
+	</update>
+	
+	<!-- delete ftp info -->
+	<delete id="deleteFtpInfo" parameterType="map">
+		delete from TBL_CENTER_FTP_INFO
+		where ftp_id = #{ftp_id} 
+	</delete>
+	
+	
+</mapper>

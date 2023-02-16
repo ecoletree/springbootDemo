@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 김경현	
+	* Created : 2022. 04. 11
+	* DESC :  ANIDIAL GW(anidial_gateway)
+-->
+<mapper namespace="com.example.demo.service.anidialGW.mapper.AnidialGWMapper">
+	
+	<!-- ANIDIAL GW 조회 -->
+	<select id="selectAnidialGWList" parameterType="map" resultType="map">
+		select 
+			a.group_gw_id
+			, a.gw_id
+			,c.group_gw_name
+			, a.prefix4 
+			, a.gateway 
+			, a.gateway_prefix 
+		from ANIDIAL_GATEWAY a left outer join TBL_GROUP_GATEWAY c
+		on a.GROUP_GW_ID = c.GROUP_GW_ID
+		where 1=1
+		and (c.is_trunk ="N" or c.is_trunk is null)
+		<if test='gateway != "" and gateway != null '>
+			and gateway like concat('%',#{gateway},'%')
+		</if>
+		<if test='group_gw_id != "" and group_gw_id != null '>
+			and a.group_gw_id = #{group_gw_id}
+		</if>
+	</select>
+	
+	<!-- ANIDIAL GW 수정 -->
+	<update id="updateAnidialGW" parameterType="map">
+		update ANIDIAL_GATEWAY set 
+			gateway =  #{gateway}
+			, gateway_prefix  =  #{gateway_prefix}
+			, group_gw_id  =  #{group_gw_id}
+		where prefix4 = #{prefix4}
+	</update>
+	
+	<!-- ANIDIAL GW 추가 -->
+	<insert id="insertAnidialGW" parameterType="map">
+		insert into
+		ANIDIAL_GATEWAY (
+			group_gw_id 
+			,gw_id 
+			, prefix4 
+			, gateway 
+			, gateway_prefix 
+		)values(
+			#{group_gw_id }
+			, #{gw_id  }
+			, #{prefix4}
+			, #{gateway}
+			, #{gateway_prefix}
+		)
+	</insert>
+	
+	<!-- ANIDIAL GW 삭제 -->
+	<delete id="deleteAnidialGW" parameterType="map">
+		delete from ANIDIAL_GATEWAY
+		where prefix4 = #{prefix4} 
+	</delete>
+	
+	<!-- TRUNK GW ID 체크 -->
+	<select id="selectAnidialGWCheck" parameterType="map" resultType="int">
+		select
+			count(*) as cnt 
+		from ANIDIAL_GATEWAY
+		where 1=1
+		and prefix4 = #{prefix4}
+	</select>
+	<!-- TRUNK GW ID 체크 -->
+	<select id="selectAnidialGWGroupCheck" parameterType="map" resultType="int">
+		select
+			count(*) as cnt 
+		from TBL_GROUP_GATEWAY
+		where 1=1
+		and group_gw_id = #{group_gw_id}
+	</select>
+	<select id="selectGWGroupList" parameterType="map" resultType="map">
+		select 
+			a.group_gw_id 
+			,a.group_gw_name 
+			,concat(a.group_gw_name ,'(',a.group_gw_id,')') view_group_gw_name 
+			,a.is_trunk 
+			,a.create_dttm 
+			,a.create_user 
+			,a.update_dttm 
+			,a.update_user
+		from 
+		TBL_GROUP_GATEWAY a
+		where a.is_trunk = "N"
+		;
+	</select>
+	<update id="insertAnidialGWGroup" parameterType="map">
+	insert into 
+	TBL_GROUP_GATEWAY
+	(
+		group_gw_id 
+		,group_gw_name 
+		,is_trunk 
+		,create_dttm 
+		,create_user 
+	)values(
+		#{group_gw_id }
+		,#{group_gw_name }
+		,"N"
+		,now()
+		,#{create_user }
+	)
+	on duplicate key update
+		group_gw_name =#{group_gw_name }	
+		,is_trunk = "N"	
+		,create_dttm = now()	
+		,create_user = #{create_user}	
+	</update>
+	
+</mapper>

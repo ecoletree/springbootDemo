@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 	
+	* Created : 2022. 10. 05
+	* DESC :  [애니매니저] 다이얼러 목록 관리
+-->
+<mapper namespace="com.example.demo.service.aniManager.mapper.DiallerMgtMapper">
+	
+	<!-- 다이얼러 리스트 조회 -->
+	<select id="selectDialerList" parameterType="map" resultType="map">
+		SELECT   
+			a.dialer_cd  
+			,a.group_cd 
+            ,b.group_id
+            ,b.group_name
+            ,concat(b.group_name,'(',b.group_id,')') view_group_name
+			,a.dialer_name 
+			,a.dialer_type 
+			,a.dialer_ip 
+			,a.dialer_port 
+			,a.dialer_user 
+			,a.dialer_pw 
+			,a.dialer_dir 
+			,a.is_use 
+			,a.create_dttm 
+			,a.create_user 
+			,a.update_dttm 
+			,a.update_user 
+		FROM TBL_DIALER a,TBL_GROUP_MST b
+		where 1=1
+        and a.group_cd = b.group_cd
+		<if test='group_id != "" and group_id != null '>
+			and b.group_id = #{group_id}
+		</if>
+		<if test='dialer_name != "" and dialer_name != null '>
+			and a.dialer_name like concat('%',#{dialer_name},'%')
+		</if>
+		<if test='dialer_type != "" and dialer_type != null '>
+			and a.dialer_type like concat('%',#{dialer_type},'%')
+		</if>
+	</select>
+	
+	<!-- 다이얼러 리스트 수정 -->
+	<update id="updateDialerList" parameterType="map">
+		update TBL_DIALER set 
+			dialer_name = #{dialer_name }
+			,group_cd = #{group_cd }
+			,dialer_type = #{dialer_type }
+			,dialer_ip = #{dialer_ip }
+			,dialer_port = #{dialer_port }
+			,dialer_user = #{dialer_user }
+			,dialer_pw = #{dialer_pw }
+			,dialer_dir = #{dialer_dir }
+			,is_use = #{is_use }
+			,update_dttm = now()
+			,update_user= #{user_id}
+		where DIALER_CD = #{dialer_cd}
+	</update>
+	
+	<!-- 다이얼러 리스트 추가 -->
+	<insert id="insertDialerList" parameterType="map">
+		insert ignore into
+		TBL_DIALER (
+			dialer_cd 
+			,group_cd 
+			,dialer_name 
+			,dialer_type 
+			,dialer_ip 
+			,dialer_port 
+			,dialer_user 
+			,dialer_pw 
+			,dialer_dir 
+			,is_use 
+			,create_dttm
+			,create_user 
+			,update_dttm
+			,update_user
+	
+		)values
+		(
+			#{dialer_cd }
+			,#{group_cd }
+			,#{dialer_name }
+			,#{dialer_type }
+			,#{dialer_ip }
+			,#{dialer_port }
+			,#{dialer_user }
+			,#{dialer_pw }
+			,#{dialer_dir }
+			,#{is_use }
+			,now()
+			,#{user_id }
+			,now()
+			,#{user_id}
+		)
+	</insert>
+	
+	<!-- 다이얼러 리스트 삭제 -->
+	<delete id="deleteDialerList" parameterType="map">
+		DELETE FROM TBL_DIALER
+		WHERE
+			dialer_cd IN
+	    <foreach collection="dialerList" item="data" index="i" open="(" separator="," close=")">
+			#{data.dialer_cd}
+	    </foreach>
+	</delete>
+	<select id="selectDialerCheck" parameterType="map" resultType="int">
+		select 
+			count(*) as cnt
+		from TBL_DIALER a
+		where 1=1
+		and a.dialer_cd = #{dialer_cd}
+	</select>
+	
+</mapper>

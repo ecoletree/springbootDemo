@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 	
+	* Created : 2022. 10. 13
+	* DESC :  녹취 컬럼/옵션 관리
+-->
+<mapper namespace="com.example.demo.service.recordMgt.mapper.RecordListenOptionMapper">
+	
+	
+	<!-- 유저 타입 조회 -->
+	<select id="selectUserTypeList" parameterType="map" resultType="map">
+		select 
+			a.user_type
+			, max(view_update_user) as view_update_user
+			, max(date_format(view_update_dttm, '%Y.%m.%d')) as view_update_dttm
+		from 
+		(
+		select 
+			a.user_type
+			, max(a.update_user) as view_update_user
+			, max(a.update_dttm) as view_update_dttm
+		from TBL_CUSTOM_RECORD_SEARCH a
+		group by a.user_type
+		union all
+		select 
+			a.user_type
+			, max(a.update_user) as view_update_user
+			, max(a.update_dttm) as view_update_dttm
+		from TBL_CUSTOM_RECORD_COL a
+		group by user_type
+		) a
+		group by user_type
+	</select>
+	
+	<select id="selectColumnList" parameterType="map" resultType="map">
+		select 
+			a.column_id
+			, a.rec_column
+			, a.col_name
+			, b.is_view
+			, b.user_type
+		from 
+			TBL_RECORD_COLUMN a
+		    left join
+		    TBL_CUSTOM_RECORD_COL b
+		on a.column_id = b.column_id
+		and b.user_type = #{user_type}
+		where 1=1
+		and a.is_use = 'Y'
+		order by order_num
+	</select>
+	
+	<select id="selectSearchList" parameterType="map" resultType="map">
+		select 
+			a.code_cd
+		    , a.code_name
+		    , a.code_value
+		    , b.user_type
+		    , b.is_view
+		from 
+			TBL_CODE a
+		    left join
+		    TBL_CUSTOM_RECORD_SEARCH b
+		on a.code_cd = b.code_cd
+		and b.user_type = #{user_type}
+		where 1=1
+		and a.p_code_cd = 'RES000'
+		and a.is_active = 'Y'
+		order by order_num
+	</select>
+	
+	<insert id="upsertColumnList" parameterType="map">
+		insert into TBL_CUSTOM_RECORD_COL
+		(
+			user_type 
+			, column_id 
+			, is_view 
+			, create_user 
+			, create_dttm 
+			, update_user 
+			, update_dttm 
+		)
+		values
+		<foreach collection="list" open="(" close=")" index="i" separator="),(" item="data">
+			#{user_type} 
+			, #{data.column_id} 
+			, #{data.is_view} 
+			, #{create_user}
+			, now() 
+			, #{create_user}
+			, now() 
+		</foreach>
+		on duplicate key update
+			is_view = values(is_view )
+			, update_dttm = now() 
+			, update_user = values(create_user )
+	</insert>
+	
+	<insert id="upsertSearchList" parameterType="map">
+		insert into TBL_CUSTOM_RECORD_SEARCH
+		(
+			user_type 
+			, code_cd 
+			, is_view 
+			, create_user 
+			, create_dttm 
+			, update_user 
+			, update_dttm
+		)
+		values
+		<foreach collection="list" open="(" close=")" index="i" separator="),(" item="data">
+			#{user_type} 
+			, #{data.code_cd} 
+			, #{data.is_view} 
+			, #{create_user}
+			, now() 
+			, #{create_user}
+			, now() 
+		</foreach>
+		on duplicate key update
+			is_view = values(is_view )
+			, update_dttm = now() 
+			, update_user = values(create_user )
+	</insert>
+	
+</mapper>

@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 	
+	* Created : 2022. 10. 05
+	* DESC :  [녹취관리] 녹음전송관리
+-->
+<mapper namespace="com.example.demo.service.recordMgt.mapper.RecordSendMgtMapper">
+	<resultMap id="preedRecData" type="java.util.HashMap">
+		<result property="id" column="id  " />
+		<result property="record_id " column="record_id " />
+		<result property="uuid " column="uuid " />
+		<result property="start_stamp " column="start_stamp " />
+		<result property="end_stamp " column="end_stamp " />
+		<result property="duration " column="duration " />
+		<result property="calltype  " column="calltype  " />
+		<result property="rec_type  " column="rec_type  " />
+		<result property="rec_id  " column="rec_id  " />
+		<result property="phone  " column="phone  " />
+		<result property="other  " column="other  " />
+		<result property="agent_id " column="agent_id " />
+		<result property="rec_file " column="rec_file " />
+		<result property="user_data " column="user_data " />
+		<result property="user_data_1  " column="user_data_1  " />
+		<result property="user_data_2  " column="user_data_2  " />
+		<result property="user_data_3  " column="user_data_3  " />
+		<result property="user_data_4  " column="user_data_4  " />
+		<result property="user_data_5  " column="user_data_5  " />
+		<result property="user_data_6  " column="user_data_6  " />
+		<result property="user_data_7  " column="user_data_7  " />
+		<result property="user_data_8  " column="user_data_8  " />
+		<result property="user_data_9  " column="user_data_9  " />
+		<result property="user_data_10 " column="user_data_10 " />
+		<result property="user_data_11 " column="user_data_11 " />
+		<result property="user_data_12 " column="user_data_12 " />
+		<result property="user_data_13 " column="user_data_13 " />
+		<result property="user_data_14 " column="user_data_14 " />
+		<result property="user_data_15 " column="user_data_15 " />
+		<result property="user_data_16 " column="user_data_16 " />
+		<result property="user_data_17 " column="user_data_17 " />
+		<result property="user_data_18 " column="user_data_18 " />
+		<result property="user_data_19 " column="user_data_19 " />
+		<result property="user_data_20 " column="user_data_20 " />
+		<result property="group_id  " column="group_id  " />
+		<result property="tenant_id " column="tenant_id " />
+		<result property="team_id " column="team_id " />
+		<result property="is_delete  " column="is_delete  " />
+		<result property="client_name" column="client_name" />
+		<result property="group_cd" column="group_cd" />
+		<collection property="certData" column="{rec_id = id}" select="com.example.demo.service.recordMgt.mapper.RecordSendMgtMapper.selectPreedCertificationLists" javaType="java.util.ArrayList" ofType="java.util.HashMap" />
+	</resultMap>
+	<select id="selectRecordSendList" parameterType="map" resultType="map">
+		SELECT 
+			a.record_send_id 
+			,ifnull(a.faile_count,0) faile_count
+			,a.ftp_id 
+			,b.ftp_pw
+			,a.group_name 
+			,a.group_id 
+			,FN_GROUP_NAME(a.center_id ) view_group_name
+			,a.center_name 
+			,a.center_id 
+			,concat(a.center_name ,'(',a.center_id ,')') view_center_name
+			,a.send_ip 
+			,date_format(a.apply_dttm,'%Y-%m-%e %h:%i:%s') apply_dttm
+			,b.ftp_type 
+			,b.ftp_ip 
+			,b.ftp_port 
+			,b.ftp_user 
+			,b.ftp_pw 
+			,b.ftp_dir
+			,(select group_cd from TBL_GROUP_MST WHERE group_id = a.group_id and tenant_id = a.center_id and team_id is null) group_cd
+		FROM TBL_RECORD_SEND a , TBL_CENTER_FTP_INFO b
+		where 1=1
+		and a.ftp_id = b.ftp_id
+		<if test='group_id != "" and group_id != null '>
+			and a.group_id = #{group_id}
+		</if>
+		<if test='tenant_id != "" and tenant_id != null '>
+			and a.center_id = #{tenant_id}
+		</if>
+		<if test='ftp_ip != "" and ftp_ip != null '>
+			and b.ftp_ip like concat('%',#{ftp_ip},'%')
+		</if>
+		<if test='fail_cnt != "" and fail_cnt != null '>
+			<if test='fail_cnt == "Y"'>
+				and faile_count <![CDATA[>=]]> 1
+			</if>
+		</if>
+		order by a.APPLY_DTTM desc
+	</select>
+	<!-- 전송할 레코드 리스트 preed :증서번호 남기고 전송 하기 한 기록(대기상태) 녹취 기록 검색 -->
+	<select id="selectPreedSendRecordList" parameterType="map" resultMap="preedRecData">
+			select
+				rec.id  
+				,rec.id as record_id  
+				,rec.uuid 
+				,rec.start_stamp 
+				,rec.end_stamp 
+				,rec.duration 
+				,rec.calltype  
+				,rec.rec_type  
+				,rec.rec_id  
+				,rec.phone  
+				,rec.other  
+				,rec.agent_id 
+				,rec.rec_file 
+				,rec.user_data 
+				,rec.user_data_1  
+				,rec.user_data_2  
+				,rec.user_data_3  
+				,rec.user_data_4  
+				,rec.user_data_5  
+				,rec.user_data_6  
+				,rec.user_data_7  
+				,rec.user_data_8  
+				,rec.user_data_9  
+				,rec.user_data_10 
+				,rec.user_data_11 
+				,rec.user_data_12 
+				,rec.user_data_13 
+				,rec.user_data_14 
+				,rec.user_data_15 
+				,rec.user_data_16 
+				,rec.user_data_17 
+				,rec.user_data_18 
+				,rec.user_data_19 
+				,rec.user_data_20 
+				,rec.group_id  
+				,rec.tenant_id 
+				,rec.team_id 
+				,rec.is_delete  
+				,rec.client_name
+				,rec.group_cd
+			from(
+				select 
+					a.*
+					,b.group_cd
+				from
+				TBL_REC a ,TBL_GROUP_MST b
+				where 1=1
+				
+		        and a.group_id = b.group_id
+		        and a.tenant_id = b.tenant_id
+		        and b.team_id is null
+				order by b.group_cd desc, a.id desc
+				
+			)rec , TBL_REC_TRANS_CERT cer
+			where 1=1 
+			and rec.id = cer.rec_id
+			and cer.trans_status = 'error'
+			and cer.is_trans = "N"
+			and rec.group_id = #{group_id}
+            and rec.tenant_id = #{center_id}
+			and date_format(cer.update_dttm,'%Y-%m-%d') = date_format(#{apply_dttm},'%Y-%m-%d')
+			group by rec.id
+	</select>
+	
+	<!-- 증서번호 리스트 -->
+	<select id="selectPreedCertificationLists" parameterType="map" resultType="map">
+		select
+			cer.certificate_cd 
+			,cer.rec_id 
+			,cer.internal_index 
+			,cer.certificate_num 
+			,cer.gubun 
+			,cer.is_trans 
+			,cer.trans_status 
+			,cer.rec_file 
+			,cer.create_dttm 
+			,cer.create_user 
+			,cer.update_dttm 
+			,cer.update_user
+		from
+		TBL_REC_TRANS_CERT cer
+		where 1=1
+		and cer.trans_status = 'error'
+		and cer.rec_id = #{rec_id}
+		order by cer.internal_index asc
+	</select>
+	
+	<!-- 전송한 레코드 리스트 업데이트  -->
+	<update id="updateRecordState" parameterType="map">
+		
+		update TBL_REC  
+		 SET 
+		 user_data_5 =  (CONCAT(SUBSTRING_INDEX(FN_DECRYPT(#{user_data_5}), '|', 0), '|', SUBSTRING_INDEX(FN_DECRYPT(#{user_data_5}), '|', -3))),
+		 user_data_10 = FN_ENCRYPT(IF(#{user_data_10} IS NULL OR LENGTH(FN_DECRYPT(#{user_data_10})) = 0, CONCAT('성공', '|||'), 
+		CONCAT(SUBSTRING_INDEX(FN_DECRYPT(#{user_data_10}), '|', 0), CONCAT('성공', '|'), SUBSTRING_INDEX(FN_DECRYPT(#{user_data_10}), '|', -3))
+		)) 
+		WHERE id = #{record_id}
+		
+	</update>
+	
+	<!-- 전송한 증서 리스트 업데이트 preed --> 
+	<update id="updateRecordCertificationState" parameterType="map">
+		update TBL_REC_TRANS_CERT set
+			trans_status = #{trans_status}
+			, is_trans=#{is_trans}  
+			, update_dttm = now()
+		where certificate_cd in
+		<foreach collection="certData" open="(" close=")" index="i" separator="," item="data">
+       		#{data.certificate_cd}
+   		</foreach>
+   		
+	</update>
+	
+	<!-- 전송한 레코드 리스트 인서트 preed  ::: insert가 맞는가  update로 바꾸기--> 
+	<update id="updateRecordSendList" parameterType="map">
+		update TBL_RECORD_SEND set
+			faile_count = #{upload_fail}
+		where record_send_id = #{record_send_id};
+	</update>
+</mapper>

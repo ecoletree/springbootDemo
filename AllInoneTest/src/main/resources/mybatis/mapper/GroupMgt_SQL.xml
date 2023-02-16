@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 장윤석	
+	* Created : 2022. 07. 13
+	* DESC :  조직관리
+-->
+<mapper namespace="com.example.demo.service.groupMgt.mapper.GroupMgtMapper">
+	
+	<!-- 조직관리 조회 -->
+	<select id="selectGroupMgtList" parameterType="map" resultType="map">
+		select 
+			group_cd
+			, group_id 
+			, tenant_id 
+			, team_id
+			,group_dialer_name
+			<choose>
+				<when test='group_type.equals("center")'>
+					, (select group_name from TBL_GROUP_MST where group_id = a.group_id limit 0,1) as cust_name
+				</when>
+				<when test='group_type.equals("team")'>
+					, (select group_name from TBL_GROUP_MST where group_id = a.group_id limit 0,1) as cust_name
+					, (select concat(group_name,'(',group_id,')') from TBL_GROUP_MST where group_id = a.group_id limit 0,1) as view_cust_name
+					, (select group_name from TBL_GROUP_MST where tenant_id = a.tenant_id limit 0,1) as center_name
+					, (select concat(group_name,'(',tenant_id,')') from TBL_GROUP_MST where tenant_id = a.tenant_id limit 0,1) as view_center_name
+				</when>
+			</choose>
+			,(select group_concat(tenant_id) from TBL_GROUP_MST where team_id is null and group_id = a.group_id) tenantList
+			, group_name 
+			, group_master 
+			, address 
+			, phone 
+			, create_dttm 
+			, create_user 
+			, update_dttm 
+			, update_user 
+			, is_delete
+		from TBL_GROUP_MST a
+		where 1=1
+		and is_delete = 'N'
+		<if test='group_id != "" and group_id != null '>
+			and a.group_id = #{group_id}
+		</if>
+		<if test='tenant_id != "" and tenant_id != null '>
+			and a.tenant_id = #{tenant_id}
+		</if>
+		<if test='team_id != "" and team_id != null '>
+			and a.team_id = #{team_id}
+		</if>
+		<if test='group_name != "" and group_name != null '>
+			and a.group_name like concat('%',#{group_name},'%')
+		</if>
+		<if test='group_master != "" and group_master != null '>
+			and a.group_master like concat('%',#{group_master},'%')
+		</if>
+		<choose>
+			<when test='group_type.equals("group")'>
+				and a.tenant_id is null
+				and a.team_id is null
+			</when>
+			<when test='group_type.equals("center")'>
+				and a.team_id is null
+				and a.tenant_id is not null
+			</when>
+			<when test='group_type.equals("team")'>
+				and a.team_id is not null
+			</when>
+		</choose>
+		order by a.update_dttm desc
+	</select>
+	
+	<!--  조직관리 전체 조회  -->
+	<select id="selectGroupList"  parameterType="map" resultType="map">
+	SELECT 
+		a.group_cd 
+		,a.group_id 
+		,a.tenant_id 
+		,a.team_id 
+		,a.group_name 
+		, (
+        CASE
+			WHEN (a.team_id is null and a.tenant_id is null)
+			THEN CONCAT(a.group_name, '(', a.group_id,')')
+			WHEN (a.team_id is null)
+			THEN CONCAT(a.group_name, '(', a.tenant_id,')')
+			ELSE CONCAT(a.group_name, '(', a.team_id,')')
+		END
+        ) as view_group_name
+		,a.group_master 
+		,a.address 
+		,a.phone 
+		,a.create_dttm 
+		,a.create_user 
+		,a.update_dttm 
+		,a.update_user 
+		,a.is_delete
+		,(select DIALER_CENTER_CODE from TENANT WHERE 1=1 AND ID = a.tenant_id) dialer_center_code
+	FROM TBL_GROUP_MST a
+	where 1=1 
+	and is_delete ="N"
+	order by a.GROUP_ID asc
+	</select>
+	
+	<!-- 조직관리 수정 -->
+	<update id="updateGroupMgt" parameterType="map">
+		update TBL_GROUP_MST set 
+			group_name =  #{group_name}
+			, group_master  =  #{group_master}
+			, address  =  #{address}
+			, phone  =  #{phone}
+			, update_dttm = now()
+			, update_user = #{user_id}
+			, group_dialer_name = #{group_dialer_name}
+		where group_cd = #{group_cd}
+	</update>
+	
+	<!-- 조직관리 추가 -->
+	<insert id="insertGroupMgt" parameterType="map">
+		insert into
+		TBL_GROUP_MST (
+			group_cd
+			, group_id 
+			, tenant_id 
+			, team_id 
+			, group_name 
+			, group_master 
+			, address 
+			, phone 
+			, create_dttm 
+			, create_user 
+			, update_dttm 
+			, update_user 
+			,group_dialer_name
+		)values(
+			#{group_cd}
+			, #{group_id} 
+			, #{tenant_id} 
+			, #{team_id} 
+			, #{group_name} 
+			, #{group_master} 
+			, #{address} 
+			, #{phone} 
+			, now() 
+			, #{user_id} 
+			, now() 
+			, #{user_id} 
+			, #{group_dialer_name}
+		)
+	</insert>
+	
+	<!-- 조직관리 삭제 -->
+	<update id="deleteGroupMgt" parameterType="map">
+		update TBL_GROUP_MST set 
+			is_delete = 'Y'
+			, update_dttm = now()
+			, update_user = #{user_id}
+		where
+		<if test='type.equals("group")'>
+			group_id = #{group_id}
+		</if>
+		<if test='type.equals("center")'>
+			group_id = #{group_id} 
+			and tenant_id = #{tenant_id}
+		 </if>
+		<if test='type.equals("team")'>
+		 	group_cd = #{group_cd}
+		 </if>
+	</update>
+	
+	<!-- 고객사 삭제시에 -->
+	<delete id="deleteTenantId"  parameterType="map">
+		delete from TENANT
+		where id in 
+		<foreach collection="tenantList" item="data" index="index" open="(" separator="," close=")">
+			#{data}
+		</foreach>
+	</delete>
+	
+	<!-- 조직관리 ID 체크 -->
+	<select id="selectGroupMgtCheck" parameterType="map" resultType="int">
+		select
+			count(*) as cnt 
+		from TBL_GROUP_MST a
+		where 1=1
+		and is_delete = 'N'
+		<if test='group_id != "" and group_id != null '>
+			and a.group_id = #{group_id}
+		</if>
+		<if test='tenant_id != "" and tenant_id != null '>
+			and a.tenant_id = #{tenant_id}
+		</if>
+		<if test='team_id != "" and team_id != null '>
+			and a.team_id = #{team_id}
+		</if>
+	</select>
+	<!-- 조직관리 다이얼러명 체크 -->
+	<select id="selectGroupDialerNameCheck" parameterType="map" resultType="int">
+		select
+			count(*) as cnt 
+		from TBL_GROUP_MST a
+		where 1=1
+		and is_delete = 'N'
+		<if test='group_dialer_name != "" and group_dialer_name != null '>
+			and a.group_dialer_name = #{group_dialer_name}
+		</if>
+	</select>
+	
+</mapper>

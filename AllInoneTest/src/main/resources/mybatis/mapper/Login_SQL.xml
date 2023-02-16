@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : ysjang	
+	* Created : 2022. 04. 12.
+	* DESC : 로그인 정보 확인
+-->
+<mapper namespace="com.example.demo.service.login.mapper.LoginMapper">
+	
+	<!-- 로그인 확인 -->
+    <select id="selectLoginInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+ 		select 
+			a.id			as user_id
+			, a.password	as user_pw
+			, a.is_super	as is_super
+			, a.user_name
+			, a.user_ip 
+			, 'system' as user_type
+		from 
+			SYSTEM_ADMIN a
+        where 1=1
+        and a.id = #{user_id}
+    </select>
+    
+    <!-- 로그인 확인 -->
+    <select id="selectGroupLoginInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+ 		 select
+			a.user_id 
+			, a.group_cd 
+			, a.center_cd
+			, a.team_cd 
+			, a.user_type 
+			, a.user_pw 
+			, a.user_name 
+			, a.phone 
+			, a.email 
+			, a.is_delete 
+			, a.is_agent 
+			, a.create_dttm 
+			, a.create_user 
+			, a.update_dttm 
+			, a.update_user
+			, 'N' as is_super
+			, a.user_ip
+		from TBL_USER a
+		where 1=1
+		and a.is_delete = 'N'
+		and a.is_agent='N'
+		and a.user_type = #{user_type}
+		and a.user_id = #{user_id}
+    </select>
+
+</mapper>

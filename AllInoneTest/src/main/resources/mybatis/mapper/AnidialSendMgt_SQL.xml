@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 	
+	* Created : 2022. 10. 05
+	* DESC :  [애니매니저] 전송관리
+-->
+<mapper namespace="com.example.demo.service.aniManager.mapper.AnidialSendMgtMapper">
+
+
+	<resultMap id="transmissionData" type="java.util.HashMap">
+		<result property="group_id" column="group_id" />
+		<result property="group_name" column="group_name" />
+		<result property="center_code" column="center_code" />
+		<result property="center_id" column="center_id" />
+		<result property="broadband_code" column="broadbandcode" />
+		<result property="center_name" column="center_name" />
+		<result property="view_group_name" column="view_group_name" />
+		<result property="view_center_name" column="view_center_name" />
+		<result property="center_cnt" column="center_cnt" />
+		<collection property="broadband_codes" column="{center_id=center_id,broadband_code=broadband_code}" select="com.example.demo.service.aniManager.mapper.AnidialSendMgtMapper.selectBroadbandCodeLists" javaType="java.util.ArrayList" ofType="java.util.HashMap" />
+	</resultMap>
+	
+	<resultMap id="broadbandList" type="java.util.HashMap">
+		<result property="broadband_code" column="group_name" />
+		<result property="center_code" column="center_code" />
+		<result property="center_id" column="center_id" />
+		<collection property="zipData" column="{animanger_cd = animanger_cd}" select="com.example.demo.service.aniManager.mapper.AnidialSendMgtMapper.selectSendMgtZipList" javaType="java.util.ArrayList" ofType="java.util.HashMap" />
+	</resultMap>
+	
+	<select id="selectSendMgtList" parameterType="map" resultMap="transmissionData">
+		SELECT
+            a.group_id 
+			,a.group_name 
+			,a.center_code 
+			,a.center_id
+			,if(#{broadband_code} = null or #{broadband_code} = '','',a.broadband_code ) broadband_code
+			,a.center_name 
+			,FN_GROUP_NAME(a.center_id) view_group_name
+            ,concat(a.center_name ,'(',a.center_id,')') view_center_name 
+            ,count(b.broadband_code) center_cnt
+		from TBL_ANIMANAGER a 
+        ,TBL_BROADBAND_CODE b 
+        ,TBL_DIALER d
+		where 1=1
+        and a.broadband_code = b.broadband_code
+        and a.dialer_cd = d.dialer_cd
+        and d.is_use = "Y"
+        <if test='group_id != "" and group_id != null '>
+			and a.group_id = #{group_id}
+		</if>
+		<if test='tenant_id != "" and tenant_id != null '>
+			and a.center_id = #{tenant_id}
+		</if>
+		<if test='broadband_code != "" and broadband_code != null '>
+			and a.broadband_code = #{broadband_code}
+		</if>
+         group by a.center_id
+	</select>
+	<select id="selectCountSendMgtizpList" parameterType="map" resultType="int">
+		select
+			count(*)		
+		from TBL_ANIMANAGER a 
+			,TBL_BROADBAND_CODE b 
+			,TBL_ZIP_CODE c 
+			,TBL_DIALER d
+		where 1=1
+			and a.broadband_code = b.broadband_code
+			and a.broadband_code = c.loc_code
+			and a.dialer_cd = d.dialer_cd
+			and c.loc_zip_cd = "61010000"
+            and c.is_use = "Y"
+			and d.is_use = "Y"
+			 <if test='group_id != "" and group_id != null '>
+				and a.group_id = #{group_id}
+			</if>
+			<if test='tenant_id != "" and tenant_id != null '>
+				and a.center_id = #{tenant_id}
+			</if>
+			<if test='broadband_code != "" and broadband_code != null '>
+				and a.broadband_code = #{broadband_code}
+			</if>
+	</select>
+	<select id="selectBroadbandCodeLists" parameterType="map" resultMap="broadbandList">
+		SELECT
+			a.animanger_cd
+            ,a.center_code 
+            ,a.broadband_code
+			,a.center_id 
+			from TBL_ANIMANAGER a ,TBL_DIALER d
+		where 1=1
+        and a.dialer_cd = d.dialer_cd
+        <if test='center_id != "" and center_id != null '>
+				and a.center_id = #{center_id}
+			</if>
+			<if test='broadband_code != "" and broadband_code != null '>
+				and a.broadband_code = #{broadband_code}
+			</if>
+	</select>
+	<select id="selectSendMgtZipList" parameterType="map" resultType="map">
+		select
+			a.animanger_cd 
+			,EXISTS(
+				SELECT * from TBL_ANIMANAGER_SEND 
+				WHERE animanger_cd = a.animanger_cd 
+				and broadband_code = b.broadband_code 
+				and zip_code = c.zip_code ) as register_status
+            ,d.dialer_name
+            ,concat(d.dialer_name,'(',d.dialer_cd,")") view_dialer_name
+            ,(select group_dialer_name from TBL_GROUP_MST where group_id = a.group_id and is_delete ="N" group by group_id ) group_dialer_name
+            ,d.dialer_ip
+            ,d.dialer_port
+            ,d.dialer_type
+            ,d.dialer_user
+            ,d.dialer_pw
+            ,d.dialer_dir
+            ,a.group_id 
+			,a.center_id
+			,FN_GROUP_NAME(a.center_id) view_group_name
+            ,concat(a.center_name ,'(',a.center_id,')') view_center_name 
+			,a.center_name 
+			,a.group_name 
+			,a.center_code 
+			,a.dialer_cd 
+			,b.broadband_code 
+			,b.broadband_name 
+			,c.zip_code
+			,a.out_no 
+			,a.in_no 
+			,a.status_code 
+			,a.memo 
+			,a.is_use 
+			,DATE_FORMAT(a.start_date,'%Y.%m.%d') view_start_date
+			,DATE_FORMAT(a.end_date,'%Y.%m.%d') view_end_date
+			,DATE_FORMAT(a.create_dttm,'%Y.%m.%d %H:%i') view_create_dttm
+			,DATE_FORMAT(a.update_dttm,'%Y.%m.%d %H:%i') view_update_dttm
+			,DATE_FORMAT(a.start_date,'%Y%m%d') as start_date
+			,DATE_FORMAT(a.end_date,'%Y%m%d') end_date
+			,DATE_FORMAT(a.create_dttm,'%Y-%m-%d %H:%i:%s')create_dttm
+			,DATE_FORMAT(a.update_dttm,'%Y-%m-%d %H:%i:%s')update_dttm
+			,a.create_user 
+			,a.update_user		
+		from TBL_ANIMANAGER a 
+	        ,TBL_BROADBAND_CODE b 
+	        ,TBL_ZIP_CODE c 
+            ,TBL_DIALER d
+		where 1=1
+	        and a.broadband_code = b.broadband_code
+	        and a.broadband_code = c.loc_code
+            and a.dialer_cd = d.dialer_cd
+            <if test='animanger_cd != "" and animanger_cd != null '>
+				and a.animanger_cd = #{animanger_cd}
+			</if>
+			and c.loc_zip_cd = "61010000"
+            and c.is_use = "Y"
+			and d.is_use = "Y"
+            order by a.dialer_cd
+            
+	</select>
+	<!-- 애니매니저 추가 -->
+	<insert id="insertAnidialSend" parameterType="map" >
+		insert into TBL_ANIMANAGER_SEND
+		(
+			animanger_cd 
+			,broadband_code 
+			,zip_code 
+			,group_name 
+			,center_name 
+			,center_code 
+			,dialer_cd 
+			,out_no 
+			,in_no 
+			,start_date 
+			,end_date 
+			,create_dttm 
+			,use_dttm 
+			,send_dttm 
+			,status
+		)
+		values
+		<foreach collection="sendData" open="(" close=")" index="i" separator="),(" item="data">
+			#{data.animanger_cd }
+			,#{data.broadband_code }
+			,#{data.zip_code }
+			,#{data.group_name }
+			,#{data.center_name }
+			,#{data.center_code }
+			,#{data.dialer_cd }
+			,#{data.out_no }
+			,#{data.in_no }
+			,#{data.start_date }
+			,#{data.end_date }
+			,#{data.create_dttm }
+			,#{data.use_dttm } 
+			,now()
+			,'Y'
+		</foreach>
+		on duplicate key update
+			group_name  = values(group_name )
+			,center_name  = values(center_name )
+			,center_code  = values(center_code )
+			,dialer_cd  = values(dialer_cd )
+			,out_no  = values(out_no )
+			,in_no  = values(in_no )
+			,start_date  = values(start_date )
+			,end_date  = values(end_date )
+			,create_dttm  = values(create_dttm )
+			,use_dttm  = values(use_dttm )
+			,send_dttm  = now()
+			,status = 'Y'
+	</insert>
+	
+
+</mapper>

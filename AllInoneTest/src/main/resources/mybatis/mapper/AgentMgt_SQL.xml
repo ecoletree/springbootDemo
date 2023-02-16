@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 김경현	
+	* Created : 2022. 04. 11
+	* DESC :  상담원관리
+-->
+<mapper namespace="com.example.demo.service.agentMgt.mapper.AgentMgtMapper">
+
+
+	
+	<!-- 상담원관리 조회 -->
+	<select id="selectAgentList" parameterType="map" resultType="map">
+		SELECT 
+			a.grp_id
+			,b.name grp_name
+			,concat(b.name,'(',b.grp_id,')') view_grp_name
+			,a.agent_id 
+			,a.group_cd 
+			,c.group_id
+			,FN_GROUP_NAME(c.tenant_id) group_name
+			,c.tenant_id
+			,concat((select group_name from TBL_GROUP_MST where tenant_id = c.tenant_id and team_id is null and is_delete = "N"),'(',c.tenant_id,')') tenant_name
+			,c.team_id
+			,concat(c.group_name,'(',c.team_id,')') team_name
+			,a.password 
+			,a.name agent_name
+			,a.status agent_status
+			,a.state 
+			, DATE_FORMAT(a.last_login,'%Y.%m.%d %H:%i:%s') last_login 
+			, DATE_FORMAT(a.last_logout,'%Y.%m.%d %H:%i:%s') last_logout
+			,a.update_tm  
+			,a.phone 
+			,a.is_acw  
+			,a.io_flag 
+			,a.is_delete
+		FROM AGENT a , AGENT_SKILL b , TBL_GROUP_MST c
+		where 1=1
+		and a.grp_id = b.grp_id
+		and a.group_cd = c.group_cd
+		and a.is_delete="N"
+		and c.is_delete="N"
+		
+		<if test='group_id != "" and group_id != null '>
+			and c.group_id = #{group_id}
+		</if>
+		<if test='tenant_id != "" and tenant_id != null '>
+			and c.tenant_id = #{tenant_id}
+		</if>
+		<if test='team_id != "" and team_id != null '>
+			and c.team_id = #{team_id}
+		</if>
+		<if test='grp_id != "" and grp_id != null '>
+			and a.grp_id like concat('%',#{grp_id},'%')
+		</if>
+		<if test='agent_name != "" and agent_name != null '>
+			and a.name like concat('%',#{agent_name},'%')
+		</if>
+		order by a.update_tm desc
+	</select>
+	
+	<!-- 상담원관리 수정 -->
+	<update id="updateAgent" parameterType="map">
+		update AGENT set 
+			name =  #{agent_name}
+			, status  =  #{agent_status}
+			, state  =  #{state}
+			, phone  =  #{phone}
+			, update_tm = DATE_FORMAT(now(),'%Y%m%d%H%i%s')
+			, io_flag = #{io_flag}
+			, group_cd = (select group_cd from TBL_GROUP_MST where group_id = #{group_id} and tenant_id = #{tenant_id} and team_id = #{team_id})
+		where
+		grp_id = #{grp_id}
+		and agent_id = #{agent_id}
+	</update>
+	<!-- 상담원관리 비밀번호 수정 -->
+	<update id="updateAgentPW" parameterType="map">
+		update AGENT set 
+			password  =  #{agent_pw}
+		where grp_id = #{grp_id}
+		and agent_id = #{agent_id}
+	</update>
+	<!-- 상담원관리 추가 -->
+	<insert id="insertAgent" parameterType="map">
+		insert into
+		AGENT (
+			grp_id 
+			, agent_id 
+			, group_cd 
+			, password 
+			, name
+			, status
+			, state 
+			, phone
+			, last_login 
+			, last_logout 
+			, update_tm
+			, io_flag
+		)values
+		<foreach collection="agentList" open="(" close=")" index="i" separator="),(" item="data">
+			#{data.grp_id}
+			, #{data.agent_id}
+			, (select group_cd from TBL_GROUP_MST  where group_id = #{data.group_id} and tenant_id = #{data.tenant_id} and team_id = #{data.team_id} and is_delete = "N")
+			, #{data.agent_pw}
+			, #{data.agent_name}
+			, "LoggedOut"
+			, "Idle"
+			, ""
+			, DATE_FORMAT(now(),'%Y%m%d%H%i%s')
+			, DATE_FORMAT(now(),'%Y%m%d%H%i%s')
+			, DATE_FORMAT(now(),'%Y%m%d%H%i%s')
+			, #{data.io_flag}
+		</foreach>
+	</insert>
+	
+	<!-- 상담원관리 삭제 -->
+	<update id="deleteAgent" parameterType="map">
+		update AGENT set 
+			is_delete = 'Y'
+		where 1=1
+		and agent_id = #{agent_id}
+	</update>
+	
+	<!-- 상담원관리 ID 체크 -->
+	<select id="selectAgentCheck" parameterType="map" resultType="int">
+		select
+			count(*) as cnt 
+		from AGENT
+		where 1=1
+		and agent_id in
+		<foreach collection="agentList" open="(" close=")" index="i" separator="," item="data">
+			 #{data.agent_id}
+		 </foreach>
+	</select>
+	<!-- 상담원관리 SKILL ID 체크 -->
+	<select id="selectAgentSkillCheck" parameterType="map" resultType="int">
+		select
+			count(*) as cnt 
+		from AGENT_SKILL
+		where 1=1
+		and grp_id in
+		<foreach collection="agentList" open="(" close=")" index="i" separator="," item="data">
+			 #{data.agent_id}
+		 </foreach>
+	</select>
+<!-- 헌트그룹 리스트 --> 
+<!-- 	<select id="selectGroupList"  parameterType="map" resultType="map"> -->
+<!-- 		select  -->
+<!-- 			tenant_id  -->
+<!-- 			,grp_id  -->
+<!-- 			,noanswer_timeout  -->
+<!-- 			,enter_announce  -->
+<!-- 			,reenter_announce  -->
+<!-- 			,recording  -->
+<!-- 			,acd  -->
+<!-- 			,connect_announce -->
+<!-- 			,name as grp_name -->
+<!-- 		    ,concat(name,'(',grp_id,')') as view_grp_name -->
+<!-- 		from AGENT_SKILL -->
+<!-- 		where 1=1 -->
+<!-- 		<if test='tenant_id != null and tenant_id != ""'> -->
+<!-- 			and tenant_id = #{tenant_id} -->
+<!-- 		</if> -->
+<!-- 	</select> -->
+	
+	<select id="selectTeamList"  parameterType="map" resultType="map">
+		SELECT
+			a.group_cd 
+			,a.group_id 
+			,a.tenant_id 
+			,a.team_id 
+			,a.group_name 
+			,concat(a.group_name,'(',team_id,')') view_team_name
+			,a.group_master 
+			,a.address 
+			,a.phone 
+			,a.create_dttm
+			,a.create_user 
+			,a.update_dttm
+			,a.update_user 
+			,a.is_delete
+		 FROM TBL_GROUP_MST a
+		 where 1=1
+		 and is_delete = "N"
+		 and team_id is not null
+	</select>	
+		<!-- 상담원관리 ID 체크 -->
+	<select id="selectSkillGrpCheck" parameterType="map" resultType="int">
+		select
+			count(*) as cnt 
+		from AGENT_SKILL
+		where 1=1
+		and grp_id in
+		<foreach collection="checkList" open="(" close=")" index="i" separator="," item="data">
+			 #{data.grp_id}
+		 </foreach>
+	</select>
+	<select id="selectGroupList" parameterType="map" resultType="map">
+		select 
+			(select concat(group_name,'(',group_id,')') from TBL_GROUP_MST WHERE group_id = b.group_id limit 0,1) group_name
+			,a.tenant_id
+			,b.group_name as tenant_name
+			,concat(b.group_name,'(',b.tenant_id,')') view_tenant_name
+			,a.grp_id
+			,a.name
+			,(select count(*) from AGENT c where c.grp_id = a.grp_id and c.is_delete = "N") use_cnt
+		from
+		AGENT_SKILL a, TBL_GROUP_MST b
+		where 1=1
+		and a.tenant_id = b.tenant_id
+		and b.team_id is null
+		and b.is_delete = "N"
+		<if test='group_id != "" and group_id != null '>
+			and b.group_id = #{group_id}
+		</if>
+		<if test='tenant_id != "" and tenant_id != null '>
+			and b.tenant_id = #{tenant_id}
+		</if>
+		<if test='skill_id != "" and skill_id != null '>
+			and a.grp_id like concat('%', #{skill_id},'%')
+		</if>
+		<if test='skill_name != "" and skill_name != null '>
+			and a.name like concat('%', #{skill_name},'%')
+		</if>
+	</select>
+</mapper>

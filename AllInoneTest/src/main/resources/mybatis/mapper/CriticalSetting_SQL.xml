@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 김경현	
+	* Created : 2022. 08. 09.
+	* DESC :  임계점 관리
+-->
+<mapper namespace="com.example.demo.service.settingMgt.mapper.CriticalSettingMapper">
+
+	<select id="selectMonitoringStatusList" parameterType="map" resultType="map">
+		select
+			  a.code_cd as code_cd
+			, a.p_code_cd as p_code_cd
+            , a.code_name
+            , ifnull(b.set_value, a.code_value1) as code_value
+            , ifnull(b.color, a.code_value2) as color
+            , ifnull(b.order_num,a.order_num) as order_num
+            , b.tenant_id as tenant_id
+            , ifnull(b.is_highlight,'N') as is_highlight
+            ,CASE
+				WHEN a.p_code_cd is null and code_cd  in('RR000','RW000','SL000','AS000')
+				THEN 'percent'
+			    WHEN a.p_code_cd is null and code_cd in('AC000','AT000','AW000')
+				THEN 'time'
+				WHEN a.p_code_cd is null and code_cd  = 'QU000'
+				THEN 'count'
+				ELSE ''
+			END status_type
+		from
+		TBL_STATUS_CODE a
+        left join
+        	TBL_CENTER_STATUS b
+        on
+        	a.code_cd = b.status_cd
+        	<if test='tenant_id != null'>
+        	and b.tenant_id = #{tenant_id}
+        	</if> 
+		where 1=1
+		<if test='p_code_cd != null'>
+			and p_code_cd = #{p_code_cd} 
+		</if>
+		order by ifnull(b.status_cd,a.code_cd), ifnull(b.order_num,a.order_num) asc
+		
+	</select>
+	<update id="insertCriticalSetting" parameterType="map">
+		insert into TBL_CENTER_STATUS
+		(
+		tenant_id 
+		,status_cd 
+		,color 
+		,set_value 
+		,is_highlight 
+		,order_num
+		)
+		values 
+		<foreach collection="list"  separator="," item="item">
+		(
+		#{item.tenant_id}
+		,#{item.status_cd}
+		,#{item.color}
+		,#{item.set_value}
+		,#{item.is_highlight}
+		,#{item.order_num}
+		)
+		</foreach>
+		on duplicate key update
+		color = values(color)
+		,set_value = values(set_value)
+		,is_highlight = values(is_highlight)
+		,order_num = values(order_num)
+	</update>
+</mapper>

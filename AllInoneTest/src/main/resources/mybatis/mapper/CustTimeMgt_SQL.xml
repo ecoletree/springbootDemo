@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 김경현	
+	* Created : 2022. 04. 11
+	* DESC :  고객사업무시간관리
+-->
+<mapper namespace="com.example.demo.service.custTimeMgt.mapper.CustTimeMgtMapper">
+	
+	<!-- 고객사업무시간관리 조회 -->
+	<select id="selectWorkSchduleList" parameterType="map" resultType="map">
+		select
+			a.workschedule_id
+			, a.tenant_id 
+            , b.group_id 
+            , b.group_cd 
+            , FN_GROUP_NAME(a.tenant_id) as group_name
+			, concat(b.group_name,'(',a.tenant_id,')') as center_name
+			, a.day as ws_day
+			, a.start as ws_start
+			, a.end as ws_end
+		from
+		WORKSCHDULE a, TBL_GROUP_MST b
+		where 1=1
+		and b.is_delete = "N"
+		and a.tenant_id = b.tenant_id
+        and b.tenant_id is not null
+        and b.team_id is null
+		<if test='group_id != "" and group_id != null'>
+			and b.group_id = #{group_id}
+		</if>
+		<if test='tenant_id != "" and tenant_id != null'>
+			and b.tenant_id = #{tenant_id}
+		</if>
+		order by a.tenant_id, a.day asc
+	</select>
+	
+	<!-- 고객사업무시간관리 수정 -->
+	<update id="updateWorkSchdule" parameterType="map">
+		update WORKSCHDULE set 
+			day =  #{ws_day}
+			, start = #{ws_start}
+			, end = #{ws_end}
+		where workschedule_id = #{workschedule_id}
+	</update>
+	
+	<!-- 고객사업무시간관리 추가 -->
+	<insert id="insertWorkSchdule" parameterType="map">
+		insert into WORKSCHDULE (
+			tenant_id
+			, day
+			, start
+			, end
+		)values
+		<foreach collection="wsArray" open="(" close=")" index="i" separator="),(" item="data">
+			#{data.tenant_id}
+			, #{data.ws_day}
+			, #{data.ws_start}
+			, #{data.ws_end}
+		</foreach>
+	</insert>
+	
+	<!-- 고객사업무시간관리 삭제 -->
+	<delete id="deleteWorkSchdule" parameterType="map">
+		delete from WORKSCHDULE
+		where workschedule_id = #{workschedule_id} 
+	</delete>
+	
+</mapper>

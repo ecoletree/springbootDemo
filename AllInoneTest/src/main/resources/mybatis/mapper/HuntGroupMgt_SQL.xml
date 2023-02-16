@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 김경현	
+	* Created : 2022. 04. 11
+	* DESC :  헌트그룹관리
+-->
+<mapper namespace="com.example.demo.service.huntGroupMgt.mapper.HuntGroupMgtMapper">
+
+	<!-- 헌트그룹관리 조회 -->
+	<select id="selectStationGRPList" parameterType="map" resultType="map">
+		select
+			a.tenant_id
+			,FN_GROUP_NAME(a.tenant_id) group_name
+			, concat(a.tenant_name,'(',a.tenant_id,')') as tenant_name 
+			, a.grp_id 
+			, a.grp_name 
+			, a.noanswer_timeout
+            ,GROUP_CONCAT(b.phone SEPARATOR ',') AS station_phone 
+		from
+			(select
+				s.tenant_id 
+			    , g.group_id
+			    , g.group_name as tenant_name
+				, s.grp_id 
+				, s.name as grp_name 
+				, s.noanswer_timeout
+			from
+			STATION_GRP s ,TBL_GROUP_MST g
+			where 1=1
+			and s.tenant_id = g.tenant_id
+			<if test='group_id != "" and group_id != null '>
+				and g.group_id = #{group_id}
+			</if>
+			<if test='tenant_id != "" and tenant_id != null '>
+				and s.tenant_id = #{tenant_id}
+			</if>
+			and g.team_id is null
+			) a
+			
+		left outer join STATION b
+		
+        on a.tenant_id = b.tenant_id
+        and a.grp_id = b.station_grp
+        
+		where 1=1
+		
+        group by a.grp_id
+        order by a.tenant_id asc
+	</select>
+	
+	<!-- 헌트그룹관리 수정 -->
+	<update id="updateStationGRP" parameterType="map">
+		update STATION_GRP set 
+			name =  #{grp_name}
+			, noanswer_timeout  =  #{noanswer_timeout}
+		where tenant_id = #{tenant_id}
+		and grp_id = #{grp_id}
+	</update>
+	
+	<!-- 헌트그룹관리 추가 -->
+	<insert id="insertStationGRP" parameterType="map">
+		insert into
+		STATION_GRP (
+			tenant_id
+			, grp_id 
+			, name 
+			, noanswer_timeout
+		)values(
+			#{tenant_id}
+			, #{grp_id}
+			, #{grp_name}
+			, #{noanswer_timeout}
+		)
+	</insert>
+	
+	<!-- 헌트그룹관리 삭제 -->
+	<delete id="deleteStationGRP" parameterType="map">
+		delete from STATION_GRP
+		where tenant_id = #{tenant_id}
+		and grp_id = #{grp_id}
+	</delete>
+	<!-- 고객리스트 조회 -->
+	<select id="selectStationGrpIdCheck" parameterType="map" resultType="int">
+		select
+			count(*) as cnt
+		from STATION_GRP
+		where 1=1
+		and grp_id = #{grp_id}
+		; 
+	</select>	
+</mapper>

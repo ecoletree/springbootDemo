@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : ysjang	
+	* Created : 2022. 10. 14.
+	* DESC : 로그인 정보 확인
+-->
+<mapper namespace="com.example.demo.service.log.mapper.LogMapper">
+	
+	<select id="selectLogList" parameterType="map" resultType="map">
+		select
+			a.log_id 
+			, a.log_dttm 
+			, a.agent_id 
+			, a.group_id 
+			, a.tenant_id 
+			, a.team_id 
+			, a.log_msg 
+			, a.login_ip 
+		from TBL_SYSTEM_LOG a
+		where 1=1
+	</select>
+	
+	<insert id="insertLog" parameterType="map">
+		insert into 
+		TBL_SYSTEM_LOG (
+			log_dttm 
+			, agent_id 
+			, group_id 
+			, tenant_id 
+			, team_id 
+			, log_msg 
+			, login_ip 
+		)values(
+			now() 
+			, #{agent_id} 
+			, #{group_id} 
+			, #{tenant_id} 
+			, #{team_id} 
+			, #{log_msg} 
+			, #{login_ip}
+		)
+	</insert>
+</mapper>

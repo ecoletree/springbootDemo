@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : kkh	
+	* Created : 2022. 07. 05.
+	* DESC : 메뉴권한 관리
+-->
+<mapper namespace="com.example.demo.service.login.mapper.RoleMapper">
+	
+	<!-- 로그인 확인 -->
+    <select id="selectUserRoleList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT 
+			a.menu_cd 
+			,a.p_menu_cd 
+			,a.menu_name 
+			,a.menu_url 
+			,a.is_parent 
+			,a.order_num 
+			,b.user_type 
+			,if (#{is_super}= "Y","Y", b.is_write) is_write
+            ,if (#{is_super}= "Y","Y", b.is_delete) is_delete
+			,b.create_dttm  
+			,b.create_user
+			,if(#{is_super}="Y","Y",if(b.is_use is null,'N',b.is_use)) is_view
+			,if (#{is_super}= "Y","Y", b.is_update) is_update
+			,if (#{is_super}= "Y","Y", b.is_search) is_search
+			,if (#{is_super}= "Y","Y", b.is_upload) is_upload
+			,if (#{is_super}= "Y","Y", b.is_download) is_download
+			,if (#{is_super}= "Y","Y", b.is_rec_download) is_rec_download
+			,if (#{is_super}= "Y","Y", b.is_transfer) is_transfer
+			,if (#{is_super}= "Y","Y", b.is_encrypt_download) is_encrypt_download
+			,if (#{is_super}= "Y","Y", b.is_play) is_play
+			,if (#{is_super}= "Y","Y", b.is_column) is_column
+			,if (#{is_super}= "Y","Y", b.is_search_option) is_search_option
+			,if (#{is_super}= "Y","Y", b.is_certification) is_certification
+			
+		FROM TBL_MENU_MST a left outer join TBL_USER_MENU_R b
+			on a.MENU_CD = b.MENU_CD
+			and b.user_type = #{user_type}
+		where 1=1 
+		and a.IS_DELETE="N"
+		order by order_num asc
+		;
+    </select>
+    
+    <!-- 권한 첫번째 페이지 확인 -->
+    <select id="selectUserFirstRole" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		SELECT 
+			a.menu_cd 
+			, a.p_menu_cd 
+			, a.menu_name 
+			, a.menu_url
+		<choose>
+			<when test='is_super != "Y"'>
+				FROM TBL_MENU_MST a 
+				, TBL_USER_MENU_R b
+				where 1=1 
+				and a.MENU_CD = b.MENU_CD
+				and b.user_type = #{user_type}
+				and b.is_use = 'Y'
+			</when>
+			<otherwise>
+				FROM TBL_MENU_MST a 
+				where 1=1 
+			</otherwise>
+		</choose>
+		and a.is_delete="N"
+		order by order_num asc
+		limit 0,1
+    </select>
+
+</mapper>
