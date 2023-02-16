@@ -67,13 +67,6 @@
 		    <artifactId>mysql-connector-java</artifactId>
 		    <version>6.0.6</version>
 		</dependency>
-
-		
-		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-log4j2 -->
-<!--		<dependency>-->
-<!--		    <groupId>org.springframework.boot</groupId>-->
-<!--		    <artifactId>spring-boot-starter-log4j2</artifactId>-->
-<!--		</dependency>-->
 		
 		<!-- https://mvnrepository.com/artifact/org.bgee.log4jdbc-log4j2/log4jdbc-log4j2-jdbc4.1 -->
 		<dependency>
@@ -81,7 +74,6 @@
 		    <artifactId>log4jdbc-log4j2-jdbc4.1</artifactId>
 		    <version>1.16</version>
 		</dependency>
-		
 		
 		<dependency>
 		    <groupId>javax.servlet</groupId>
@@ -98,7 +90,6 @@
 		    <artifactId>tiles-jsp</artifactId>
 		    <version>3.0.8</version>
 		</dependency>
-				
 		
 		<!--자동리로드-->		
 	    <dependency>
@@ -106,8 +97,6 @@
 	        <artifactId>spring-boot-devtools</artifactId>
 	    </dependency>
 	    
-	    
-		
 		<dependency>
 		    <groupId>org.webjars</groupId>
 		    <artifactId>webjars-locator</artifactId>
@@ -133,6 +122,24 @@
 			<artifactId>ecoletreeLibraryJS</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<!-- Ecoletree Library -->
+		
+		<!-- 아파치 commons 관련 -->
+		<!-- 아파치 commons collection4 -->
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-collections4</artifactId>
+		    <version>4.4</version>
+		</dependency>
+		
+		<!-- 아파치 commons fileupload (multipartfiles dependency -->
+		<dependency>
+		    <groupId>commons-fileupload</groupId>
+		    <artifactId>commons-fileupload</artifactId>
+		    <version>1.5</version>
+		</dependency>
+		<!-- 아파치 commons 관련 -->
+				
 
 	</dependencies>
 
