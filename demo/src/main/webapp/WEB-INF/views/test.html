@@ -1,0 +1,177 @@
+<!--videosender.html-->
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Hello</title>
+</head>
+<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+<body>
+	<audio id="audio"  autobuffer="autobuffer" controls>
+	    <source id="source" src="" type="audio/ogg"/>
+	</audio>
+	
+	<video id="video" >
+	  <source id="source2" type="video/mp4" />
+	</video>
+  <input type="file" id="idFile"/>
+  <button id="btn3">connect</button>
+  <button id="btn2">file</button>
+  <button id="btn">generate</button>
+</body>
+<script>
+	var ws = null;
+	$("#btn3").click(function(){
+		var url = "ws://117.52.89.240:11983";
+// 	 	var url = "ws://localhost:9999/test";
+		ws = new WebSocket(url);
+		ws.binaryType = "arraybuffer";
+		
+		ws.onopen = function(){
+			console.log("Websocket is connected.");
+		}
+		ws.onmessage = function(msg){
+			
+			if (msg.data instanceof ArrayBuffer) {
+	            //getFileReader(msg.data);
+	            
+	            getAudioContext2(msg.data);
+// 	             getAudioContext(msg.data);
+	            
+			}
+			if (msg.data instanceof Blob) {
+	            //getFileReader(msg.data);
+	            
+	            getAudioContextAsyc(msg.data);
+//	             getAudioContext(msg.data);
+	            
+			}
+			console.log(msg.data);
+		};
+		ws.onclose = function () {
+			console.log("close");
+			playing = false;
+		}
+		
+		//getAudioContext($("#idFile")[0].files[0].arrayBuffer());
+	});
+	
+	$("#btn").click(function(){
+		debugger;
+		var data = {};
+		data["Event-Name"] = "Recording";
+		data["Tenant"] = "1";
+		data["Req_Admin"] = "3002";
+		data["Phone"] = "5001";
+		data["Command"] = "Wiretapping";
+		ws.send(JSON.stringify(data));
+		
+		//getAudioContext($("#idFile")[0].files[0].arrayBuffer());
+	});
+	
+	$("#btn2").click(function(){
+		
+		getFileReader($("#idFile")[0].files[0]);
+	});
+
+	
+	
+	async function getFileReader (blob) {
+		var arraybuffer = await blob.arrayBuffer();
+		
+		var reader = new FileReader();
+		
+		reader.readAsDataURL(blob); 
+		reader.onloadend = function() {
+		  var base64data = reader.result;
+		  $("#source").attr("src", base64data);
+	       	var playPromise = $("#audio")[0].play();
+          	if (playPromise !== undefined) {
+      		  playPromise.then(function() {
+      			  
+      		  }).catch(function(error) {
+      			console.log(error);
+      		  });
+      		}
+		  console.log(base64data);
+		}
+	}
+	
+	function  getAudioContext (arrayBuffer) {
+		const array = arrayBuffer;
+		const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+		const trackSource = audioContext.createBufferSource(); // 소스 노드를 만들고...
+		
+		if (arrayBuffer !== undefined) {
+			audioContext.decodeAudioData(array, 
+			        function (buffer) {
+			        	trackSource.buffer = buffer; // 오디오 버퍼를 전달합니다.
+			    		trackSource.connect(audioContext.destination);
+			    		trackSource.start(0);
+			        }, function (error) {
+			        	console.log(error)
+			        });
+	}  
+	}
+	
+	async function getAudioContextAsyc (blob) {
+		var abuffer = await blob.arrayBuffer();
+		var bb = new Blob([abuffer], {type:"audio/wav"});
+		var reader = new FileReader();
+		reader.readAsDataURL(bb); 
+		reader.onloadend = function() {
+		  var base64data = reader.result;
+		  $("#source").attr("src", base64data);
+	       	var playPromise = $("#audio")[0].play();
+          	if (playPromise !== undefined) {
+      		  playPromise.then(function() {
+      			  
+      		  }).catch(function(error) {
+      			console.log(error);
+      		  });
+      		}
+		  console.log(base64data);
+		}
+	}
+	
+	function  getAudioContext2 (arrayBuffer) {
+// 		addBuffer(new Float32Array(arrayBuffer));
+		addBuffer(new Int16Array(arrayBuffer));
+		play();
+	}
+	
+	var buffers = [];
+	var playing = false; 
+	function addBuffer(buffer){
+		buffers.push(buffer);
+	}
+	
+	function play(){
+		const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+		if (buffers.length > 0) {
+            var pcmData = buffers.shift();
+            const channels = 1;
+            const frameCount = audioContext.sampleRate * 2.0;
+            const sampleRate = 8000;
+//             const sampleRate = audioContext.sampleRate;
+            const myAudioBuffer = audioContext.createBuffer(channels, frameCount, sampleRate);
+            // 화이트 노이즈로 버퍼를 채운다.
+            for (let i = 0; i < channels; i++) {
+                const nowBuffering = myAudioBuffer.getChannelData(i, 16, sampleRate);
+                for (let j = 0; j < frameCount; j++){
+                    //nowBuffering[j] = ((pcmData[j] + 32768) % 65536 - 32768) / 32768.0;
+                    nowBuffering[j] = pcmData[j];
+//                 	nowBuffering[i] = Math.random() * 2 - 1;
+
+                }
+            }
+            pcmData = null;
+            this.source = audioContext.createBufferSource();
+            this.source.buffer = myAudioBuffer;
+            this.source.connect(audioContext.destination);
+            this.source.start();
+        }
+	}
+
+
+</script>
+</html>
