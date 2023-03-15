@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Opus to PCM</title>
+</head>
+<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+<body>
+<div id="container" style="width: 400px; margin: 0 auto;">
+    <h2>It should play audio if everying went well!</h2>
+    <p>However, the AudioContext may not allow starting the playing without a user gesture. Click this text to instruct the disobedient browser you really want to listen to the audio!</p>
+</div>
+<div>
+	<button id="btn3">connect</button>
+  	<button id="btn">PCM</button>
+  	<button id="btn4">WAV</button>
+  	<input id="iptVolumn" type="range" min="0" max="100" step="1">
+</div>
+<script>
+ window.onload = function() {
+   var socketURL = 'ws://117.52.89.240:11983';
+   var ws = null;
+   var player = new PCMPlayer({
+        encoding: '16bitInt',
+        channels: 1,
+        sampleRate: 8000,
+        flushingTime: 2000
+   });
+   
+   $("#iptVolumn").on ("change",function (event){
+	   var val = this.value;
+	   player.volume = val / 100;
+   });
+   $("#iptVolumn").on ("input",function (event){
+	   var val = this.value;
+	   player.volume = val / 100;
+   });
+   
+   
+   $("#btn2").click(function(){
+	   	player.volume = $("#vol").val();
+   });
+   $("#btn4").click(function(){
+		debugger;
+		var data = {};
+		data["Event-Name"] = "Recording";
+		data["Tenant"] = "1";
+		data["Req_Admin"] = "3002";
+		data["Phone"] = "5001";
+		data["Audio"] = "wav";
+		data["Command"] = "Wiretapping";
+		isPCM = false;
+		ws.send(JSON.stringify(data));
+	});
+	
+	$("#btn").click(function(){
+		debugger;
+		var data = {};
+		data["Event-Name"] = "Recording";
+		data["Tenant"] = "1";
+		data["Req_Admin"] = "3002";
+		data["Phone"] = "5001";
+		data["Audio"] = "pcm";
+		data["Command"] = "Wiretapping";
+		isPCM = true;
+		ws.send(JSON.stringify(data));
+	});
+	
+	$("#btn3").click(function(){
+		var url = "ws://117.52.89.240:11983";
+		ws = new WebSocket(url);
+		ws.binaryType = "arraybuffer";
+		
+		ws.onopen = function(){
+			console.log("Websocket is connected.");
+		}
+		ws.onmessage = function(msg){
+			
+			if (msg.data instanceof ArrayBuffer) {
+            	var data = new Uint8Array(event.data);
+                player.feed(data);
+			}
+			console.log(msg.data);
+		};
+		ws.onclose = function () {
+			console.log("close");
+		}
+		
+		//getAudioContext($("#idFile")[0].files[0].arrayBuffer());
+	});
+ }   
+</script>
+<script type="text/javascript" src="../pcmPlayer/pcm-player.js"></script>
+</body>
+</html>
