@@ -14,7 +14,7 @@
 	<button id="btn3">connect</button>
   	<button id="btn">PCM</button>
   	<button id="btn4">WAV</button>
-  	<input id="iptVolumn" type="range" min="0" max="100" step="1">
+  	<input id="iptVolumn" type="range" min="0" max="100" step="1" value="100">
 </div>
 <script>
  window.onload = function() {
@@ -29,11 +29,11 @@
    
    $("#iptVolumn").on ("change",function (event){
 	   var val = this.value;
-	   player.volume = val / 100;
+	   player.volume(val / 100);
    });
    $("#iptVolumn").on ("input",function (event){
 	   var val = this.value;
-	   player.volume = val / 100;
+	   player.volume(val / 100);
    });
    
    

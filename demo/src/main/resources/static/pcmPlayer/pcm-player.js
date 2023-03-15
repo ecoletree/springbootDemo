@@ -48,7 +48,7 @@ PCMPlayer.prototype.createContext = function() {
     this.audioCtx.onstatechange = () => console.log(this.audioCtx.state);   // if you want to see "Running" state in console and be happy about it
     
     this.gainNode = this.audioCtx.createGain();
-    this.gainNode.gain.value = 0.01;
+    this.gainNode.gain.value = 1;
     this.gainNode.connect(this.audioCtx.destination);
     this.startTime = this.audioCtx.currentTime;
 };
@@ -78,10 +78,7 @@ PCMPlayer.prototype.getFormatedValue = function(data) {
 };
 
 PCMPlayer.prototype.volume = function(volume) {
-	debugger;
-	this.gainNode.disconnect();
-    this.gainNode.gain.setValueAtTime(volume, this.audioCtx.currentTime);
-    this.gainNode.connect(this.audioCtx.destination);
+    this.gainNode.gain.value = volume;
 };
 
 PCMPlayer.prototype.destroy = function() {
@@ -131,4 +128,8 @@ PCMPlayer.prototype.flush = function() {
     bufferSource.start(this.startTime);
     this.startTime += audioBuffer.duration;
     this.samples = new Float32Array();
+};
+
+PCMPlayer.prototype.setVolume = function(volume) {
+    this.gainNode.gain.value = volume;
 };
