@@ -12,8 +12,8 @@
 </div>
 <div>
 	<button id="btn3">connect</button>
+  	<button id="btnStop">disconnected</button>
   	<button id="btn">PCM</button>
-  	<button id="btn4">WAV</button>
   	<input id="iptVolumn" type="range" min="0" max="100" step="1" value="100">
 </div>
 <script>
@@ -27,13 +27,35 @@
         flushingTime: 2000
    });
    
+   var _promise = function (websocket) {
+		return new Promise(function (resolve, reject) {
+			// 비동기를 표현하기 위해 setTimeout 함수를 사용 
+			window.setTimeout(function () {
+				// 파라메터가 참이면,
+				if (websocket === null || websocket.readyState === 3) {
+					// 해결됨 
+					resolve(websocket);
+				} else if (websocket.readyState == WebSocket.CLOSE) {
+					resolve(websocket);
+				}
+				// 파라메터가 거짓이면, 
+				else {
+					// 실패 
+					reject("ERROR");
+				}
+			}, 1000);
+		});
+	};
+   
    $("#iptVolumn").on ("change",function (event){
 	   var val = this.value;
 	   player.volume(val / 100);
    });
-   $("#iptVolumn").on ("input",function (event){
-	   var val = this.value;
-	   player.volume(val / 100);
+   
+   $("#btnStop").click(function(){
+	   	if (ws) {
+	   		ws.close();
+	   	}
    });
    
    
@@ -68,23 +90,45 @@
 	
 	$("#btn3").click(function(){
 		var url = "ws://117.52.89.240:11983";
-		ws = new WebSocket(url);
-		ws.binaryType = "arraybuffer";
-		
-		ws.onopen = function(){
-			console.log("Websocket is connected.");
+		if (ws != null && ws.readyState !== WebSocket.CLOSE) {
+			ws.close();
 		}
-		ws.onmessage = function(msg){
+		_promise(ws)
+		.then(function (text) {
+			// 성공시
+			ws = new WebSocket(url);
+			ws.binaryType = "arraybuffer";
 			
-			if (msg.data instanceof ArrayBuffer) {
-            	var data = new Uint8Array(event.data);
-                player.feed(data);
+			ws.onopen = function(){
+				$("#container").empty();
+				$("#container").append("<h2>Websocket is connected!</h2>")
+				var data = {};
+				data["Event-Name"] = "Recording";
+				data["Tenant"] = "1";
+				data["Req_Admin"] = "3002";
+				data["Phone"] = "5001";
+				data["Audio"] = "pcm";
+				data["Command"] = "Wiretapping";
+				ws.send(JSON.stringify(data));
 			}
-			console.log(msg.data);
-		};
-		ws.onclose = function () {
-			console.log("close");
-		}
+			ws.onmessage = function(msg){
+				
+				if (msg.data instanceof ArrayBuffer) {
+	            	var data = new Uint8Array(event.data);
+	                player.feed(data);
+				}
+				console.log(msg.data);
+			};
+			ws.onclose = function () {
+				$("#container").empty();
+				$("#container").append("<h2>Websocket is disconnected!</h2>")
+			}
+		}, function (error) {
+			// 실패시 
+			console.error(error);
+		});
+		
+		
 		
 		//getAudioContext($("#idFile")[0].files[0].arrayBuffer());
 	});
