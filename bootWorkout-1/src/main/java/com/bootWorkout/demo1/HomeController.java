@@ -13,8 +13,9 @@ public class HomeController {
 	@RequestMapping(value = "/")
 	public String home(HttpServletRequest request) {
 		//세션유무 확인
-		Object sessionAttribute = RequestContextHolder.getRequestAttributes().getAttribute("sessionVO", RequestAttributes.SCOPE_SESSION);
-		return sessionAttribute == null ? "redirect:/login":"redirect:/main";
+//		Object sessionAttribute = RequestContextHolder.getRequestAttributes().getAttribute("sessionVO", RequestAttributes.SCOPE_SESSION);
+//		return sessionAttribute == null ? "REDIRECT:/LOGIN":"redirect:/main";
+		return "redirect:/main";
 	}
 	
 	@RequestMapping(value = "/timeout")
