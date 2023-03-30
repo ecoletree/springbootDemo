@@ -11,6 +11,8 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
@@ -22,6 +24,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.SignatureException;
 @Service
 public class JwtOAuthService3 {
+	
+	Logger logger = LoggerFactory.getLogger(getClass());
 	
 	private final String baseKey = "thisisdummykeythisisdummykeythisisdummykeythisisdummykeythisisdummykey";
 	private final SignatureAlgorithm signatureAlgorith = SignatureAlgorithm.HS256;
@@ -102,19 +106,29 @@ public class JwtOAuthService3 {
 		
 		return map;
 	}
-	
+//	public Map<String, Object> checkJwt(String jwt){
+//		Map<String, Object> map = new HashMap<>();
+//		Boolean verifyJwt = verifyJwt(jwt);
+//		return map;
+//	}
 	/**
-	 * 토큰 검증
+	 * 토큰 검증 true false
 	 * @param jwt
 	 * @return
 	 */
-	public Boolean checkJwt(String jwt) {
+	public Boolean verifyJwt(String jwt) {
+		Map<String, Object> map = new HashMap<String,Object>();
+		
 		try {
 			Claims claims = Jwts.parserBuilder()
 					.setSigningKey(DatatypeConverter.parseBase64Binary(baseKey))
 					.build()
 					.parseClaimsJws(jwt)
 					.getBody();
+			
+			//access인지 refresh인지 구분자 넣는거 어떻게 할건지..?
+			logger.info(claims.getSubject());
+			
 		} catch (SignatureException e) {
 			e.printStackTrace();
 			return false;
@@ -125,7 +139,8 @@ public class JwtOAuthService3 {
 			e.printStackTrace();
 			return false;
 		} 
-		
+		// getBody()가 true일 경우에만
+		// getSubject() 해서 map으로 리턴 받을수 있게 하기 
 		return true; 
 	}
 }

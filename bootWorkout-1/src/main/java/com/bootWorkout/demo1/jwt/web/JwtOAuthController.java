@@ -1,5 +1,6 @@
 package com.bootWorkout.demo1.jwt.web;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -21,18 +22,11 @@ import com.bootWorkout.demo1.jwt.service.JwtOAuthService2;
 import com.bootWorkout.demo1.jwt.service.JwtOAuthService3;
 
 @Controller
-//@RestController
 @RequestMapping("/jwt")
 public class JwtOAuthController {
 
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
-	
-	@Autowired
-	private JwtOAuthService jwtOAuthService; 
-	
-	@Autowired
-	private JwtOAuthService2 jwtOAuthService2; 
 	
 	@Autowired
 	private JwtOAuthService3 jwtOAuthService3; 
@@ -43,55 +37,6 @@ public class JwtOAuthController {
 		return mav;
 	}
 	
-	/** 토큰 생성
-	 * @param subject
-	 * @return
-	 */
-	@RequestMapping("/create/token")
-	public Map<String, Object> createToken(@RequestParam(value="subject") String subject) {
-		Map<String, Object> map = new LinkedHashMap<>();
-		String token = jwtOAuthService.createToken(subject, (5*1000*60)); // 2분
-		map.put("result",token);
-		return map;
-	}
-	
-	/** 토큰 검증
-	 * @param subject
-	 * @return
-	 */
-	@RequestMapping("/get/subject")
-	public Map<String, Object> getSubject(@RequestParam(value="token") String token) {
-		Map<String, Object> map = new LinkedHashMap<>();
-		String subject = jwtOAuthService.getSubject(token);
-		map.put("result",subject);
-		return map;
-	}
-	/** 토큰 생성2
-	 * @param subject
-	 * @return
-	 * @throws Exception 
-	 */
-	@RequestMapping("/createToken")
-	public Map<String, Object> createToken2(HttpServletRequest request) throws Exception {
-		Map<String, Object> map = new LinkedHashMap<>();
-		String token = jwtOAuthService2.createJwt(request);
-		map.put("result",token);
-		return map;
-	}
-	
-	/** 토큰 검증2
-	 * @param subject
-	 * @return
-	 * @throws Exception 
-	 */
-	@RequestMapping("/getSubject")
-	public Map<String, Object> getSubject2(@RequestParam(value="token") String token) throws Exception {
-		Map<String, Object> map = new LinkedHashMap<>();
-		boolean subject = jwtOAuthService2.checkJwt(token);
-		map.put("result",subject);
-		return map;
-	}
-	
 	/** 로그인 후 토큰 생성
 	 * @param subject
 	 * @return
@@ -100,6 +45,20 @@ public class JwtOAuthController {
 	@RequestMapping("/login")
 	public @ResponseBody Map<String, Object> loginJWT(@RequestBody Map<String, Object> param) throws Exception {
 		 Map<String, Object> map = jwtOAuthService3.loginJwt(param);
+		return map;
+	}
+	
+	/** 로그인 후 토큰 생성
+	 * @param subject
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping("/check")
+	public @ResponseBody Map<String, Object> checkJwt(@RequestBody Map<String, Object> param) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		String token  = param.get("token").toString();
+		Boolean chk = jwtOAuthService3.verifyJwt(token);
+		map.put("check", chk);
 		return map;
 	}
 	
