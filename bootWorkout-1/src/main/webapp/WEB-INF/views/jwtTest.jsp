@@ -51,47 +51,63 @@
 		document.cookie = "refresh_token="+refresh_token+";";
 		console.log("refresh_token:"+getCookie("refresh_token")); // 쿠키
 		
-		$("#btnAccess").prop("disabled",false);
+		$("#btnAccess,#btnRefresh").prop("disabled",false);
 		
 	}
 	/*
-	 * access token check
+	 * button : access token check 
 	 */	 
 	var accessTokenCheck = function(){
 		var token = this.xss_token.get_token();
-		this.checkTokenAjax(token);
+		var param = {};
+		param.type = "access";
+		param.token = token;
+		
+		this.checkTokenAjax(param);
 		
 	}
 	/*
-	 * refresh token check 
+	 * button : refresh token check 
 	 */	
 	var refreshTokenCheck = function(){
-		debugger;
+		//쿠키 가져오기 ,, 쿠키 없으면 바로 false 띄우고 로그인
+		var token = getCookieValue("refresh_token");
+		var param = {};
+		param.type = "refresh";
+		param.token = token;
 		
+		this.checkTokenAjax(param);
 	}
+
 	/*
 	 * token check ajax
 	 */	
 	var checkTokenAjax = function(data){
 		
-		var param = {};
-		param.token = data;
 		$.ajax({
 			url:"/jwt/check",
 			type :"POST",
-			data : JSON.stringify(param),
+			data : JSON.stringify(data),
 			dataType:"text",
 			contentType:"application/json; charset=UTF-8",
 			success: function(data){
-				var result = JSON.parse(data);
-				//access인지 refresh인지 구분자 넣는거 어떻게 할건지..?
-						
+				checkTokenAjaxSuccessHandler(JSON.parse(data));
 			}
 		});
 	        
 	        
 	}
-	
+	/*
+	 * token check ajax success handler
+	 */	
+	var checkTokenAjaxSuccessHandler = function(result){
+		var type = result.type;
+		var valid = result.valid;
+		$("#divResult").empty();
+		var str = valid === true ? "<h3>"+type+" token ::: true</h3>" :"<h3>"+type+" token ::: false</h3>";
+		$("#divResult").append(str);
+		
+	}
 	/*
 	 * cookie 저장 
 	 */
@@ -116,6 +132,26 @@
 		}
 	} //객체 안에 함수가 구현되어 있는 형태 
 	
+	/*
+	 * cookie value만 가져오기 
+	 */	
+	var getCookieValue = (key) => {
+		  let cookieKey = key + "="; 
+		  let result = "";
+		  const cookieArr = document.cookie.split(";");
+		  
+		  for(let i = 0; i < cookieArr.length; i++) {
+		    if(cookieArr[i][0] === " ") {
+		      cookieArr[i] = cookieArr[i].substring(1);
+		    }
+		    
+		    if(cookieArr[i].indexOf(cookieKey) === 0) {
+		      result = cookieArr[i].slice(cookieKey.length, cookieArr[i].length);
+		      return result;
+		    }
+		  }
+		  return result;
+		}	
 
     
 </script>
@@ -131,6 +167,7 @@
 <div>
 	<button id="btnAccess" onclick="accessTokenCheck()" disabled="disabled">access token check</button>
 	<button id="btnRefresh" onclick="refreshTokenCheck()" disabled="disabled">refresh token check</button>
+	<div id="divResult"></div>
 </div>
 </div>
 </body>

@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.crypto.spec.SecretKeySpec;
-import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
 
 import org.slf4j.Logger;
@@ -53,18 +52,20 @@ public class JwtOAuthService3 {
 	 * @param request
 	 * @return
 	 */
-	public String createJwt(Map<String, Object> param, int ExpTime, String tokenType) {
+	public String createJwt(Map<String, Object> param, String tokenType) {
 		Map<String, Object> headerMap = new HashMap<String,Object>();
 		headerMap.put("typ", "JWT");
 	    headerMap.put("alg", "HS256");
-	    headerMap.put("tktyp", tokenType);
 		
 	    Map<String, Object> claims = new HashMap<String, Object>();
 	    claims.put("name", "jwtTest");
 	    claims.put("id", param.get("user_id"));
+	    claims.put("tktyp", tokenType);
+	    
+	    int expTime = tokenType == "refresh" ? 1000 * 60 * 10 : 1000 * 60 * 2;
 	    
 	    Date expireTime = new Date();
-	    expireTime.setTime(expireTime.getTime() + ExpTime);
+	    expireTime.setTime(expireTime.getTime() + expTime);
 	    
 	    JwtBuilder builder = Jwts.builder()
 	    		.setHeader(headerMap)
@@ -95,8 +96,8 @@ public class JwtOAuthService3 {
 		if(!user_id.equals("admin") || !user_pw.equals("admin") ) {
 			resultMsg = "no_user_data";
 		}else {
-			String atoken = createJwt(param,1000 * 60 * 2,"access"); // 2분
-			String rtoken = createJwt(param,1000 * 60 * 10,"refresh"); // 10분
+			String atoken = createJwt(param,"access"); // 2분
+			String rtoken = createJwt(param,"refresh"); // 10분
 			
 			map.put("access_token", atoken);
 			map.put("refresh_token", rtoken);
@@ -106,11 +107,24 @@ public class JwtOAuthService3 {
 		
 		return map;
 	}
-//	public Map<String, Object> checkJwt(String jwt){
-//		Map<String, Object> map = new HashMap<>();
-//		Boolean verifyJwt = verifyJwt(jwt);
-//		return map;
-//	}
+	public Map<String, Object> checkJwt(Map<String,Object> param){
+		Map<String, Object> map = new HashMap<>();
+		String type = param.get("type").toString();
+		String jwt = param.get("token").toString();
+		Boolean verifyJwt = true;
+		//token이 refresh 일때는 서버에 있는 거랑 비교한 뒤 true/false 반환
+		if(type == "refresh") {
+			verifyJwt = tokenList.contains(jwt) ? verifyJwt(jwt) : false;
+		}else {
+			verifyJwt = verifyJwt(jwt);
+		}
+		map.put("type", type);
+		map.put("valid", verifyJwt);
+		//token이 access 일때는 그냥 true/false 반환
+		
+		
+		return map;
+	}
 	/**
 	 * 토큰 검증 true false
 	 * @param jwt
@@ -118,29 +132,19 @@ public class JwtOAuthService3 {
 	 */
 	public Boolean verifyJwt(String jwt) {
 		Map<String, Object> map = new HashMap<String,Object>();
-		
 		try {
 			Claims claims = Jwts.parserBuilder()
 					.setSigningKey(DatatypeConverter.parseBase64Binary(baseKey))
 					.build()
 					.parseClaimsJws(jwt)
 					.getBody();
-			
-			//access인지 refresh인지 구분자 넣는거 어떻게 할건지..?
-			logger.info(claims.getSubject());
-			
-		} catch (SignatureException e) {
-			e.printStackTrace();
-			return false;
 		} catch (ExpiredJwtException e) {
-			e.printStackTrace();
+			logger.info("Token Expired!!!");
 			return false;
 		} catch (JwtException e) {
-			e.printStackTrace();
+			logger.info("Token Error!!!");
 			return false;
 		} 
-		// getBody()가 true일 경우에만
-		// getSubject() 해서 map으로 리턴 받을수 있게 하기 
 		return true; 
 	}
 }

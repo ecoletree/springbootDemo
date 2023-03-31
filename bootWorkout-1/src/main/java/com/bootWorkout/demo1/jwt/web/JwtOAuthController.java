@@ -55,10 +55,7 @@ public class JwtOAuthController {
 	 */
 	@RequestMapping("/check")
 	public @ResponseBody Map<String, Object> checkJwt(@RequestBody Map<String, Object> param) throws Exception {
-		Map<String, Object> map = new HashMap<>();
-		String token  = param.get("token").toString();
-		Boolean chk = jwtOAuthService3.verifyJwt(token);
-		map.put("check", chk);
+		Map<String, Object> map = jwtOAuthService3.checkJwt(param);
 		return map;
 	}
 	
