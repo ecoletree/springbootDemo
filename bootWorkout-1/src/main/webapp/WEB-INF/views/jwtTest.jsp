@@ -158,6 +158,12 @@
 </head> 
 <body>
 <h1>JWT Oauth login</h1>
+<h4>
+<br>로그인 하면 access/refresh 토큰이 발급되고 refresh토큰은 서버에 저장됨. 
+<br>access 토큰은 2분 refresh 토큰은 10분간 유효함.
+<br>브라우저에서 access는 private변수에 저장, refresh는 쿠키에 저장. 
+<br>토큰 검증 true/false 확인하는 것까지만 해둠.
+</h4>
 <div>
 <div>
 	아이디 : <input id="iptUserID" >
