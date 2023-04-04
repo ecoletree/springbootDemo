@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
 
 import org.slf4j.Logger;
@@ -122,6 +123,14 @@ public class JwtOAuthService3 {
 		map.put("valid", verifyJwt);
 		//token이 access 일때는 그냥 true/false 반환
 		
+		
+		return map;
+	}
+	public Map<String, Object> simpleCheckJwt(HttpServletRequest request){
+		Map<String, Object> map = new HashMap<>();
+		String jwt = request.getHeader("access_token");
+		Boolean verifyJwt = verifyJwt(jwt);
+		map.put("valid", verifyJwt);
 		
 		return map;
 	}

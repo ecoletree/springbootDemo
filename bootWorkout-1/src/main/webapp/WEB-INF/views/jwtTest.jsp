@@ -154,6 +154,8 @@
 		}	
 
     var sendToken = function(){
+    	var access_token = this.xss_token.get_token();
+    	var refresh_token = getCookieValue("refresh_token");
     	$.ajax({
     		url:"http://localhost:8080/jwt/test",
     		type:"POST",
@@ -161,8 +163,8 @@
     		contentType : "application/json; charset=UTF-8",
     		beforeSend : function(xhr){
     			xhr.setRequestHeader("Access-Control-Allow-Headers", "origin, x-requested-with, content-type, accept");
-    			xhr.setRequestHeader("access_token", "asdfasxdfasdfasdf"); 
-    			xhr.setRequestHeader("refresh_token", "asdfasxdfasdfasdf"); 
+    			xhr.setRequestHeader("access_token", access_token); 
+    			xhr.setRequestHeader("refresh_token", refresh_token); 
     			xhr.setRequestHeader("Content-type","application/json; charset=UTF-8");
     		},
     		success : function (data) {
@@ -175,15 +177,18 @@
 			
     }
     var sendSuccessHandler = function(result){
-    	console.log("send success");
-    	console.log(result);
-    	debugger;
+   		$("#divResult").empty();
+    	if(result.valid === true){
+    		$("#divResult").append("<h3>토큰 검증 성공</h3>");
+    	}else{
+    		$("#divResult").append("<h3>토큰 유효기간 지남</h3>");
+    	}
     	
     }
 </script>
 </head> 
 <body>
-<h1>JWT Oauth send test</h1>
+<h1>JWT Oauth send test bootTest 9999 to 8080</h1>
 <div>
 <div>
 	아이디 : <input id="iptUserID" >
