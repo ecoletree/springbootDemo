@@ -153,17 +153,37 @@
 		  return result;
 		}	
 
-    
+    var sendToken = function(){
+    	$.ajax({
+    		url:"http://localhost:8080/jwt/test",
+    		type:"POST",
+    		dataType :"text",
+    		contentType : "application/json; charset=UTF-8",
+    		beforeSend : function(xhr){
+    			xhr.setRequestHeader("Access-Control-Allow-Headers", "origin, x-requested-with, content-type, accept");
+    			xhr.setRequestHeader("access_token", "asdfasxdfasdfasdf"); 
+    			xhr.setRequestHeader("refresh_token", "asdfasxdfasdfasdf"); 
+    			xhr.setRequestHeader("Content-type","application/json; charset=UTF-8");
+    		},
+    		success : function (data) {
+	        	var result = JSON.parse(data);
+	        	sendSuccessHandler(JSON.parse(data));
+            }//success
+    		
+    	});
+		
+			
+    }
+    var sendSuccessHandler = function(result){
+    	console.log("send success");
+    	console.log(result);
+    	debugger;
+    	
+    }
 </script>
 </head> 
 <body>
-<h1>JWT Oauth login</h1>
-<h4>
-<br>로그인 하면 access/refresh 토큰이 발급되고 refresh토큰은 서버에 저장됨. 
-<br>access 토큰은 2분 refresh 토큰은 10분간 유효함.
-<br>브라우저에서 access는 private변수에 저장, refresh는 쿠키에 저장. 
-<br>토큰 검증 true/false 확인하는 것까지만 해둠.
-</h4>
+<h1>JWT Oauth send test</h1>
 <div>
 <div>
 	아이디 : <input id="iptUserID" >
@@ -173,6 +193,7 @@
 <div>
 	<button id="btnAccess" onclick="accessTokenCheck()" disabled="disabled">access token check</button>
 	<button id="btnRefresh" onclick="refreshTokenCheck()" disabled="disabled">refresh token check</button>
+	<button id="btnSendRedirect" onclick="sendToken()">url이동 및 토큰 전송</button>
 	<div id="divResult"></div>
 </div>
 </div>

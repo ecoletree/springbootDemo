@@ -32,9 +32,17 @@ public class JwtOAuthController {
 	private JwtOAuthService3 jwtOAuthService3; 
 
 	@RequestMapping("")
-	public ModelAndView open(final ModelAndView mav) {
+	public ModelAndView open(final ModelAndView mav,HttpServletRequest request) {
 		mav.setViewName("jwtTest");
+		
 		return mav;
+	}
+	@RequestMapping("/test")
+	public @ResponseBody Map<String, Object> getTest(HttpServletRequest request,@RequestBody Map<String, Object> param) {
+		Map<String, Object> map = new HashMap<>();
+		logger.info("액세스토큰 "+request.getHeader("access_token"));
+		map.put("test", "success");
+		return map;
 	}
 	
 	/** 로그인 후 토큰 생성
