@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.jwt.TokenInfo;
 
+import kr.co.ecoletree.common.util.ResultUtil;
+import kr.co.ecoletree.common.util.StringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,10 +30,15 @@ public class MemberController {
     private final MemberService memberService;
  
     @PostMapping("/login")
-    public TokenInfo login(@RequestBody Map<String, String> params) {
+    public Map<String, Object> login(@RequestBody Map<String, String> params) {
         String memberId = params.get("email");
         String password = params.get("password");
         TokenInfo tokenInfo = memberService.login(memberId, password);
-        return tokenInfo;
+        return ResultUtil.getResultMap(!StringUtil.isEmpty(tokenInfo), tokenInfo);
+    }
+    
+    @PostMapping("/test")
+    public String test() {
+    	return "하하하";
     }
 }

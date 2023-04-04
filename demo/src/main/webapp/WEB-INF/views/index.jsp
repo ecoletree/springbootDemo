@@ -15,6 +15,10 @@ test
 <button id="btnList"> btngetList</button>
 <button id="btnList2"> btngetList2</button>
 <button id="btn"> testalert</button>
+<button id="btn1"> Login</button>
+<button id="btn2"> TEST</button>
+<input id="iptId">
+<input id="iptPw">
 <img  src="${cp}/resources/ecoletree/img/btn_cal.png">
 
 <script type="text/javascript">

@@ -28,6 +28,7 @@
 	ctrl.name = "home";
 	ctrl.path = "/login";
 	ctrl.formId = "#loginForm";
+	ctrl.JWT = null;
 	
 	// ============================== 화면 컨트롤 ==============================
 	/**
@@ -36,6 +37,8 @@
 	ctrl.init = function() {
 		var self = et.vc;
 		$("#btn").click(self.clickHandler);
+		$("#btn1").click(self.clickHandler1);
+		$("#btn2").click(self.clickHandler2);
 		$("#btnList").click(self.btnListHandler);
 		$("#btnList2").click(self.btnListHandler);
 		
@@ -44,6 +47,47 @@
 	
 	ctrl.clickHandler = function() {
 		et.alert.show(ETCONST.ALERT_TYPE_INFO, "", et.message("button.delete_faile"));
+	}
+	
+	ctrl.clickHandler1 = function() {
+		var self = et.vc;
+		var params = {email:$("#iptId").val(), password:$("#iptPw").val()};
+		var url = "/members/login";
+		new ETService().setSuccessFunction(function(result){
+			if (result.message === ETCONST.SUCCESS) {
+				self.JWT = result.data.accessToken + "33";
+			}
+			debugger;
+		}).callService(url, params);
+	}
+	
+	ctrl.clickHandler2 = function() {
+		var self = et.vc;
+		var params = {email:$("#iptId").val(), password:$("#iptPw").val()};
+		var url = "/members/test";
+		if (self.JWT != null) {
+//			new ETService().setSuccessFunction(function(result){
+//				debugger;
+//			}).callService(url, params, {headers: {Authorization: "Bearer "+self.JWT}});
+			
+			$.ajax({
+				url : "/demo"+url,
+				type : "POST",
+				data : JSON.stringify(params) ,
+				dataType: 'json',
+				contentType : "application/json; charset=UTF-8",
+				headers: {Authorization: "Bearer "+self.JWT},
+				success : function (data) {
+					debugger;
+				},
+				error : function (a,b,c) {
+					debugger;
+				}
+			});  //ajax
+			
+			
+		}
+		
 	}
 	
 	ctrl.btnListHandler = function(e) {
