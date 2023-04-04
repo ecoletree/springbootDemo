@@ -188,7 +188,7 @@
 </script>
 </head> 
 <body>
-<h1>JWT Oauth send test bootTest 9999 to 8080</h1>
+<h1>bootTest-1 9999 to 8080</h1>
 <div>
 <div>
 	¾ÆÀÌµð : <input id="iptUserID" >
