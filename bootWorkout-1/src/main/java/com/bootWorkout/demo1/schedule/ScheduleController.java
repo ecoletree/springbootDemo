@@ -8,6 +8,7 @@
 *****************************************************************/
 package com.bootWorkout.demo1.schedule;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,7 +53,14 @@ public class ScheduleController {
 	public @ResponseBody Map<String, Object> setMultiSchedule(@RequestBody Map<String, Object> param) throws Exception {
 		Map<String, Object> map =new HashMap<>();
 		System.out.println("schedule Start!!!");
-		multiDynamicScheduler.startScheduler((String) param.get("schedule_name"),(String) param.get("schedule"));
+		multiDynamicScheduler.startScheduler(new Runnable() {
+			@Override
+			public void run() {
+				//실행 메소드
+				System.out.println(new Date() + " : " +Thread.currentThread().getName());
+				// TODO Auto-generated method stub
+			}
+		},param);
 		map.put("msg", "success");
 		return map;
 	}

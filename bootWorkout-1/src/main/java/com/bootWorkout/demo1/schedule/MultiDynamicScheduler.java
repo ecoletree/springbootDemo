@@ -9,9 +9,11 @@
 package com.bootWorkout.demo1.schedule;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledFuture;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
@@ -20,27 +22,28 @@ import org.springframework.stereotype.Component;
 @Component
 public class MultiDynamicScheduler {
 
-	private static Map<String, ThreadPoolTaskScheduler> schedulerMap = new HashMap<>();
+	@Autowired
+	ThreadPoolTaskScheduler threadScheduler;
 	
-	public void startScheduler(String name,String exp) {
-		ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
-		scheduler.initialize();
-		scheduler.setPoolSize(10);
-		scheduler.schedule(getRunnable(), getTrigger(exp));
-		schedulerMap.put(name,scheduler);
+	private static Map<String, ScheduledFuture<?>> schedulerMap = new ConcurrentHashMap<String, ScheduledFuture<?>>();
+	
+	/**
+	 * 스레드풀 안에 있는 스레드(=스케줄러)를 생성하고 
+	 * 스케줄러 맵에 넣기 (->캔슬하기 위해)
+	 * @param name
+	 * @param exp
+	 */
+	public void startScheduler(Runnable run ,Map<String, Object> param) {
+		ScheduledFuture<?> sss 
+		= threadScheduler.schedule(getRunnable(run), getTrigger((String) param.get("schedule")));
+		schedulerMap.put((String) param.get("schedule_name"),sss);
 	}
 
 	/**
 	 * @return
 	 */
-	private Runnable getRunnable() {
-		return new Runnable() {
-			@Override
-			public void run() {
-				System.out.println(new Date());
-				// TODO Auto-generated method stub
-			}
-		};
+	private Runnable getRunnable(Runnable run) {
+		return run;
 	}
 	
 	/**
@@ -51,9 +54,14 @@ public class MultiDynamicScheduler {
 		return new CronTrigger(exp);
 	}
 	
+	/**
+	 * shutdown()이 아니라 cancel을 해야 스레드 하나만 종료된다
+	 * @param name
+	 */
 	public void stopScheduler(String name) {
 		if(!schedulerMap.isEmpty()) {
-			schedulerMap.get(name).shutdown();
+			schedulerMap.get(name).cancel(true);
+			schedulerMap.remove(name);
 			System.out.println("schedule Stop!!!");
 		}
 	}

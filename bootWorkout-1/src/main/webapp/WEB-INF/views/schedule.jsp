@@ -92,14 +92,14 @@
 </head> 
 <body>
 <h1>scheduler</h1>
-<div>
-	cron expression : <input id="iptSingleSchedule">
-	<div>
-		<button onclick="btnStart()">start</button>
-		<button onclick="btnStop()">stop</button>
-	</div>
-</div>
-<h1>multi scheduler</h1>
+<!-- <div> -->
+<!-- 	cron expression : <input id="iptSingleSchedule"> -->
+<!-- 	<div> -->
+<!-- 		<button onclick="btnStart()">start</button> -->
+<!-- 		<button onclick="btnStop()">stop</button> -->
+<!-- 	</div> -->
+<!-- </div> -->
+<!-- <h1>multi scheduler</h1> -->
 <div>
 	cron name : <input id="iptScheduleName"><br>
 	cron expression : <input id="iptMultiSchedule"><br>
