@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	* Copyright (c) 2017 EcoleTree. All Rights Reserved.
+	* 
+	* Author : 김경현	
+	* Created : 2023 04. 26
+	* DESC :  [공통] 고객사-센터-팀 리스트
+-->
+<mapper namespace="com.bootWorkout.demo1.main.mapper.MainMapper">
+	
+	<!--  조직관리 전체 조회  -->
+	<select id="selectGroupList"  parameterType="map" resultType="map">
+	SELECT 
+		a.group_cd 
+		,a.group_id 
+		,a.tenant_id 
+		,a.team_id 
+		,a.group_name 
+		, (
+        CASE
+			WHEN (a.team_id is null and a.tenant_id is null)
+			THEN CONCAT(a.group_name, '(', a.group_id,')')
+			WHEN (a.team_id is null)
+			THEN CONCAT(a.group_name, '(', a.tenant_id,')')
+			ELSE CONCAT(a.group_name, '(', a.team_id,')')
+		END
+        ) as view_group_name
+		,a.group_master 
+		,a.address 
+		,a.phone 
+		,a.create_dttm 
+		,a.create_user 
+		,a.update_dttm 
+		,a.update_user 
+		,a.is_delete
+		,(select DIALER_CENTER_CODE from TENANT WHERE 1=1 AND ID = a.tenant_id) dialer_center_code
+	FROM TBL_GROUP_MST a
+	where 1=1 
+	and is_delete ="N"
+	<if test="group_id != null">
+		and (
+			group_id = #{group_id}
+			<if test="tenant_id != null">
+				and tenant_id is null
+				or tenant_id = #{tenant_id}
+				<if test="team_id != null">
+					and team_id is null
+					or team_id = #{team_id}
+				</if> 
+			</if>
+		)
+	</if>
+	order by a.GROUP_ID asc
+	</select>
+	
+</mapper>

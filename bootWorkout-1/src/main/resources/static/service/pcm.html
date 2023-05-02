@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Opus to PCM</title>
+</head>
+<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+<body>
+<div id="container" style="width: 400px; margin: 0 auto;">
+    <h2>It should play audio if everying went well!</h2>
+    <p>However, the AudioContext may not allow starting the playing without a user gesture. Click this text to instruct the disobedient browser you really want to listen to the audio!</p>
+</div>
+<div>
+	<button id="btn3">connect</button>
+  	<button id="btnStop">disconnected</button>
+  	<button id="btn">PCM</button>
+  	<input id="iptVolumn" type="range" min="0" max="100" step="1" value="100">
+</div>
+<script>
+ window.onload = function() {
+   var socketURL = 'ws://117.52.89.240:11983';
+   var ws = null;
+   var player = new PCMPlayer({
+        encoding: '16bitInt',
+        channels: 1,
+        sampleRate: 8000,
+        flushingTime: 2000
+   });
+   
+   var _promise = function (websocket) {
+		return new Promise(function (resolve, reject) {
+			// 비동기를 표현하기 위해 setTimeout 함수를 사용 
+			window.setTimeout(function () {
+				// 파라메터가 참이면,
+				if (websocket === null || websocket.readyState === 3) {
+					// 해결됨 
+					resolve(websocket);
+				} else if (websocket.readyState == WebSocket.CLOSE) {
+					resolve(websocket);
+				}
+				// 파라메터가 거짓이면, 
+				else {
+					// 실패 
+					reject("ERROR");
+				}
+			}, 1000);
+		});
+	};
+   
+   $("#iptVolumn").on ("change",function (event){
+	   var val = this.value;
+	   player.volume(val / 100);
+   });
+   
+   $("#btnStop").click(function(){
+	   	if (ws) {
+	   		ws.close();
+	   	}
+   });
+   
+   
+   $("#btn2").click(function(){
+	   	player.volume = $("#vol").val();
+   });
+   $("#btn4").click(function(){
+		debugger;
+		var data = {};
+		data["Event-Name"] = "Recording";
+		data["Tenant"] = "1";
+		data["Req_Admin"] = "3002";
+		data["Phone"] = "5001";
+		data["Audio"] = "wav";
+		data["Command"] = "Wiretapping";
+		isPCM = false;
+		ws.send(JSON.stringify(data));
+	});
+	
+	$("#btn").click(function(){
+		debugger;
+		var data = {};
+		data["Event-Name"] = "Recording";
+		data["Tenant"] = "1";
+		data["Req_Admin"] = "3002";
+		data["Phone"] = "5001";
+		data["Audio"] = "pcm";
+		data["Command"] = "Wiretapping";
+		isPCM = true;
+		ws.send(JSON.stringify(data));
+	});
+	
+	$("#btn3").click(function(){
+		var url = "ws://117.52.89.240:11983";
+		if (ws != null && ws.readyState !== WebSocket.CLOSE) {
+			ws.close();
+		}
+		_promise(ws)
+		.then(function (text) {
+			// 성공시
+			ws = new WebSocket(url);
+			ws.binaryType = "arraybuffer";
+			
+			ws.onopen = function(){
+				$("#container").empty();
+				$("#container").append("<h2>Websocket is connected!</h2>")
+				var data = {};
+				data["Event-Name"] = "Recording";
+				data["Tenant"] = "1";
+				data["Req_Admin"] = "3002";
+				data["Phone"] = "5001";
+				data["Audio"] = "pcm";
+				data["Command"] = "Wiretapping";
+				ws.send(JSON.stringify(data));
+			}
+			ws.onmessage = function(msg){
+				
+				if (msg.data instanceof ArrayBuffer) {
+	            	var data = new Uint8Array(event.data);
+	                player.feed(data);
+				}
+				console.log(msg.data);
+			};
+			ws.onclose = function () {
+				$("#container").empty();
+				$("#container").append("<h2>Websocket is disconnected!</h2>")
+			}
+		}, function (error) {
+			// 실패시 
+			console.error(error);
+		});
+		
+		
+		
+		//getAudioContext($("#idFile")[0].files[0].arrayBuffer());
+	});
+ }   
+</script>
+<script type="text/javascript" src="../pcmPlayer/pcm-player.js"></script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 	
-<mapper namespace="com.bootWorkout.demo1.test.mapper.BootWorkoutTestMapper">
+<mapper namespace="com.bootWorkout.demo1.code.mapper.CodeListMapper">
 	
 	<!-- 메뉴 조회 -->
 	<select id="getMenuList" parameterType="map" resultType="Map">

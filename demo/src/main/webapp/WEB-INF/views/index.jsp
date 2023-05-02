@@ -11,7 +11,8 @@
 </head>
 <body>
 
-test
+test<br>
+cp: ${pageContext.request.contextPath }
 <button id="btnList"> btngetList</button>
 <button id="btnList2"> btngetList2</button>
 <button id="btn"> testalert</button>

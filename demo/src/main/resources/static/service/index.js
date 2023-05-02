@@ -36,6 +36,7 @@
 	 */
 	ctrl.init = function() {
 		var self = et.vc;
+		debugger;
 		$("#btn").click(self.clickHandler);
 		$("#btn1").click(self.clickHandler1);
 		$("#btn2").click(self.clickHandler2);

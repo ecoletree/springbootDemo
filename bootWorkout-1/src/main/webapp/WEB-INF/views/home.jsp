@@ -1,97 +1,44 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
+<meta charset="UTF-8">
+<c:import url="/include.commonHeader.sp" charEncoding="UTF-8" />
 <title>Insert title here</title>
+<c:import url="/include.commonPlugin.sp" charEncoding="UTF-8" />
+
 <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script type="text/javascript">
-
-
-	/*
-	 * ¹öÆ° Å¬¸¯ 
-	 */
-	var btnTest = function(){
-		
-		$("#divResult").empty();
-		var menu_name = $("#iptTest").val();
-		var param = {};
-		param.menu_name = menu_name;
-		 $.ajax({
-		        url : "/getTest",
-		        type : "POST",
-		        data : JSON.stringify(param) ,
-		        dataType: 'text',
-		        contentType : "application/json; charset=UTF-8",
-		        success : function (data) {
-		        	var result = JSON.parse(data);
-		        	btnTestSuccessHandler(JSON.parse(data));
-		            },//success
-		        error: function(request,status,error,response){
-		        	console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-		        	if(status === "error"){
-		        		if (request.status === 500) {
-		        			var view =window.location.origin +"/error/500";
-		        			window.location = view;
-						}
-		        	}
-
-		        }
-		        });  //ajax
-		
-			
-	}
-	/*
-	 * ¹öÆ° Å¬¸¯ - success function
-	 */
-	var btnTestSuccessHandler = function(result){
-		var sp = $("<div></div>")
-         	console.log(result.message);
-		
-            if(result.message === "success"){
-            	var ol = $('<ol></ol>');
-            	var data = result.data;
-            	for(var i in data){
-            		var li = $("<li>"+JSON.stringify(data[i])+"</li>");
-            		ol.append(li);
-            	}                   
-            	 var result = $("<h3>°Ë»ö°á°ú: "+data.length+"°Ç</h3>");
-            	 sp.append(result).append(ol);
-            	
-            }else{
-            	 var result = $("<h3>°Ë»ö°á°ú ¾øÀ½</h3>");
-            	 sp.append(result);
-            }
-    	$("#divResult").append(sp)
-	}
-	/*
-	 * ¿£ÅÍÅ°
-	 */	
-	var enterKeyPress = function() {
-		if (window.event.keyCode == 13) {
-	    	$("#btnSearch").trigger("click");
-	    }
-	}	
-	var doLogout = function(){
-		var view = window.location.origin + "/login/logout";
-		window.location = view;
-	}
-</script>
 </head> 
 <body>
 <h1>Spring boot</h1>
 <div>
-¾ÆÀÌµð : ${sessionVO.user_id}
+<h3>3</h3>
+<select id="selGroup" data-child = "#selCenter"></select>
+<select id="selCenter" data-child = "#selTeam"></select>
+<select id="selTeam" ></select>
 </div>
-<div>
-	¸Þ´º¸í : <input id="iptTest"  onkeydown="enterKeyPress()">
-	<button id="btnSearch" onclick="btnTest()">¸Þ´º¸í Á¶È¸</button>
-	<div id="divResult"></div>
-</div>
-<div > 
-	<button id="btnLogout" onclick="doLogout()">·Î±×¾Æ¿ô</button>
-</div>
+	
+<!-- <script src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->
+<!-- ë: ìž‘ì„±í•˜ê¸° -->
+<script type="text/javascript">
+	$.getScript(getContextPath() + "/resources/service/home.js").done(function(script, textStatus) {
+		if (!!ecoletree.vc && ecoletree.vc.name === "home") {
+			var inter = setInterval(function(){
+				 ecoletree.promiseInit()
+				.then(function(){
+					clearInterval(inter);
+					ecoletree.vc.init(${initData});
+				}, function (){})
+			},300);
+			
+		} else {
+			console.log("vc's name is not index : " + ecoletree.vc.name);
+		}
+	}).fail(function(jqxhr, settings, exception) {
+		console.log(arguments);
+	});
+</script>
 </body>
 
 </html>
