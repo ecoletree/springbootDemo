@@ -14,8 +14,8 @@
 <h1>Spring boot</h1>
 <div>
 <h3>3</h3>
-<select id="selGroup" data-child = "#selCenter"></select>
-<select id="selCenter" data-child = "#selTeam"></select>
+<select id="selGroup" ></select>
+<select id="selCenter" ></select>
 <select id="selTeam" ></select>
 </div>
 	
