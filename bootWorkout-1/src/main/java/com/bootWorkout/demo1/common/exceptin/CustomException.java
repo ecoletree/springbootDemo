@@ -43,6 +43,7 @@ public class CustomException extends RuntimeException {
     	eeee = new ExceptionDetail(t, code);
     }
     
+    
     public ExceptionDetail getExceptionDetail() {
     	return eeee;
     }
