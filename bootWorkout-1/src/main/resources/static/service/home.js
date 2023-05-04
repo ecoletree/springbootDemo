@@ -17,7 +17,6 @@
 	ctrl.JWT = null;
 	ctrl.groupList= null;
 	ctrl.optionList = {};
-	ctrl.selectedList = {};
 	// ============================== 화면 컨트롤 ==============================
 	/**
 	 * init VIEW
@@ -25,6 +24,8 @@
 	ctrl.init = function(initData) {
 		var self = et.vc;
 		self.groupList = initData.groupList;
+		
+		debugger;
 		
 //		self.setOption(["selGroup","selGroup2"]);
 		self.selectChangeHandler();
@@ -44,9 +45,8 @@
 		var self = et.vc;
 		var groupname = $(this).data("groupname");
 		var groupList = self.groupList;
-		self.selectedList[groupname] = [];
-		var options = self.setSValue(groupname);
-		self.makeTreeSelectOption(groupList,options);
+		var options = et.setSValue (groupname); 
+		et.makeTreeSelectOption(groupList,options);
 	}
 	/**
 		1. 수정 
@@ -54,26 +54,34 @@
 	ctrl.btnEditHandler = function(){
 		var self = et.vc;
 		var groupList = self.groupList;
-		var sVal =[];
+		var sVal ={};
 		var groupname = "selGroup2";
-		$('input[data-groupname=iptGroup]').each(function(index,element){
-			sVal.push(element.value);
-		});
-		self.selectedList[groupname] = sVal;
-		var options = self.setSValue(groupname);
 		
-		self.makeTreeSelectOption(groupList,options);
+		$('input[data-groupname=iptGroup]').each(function(index,element){
+			if (index === 0) {
+			sVal.group_id = element.value;
+				
+			} else if (index === 1) {
+			sVal.tenant_id = element.value;
+			} else {
+			sVal.team_id = element.value;
+			}
+		});
+		var options = et.setSValue(groupname, sVal);
+		
+		et.makeTreeSelectOption(groupList,options);
+		
+		
 		
 	}
 	/**
 		리스트, 셀렉트 이름으로 옵션에 sValue 설정
 	 */
-	ctrl.setSValue = function(groupname){
+	ctrl.setSValue = function(groupname,rowData){
 		var self = et.vc;
-		var list = self.selectedList[groupname];
 		var options = self.optionList[groupname];
 		Object.keys(options).forEach(function(v){
-			options[v].sValue = list[v]??"";
+			options[v].sValue = rowData[options[v].keyData]??"";
 		})
 		return options;
 	}
@@ -93,17 +101,14 @@
 		
 		var options2 = [];
 		
-		var option4 = {value:"group_id", text:"view_group_name", targetID:"#selGroup2",default:"그룹전체"};
-		var option5 =  {value:"tenant_id", text:"view_group_name", targetID:"#selCenter2", default:"센터전체"};
-		var option6 = {value:"team_id", text:"view_group_name", targetID:"#selTeam2", default:"팀전체"};
+		var option4 = {value:"group_id", text:"view_group_name", targetID:"#selGroup2", keyData:"group_id"};
+		var option5 =  {value:"tenant_id", text:"view_group_name", targetID:"#selCenter2", keyData:"tenant_id"};
+		var option6 = {value:"team_id", text:"view_group_name", targetID:"#selTeam2",default:"팀전체", keyData:"team_id"};
 		
 		options2.push(option4,option5,option6);
 		
-		self.optionList["selGroup"] = options;
-		self.optionList["selGroup2"] = options2;
-		
-		self.makeTreeSelectOption(groupList,options);
-		self.makeTreeSelectOption(groupList,options2);
+		et.makeTreeSelectOption(groupList,options);
+		et.makeTreeSelectOption(groupList,options2);
 	}
 	
 	// ============================== 동작 컨트롤 ==============================
@@ -163,7 +168,39 @@
 			 */
 			targetData = $(targetID).find("option:selected").data()?.children ?? [];
 		}
-		
+	}
+	
+	ctrl.makeTreeSelectOption2 = function(aDataList,oOptionList){
+		var self = et.vc;
+		var targetData = aDataList;
+		var groupname = "";
+		var options = [];
+		oOptionList.forEach((option, i) => {
+			var targetID = option.targetID;
+			groupname = $(targetID).data("groupname");
+			var sValue = option?.sValue ?? $(targetID).val();
+			$(targetID).empty();
+			
+			var optionValue = option.value; 
+			var optionText = option.text;
+			var optionDefault = oOptionList[i].default; 
+			et.makeSelectOption(targetData,{value:optionValue, text:optionText},targetID,optionDefault,sValue );
+			options.push (option);
+			targetData = $(targetID).find("option:selected").data()?.children ?? [];
+		});
+		self.optionList[groupname] = options;
+//		for(var i in oOptionList){
+//			var targetID = oOptionList[i].targetID;
+//			
+//			var sValue = oOptionList[i]?.sValue ?? $(targetID).val();
+//			$(targetID).empty();
+//			
+//			var optionValue = oOptionList[i].value; 
+//			var optionText = oOptionList[i].text;
+//			var optionDefault = oOptionList[i].default; 
+//			et.makeSelectOption(targetData,{value:optionValue, text:optionText},targetID,optionDefault,sValue );
+//			targetData = $(targetID).find("option:selected").data()?.children ?? [];
+//		}
 	}
 	
 	
