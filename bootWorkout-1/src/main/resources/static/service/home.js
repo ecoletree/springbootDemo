@@ -98,7 +98,8 @@
 		var self = et.vc;
 		var groupList = self.groupList;
 		var groupname = $(this).data("groupname");
-		var options = self.optionList[groupname]; 
+		var rowData ={}; 
+		var options = self.setSValue(groupname,rowData);
 		self.makeTreeSelectOption(groupList,options); 
 	}
 	/**
