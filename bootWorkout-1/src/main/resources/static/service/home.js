@@ -98,7 +98,7 @@
 		var self = et.vc;
 		var groupName = $(this).data("groupname");
 		var rowData ={};
-		var index = $(this).index()-1; // 변경할 옵션 설정할때 필요해
+		var index = $(this).index();// 변경할 옵션 설정할때 필요해
 		var options = self.getOptionValue(groupName,rowData,index);
 		var groupList = $(this).find("option:selected").data()?.children ?? [];
 		self.makeTreeSelectOption(groupList,options);
@@ -142,10 +142,10 @@
 	 */
 	ctrl.getOptionValue = function(groupname,rowData,index){
 		var self = et.vc;
-		
 		var optionList = self.optionList[groupname];
 		var options = [];
-		index = index??-1;// index가 undefined면 그냥 optionList return 
+		// index가 0 이하 음수(-1)일때 최상위까지 값 변경되서 셋팅됨
+		index = index === undefined ? -1 : index-1;
 		for(var i in optionList){
 			if( i > index){
 				optionList[i].sValue = rowData?.[optionList[i].keyData]??"";	
