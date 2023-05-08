@@ -52,7 +52,7 @@
 		options1.push(option1,option2,option3);
 		
 		
-		self.setOptionList("selGroup",options1);
+		self.setOptionInitList("selGroup",options1);
 		
 		var options2 = [];
 		var option4 = {value:"group_id", text:"view_group_name", targetID:"#selGroup2", keyData:"group_id"};
@@ -61,7 +61,7 @@
 		
 		options2.push(option4,option5,option6);
 		
-		self.setOptionList("selGroup2",options2);
+		self.setOptionInitList("selGroup2",options2);
 		
 		self.makeTreeSelectOption(groupList,options1);
 		self.makeTreeSelectOption(groupList,options2);
@@ -75,31 +75,20 @@
 		var self = et.vc;
 		var groupList = self.groupList;
 		var groupName = "selGroup2"
-		var rowData ={};
-		// --> rowData 형태로 만들기
-		$('input[data-groupname="iptGroup"]').each(function(index,element){
-			if (index === 0) {
-			rowData.group_id = element.value;
-			} else if (index === 1) {
-			rowData.tenant_id = element.value;
-			} else {
-			rowData.team_id = element.value;
-			}
-		});
-		// <--
-		var options = self.setSValue(groupName,rowData);
+		var rowData =self.getRowdata();
+		var options = self.getOptionValue(groupName,rowData);
 		self.makeTreeSelectOption(groupList,options);
 		
 	}	
 	/**
-	 * 초기화 : 초기 옵션값, 최상위 그룹 리스트 넣으면 초기화
+	 * 초기화 : rowData 빈값 넣으면 초기화
 	 */
 	ctrl.btnClearHandler = function(){
 		var self = et.vc;
 		var groupList = self.groupList;
 		var groupname = $(this).data("groupname");
 		var rowData ={}; 
-		var options = self.setSValue(groupname,rowData);
+		var options = self.getOptionValue(groupname,rowData);
 		self.makeTreeSelectOption(groupList,options); 
 	}
 	/**
@@ -110,7 +99,7 @@
 		var groupName = $(this).data("groupname");
 		var rowData ={};
 		var index = $(this).index()-1; // 변경할 옵션 설정할때 필요해
-		var options = self.setSValue(groupName,rowData,index);
+		var options = self.getOptionValue(groupName,rowData,index);
 		var groupList = $(this).find("option:selected").data()?.children ?? [];
 		self.makeTreeSelectOption(groupList,options);
 	}
@@ -121,7 +110,7 @@
 	/**
 	 * 옵션 리스트 common 저장
 	 */
-	ctrl.setOptionList = function(groupname,option){
+	ctrl.setOptionInitList = function(groupname,option){
 		var self = et.vc;
 		self.optionList[groupname] = option;
 	}
@@ -131,6 +120,7 @@
 	 */
 	ctrl.makeTreeSelectOption = function(aDataList,oOptionList){
 		var self = et.vc;
+		
 		var targetData = aDataList;
 		var options = [];
 		oOptionList.forEach((option, i) => {
@@ -148,9 +138,9 @@
 	}
 	
 	/**
-	 * 옵션값 변경 (전역에 저장된 option값은 변경 없음)
+	 * 옵션값 변경해서 필요한 옵션 리턴
 	 */
-	ctrl.setSValue = function(groupname,rowData,index){
+	ctrl.getOptionValue = function(groupname,rowData,index){
 		var self = et.vc;
 		
 		var optionList = self.optionList[groupname];
@@ -164,5 +154,23 @@
 		}
 		return options;
 	}	
+	
+	
+	
+	// ======================================================================
+	ctrl.getRowdata = function(){
+		var rowData = {};
+		$('input[data-groupname="iptGroup"]').each(function(index,element){
+			if (index === 0) {
+			rowData.group_id = element.value;
+			} else if (index === 1) {
+			rowData.tenant_id = element.value;
+			} else {
+			rowData.team_id = element.value;
+			}
+		});
+		return rowData;
+	}
+	
 	return ctrl;
 }));
