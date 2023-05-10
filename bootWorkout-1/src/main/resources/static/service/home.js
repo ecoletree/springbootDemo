@@ -28,7 +28,6 @@
 //		1. Date Range Picker
 		self.setDateRangePicker();
 		$("#btnSetDatePickerDate").click(self.btnSetDatePickerDateHandler);
-		self.dateRangeApply();
 		$('#divDatePickerRange').on('apply.daterangepicker', function(ev, picker) {
 	    	$("#iptStartDate").val(picker.startDate.format('YYYY-MM-DD'));
 			$("#iptEndDate").val(picker.endDate.format('YYYY-MM-DD'));

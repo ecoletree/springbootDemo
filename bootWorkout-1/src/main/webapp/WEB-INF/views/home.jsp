@@ -19,15 +19,15 @@
 <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
 <!--  -->
 <!-- 4.jQuery Date Range Picker -->
-<link rel="stylesheet" href="/node_modules/jquery-date-range-picker/dist/daterangepicker.min.css">
-<script type="text/javascript" src="/node_modules/moment/min/moment.min.js"></script>
+<link rel="stylesheet" href="/date_range_picker/jquery-date-range-picker/dist/daterangepicker.min.css">
+<script type="text/javascript" src="/date_range_picker/moment/min/moment.min.js"></script>
 <!-- <script type="text/javascript" src="jquery.min.js"></script> -->
-<script type="text/javascript" src="/node_modules/jquery-date-range-picker/dist/jquery.daterangepicker.min.js"></script>
+<script type="text/javascript" src="/date_range_picker/jquery-date-range-picker/dist/jquery.daterangepicker.min.js"></script>
 <!--  -->
 <!-- 5. light picker : npm install lightpick -->
-<link rel="stylesheet" type="text/css" href="/node_modules/lightpick/css/lightpick.css">
+<link rel="stylesheet" type="text/css" href="/date_range_picker/lightpick/css/lightpick.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
-<script src="/node_modules/lightpick/lightpick.js"></script>
+<script src="/date_range_picker/lightpick/lightpick.js"></script>
 <!--  -->
 
 
@@ -67,37 +67,11 @@ https://ourcodeworld.com/articles/read/1326/top-5-best-open-source-date-range-pi
 	<br><br>
 	<div>
 		<h4>2. Litepicker</h4>
-		<div>
-			<ul style="list-style-type: circle; margin-left : 20px ;">
-			<li>특,,</li>
-			</ul>
-		</div>
-		<br>
-
-		<div>
-		<input type="text" id="iptSetLitePickerRange1"/>-
-		<input type="text" id="iptSetLitePickerRange2"/>
-		<button id="btnSetLitePickerDate">set date range</button>
-		</div>
-		
-		<div style="margin-top : 15px ;">
-		<button id="btnLitePickerOpen">open</button>
-		<button id="btnLitePickerClose">close</button>
-		<button id="btnLitePickerClearSection">clear section</button>
-		<button id="btnLitePickerDestroy">destroy</button>
-		<button id="btnLitePickerResetMonth">reset months</button>
-		</div>
-		<div id="divLitePickerRange">
-		calendar :
-		<input type="text" id="iptLitePickerRange1"/>-
-		<input type="text" id="iptLitePickerRange2"/>
-		</div>
 	</div>
 
 	<br><br>
 	<div>
 		<h4>3. Hotel Datepicker</h4>
-		
 	</div>
 	<br><br>
 	<div>
