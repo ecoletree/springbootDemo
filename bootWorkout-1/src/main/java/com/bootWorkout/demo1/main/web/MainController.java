@@ -43,6 +43,17 @@ public class MainController extends ETBaseController {
 		return mav;
 	}
 	
+	@RequestMapping("/select")
+	public ModelAndView selectPage(final ModelAndView mav,Map<String, Object> params) {
+		
+		mav.setViewName("makeSelect");
+		mav.addObject("initData", JSONObject.fromObject(
+				MapBuilder.<String, Object>of(
+						"groupList", service.getGroupList(params)
+						))
+				);
+		return mav;
+	}
 	
 	
 	
