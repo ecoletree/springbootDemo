@@ -34,6 +34,9 @@
 <!-- ecoletree CSS -->
 <link rel="stylesheet" href="${cp }/resources/ecoletree/css/ecoletree_global.css">
 
+<!-- daterangefield CSS -->
+<link rel="stylesheet" href="${cp }/jslib/ecoletreeLibraryJS/plugin/daterangepicker-master/daterangepicker.css">
+
 <!-- Favicon -->
 <link rel="shortcut icon" href="${cp }/resources/ecoletree/img/favicon.ico">
 

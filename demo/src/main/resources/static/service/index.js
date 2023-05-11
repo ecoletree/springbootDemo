@@ -36,15 +36,39 @@
 	 */
 	ctrl.init = function() {
 		var self = et.vc;
-		debugger;
 		$("#btn").click(self.clickHandler);
 		$("#btn1").click(self.clickHandler1);
 		$("#btn2").click(self.clickHandler2);
 		$("#btnList").click(self.btnListHandler);
 		$("#btnList2").click(self.btnListHandler);
+		$("#btnFile").click(self.fileUpload);
 		
 		
+         debugger;
+		self.createDataGrid();
 	};
+	
+	ctrl.fileUpload = function(){
+		var fileInput = document.querySelector("#txtFile");
+		 var ajaxOption = {
+                    contentType: false,
+                    processData: false
+                };
+         var formData = new FormData();
+         formData.append("file",fileInput.files[0]);
+		 new ETService().setSuccessFunction(function(result){
+			 debugger;
+		 }).callService("/upload", formData, ajaxOption);
+	}
+	
+	ctrl.createDataGrid = function(){
+		var grid = canvasDatagrid();
+		$("#divGrid").append(grid);
+		grid.data = [
+		  { col1: 'row 1 column 1', col2: 'row 1 column 2', col3: 'row 1 column 3' },
+		  { col1: 'row 2 column 1', col2: 'row 2 column 2', col3: 'row 2 column 3' },
+		];
+	}
 	
 	ctrl.clickHandler = function() {
 		et.alert.show(ETCONST.ALERT_TYPE_INFO, "", et.message("button.delete_faile"));

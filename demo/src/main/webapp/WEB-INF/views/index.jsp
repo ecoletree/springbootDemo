@@ -21,6 +21,14 @@ cp: ${pageContext.request.contextPath }
 <input id="iptId">
 <input id="iptPw">
 <img  src="${cp}/resources/ecoletree/img/btn_cal.png">
+<div>
+	<input type="file" id="txtFile"/>
+	<button id="btnFile">upload</button>
+</div>
+
+<div id="divGrid">
+
+</div>
 
 <script type="text/javascript">
 $.getScript(getContextPath() + "/resources/service/index.js");

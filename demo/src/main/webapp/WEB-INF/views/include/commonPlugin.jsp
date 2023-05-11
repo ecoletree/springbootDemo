@@ -68,7 +68,28 @@
 <!-- App VIEW Controller -->
 <script src="${cp }/jslib/ecoletreeLibraryJS/common/common.js"></script>
 
+<script src="${cp }/resources/canvas-grid/canvas-datagrid.js"></script>
+
+
+<!-- daterangefield CSS -->
+<script src="${cp }/jslib/ecoletreeLibraryJS/plugin/daterangepicker-master/moment-with-locales.min.js"></script>
+<!-- <script src="https://momentjs.com/downloads/moment-with-locales.min.js"></script> -->
+<script src="${cp }/jslib/ecoletreeLibraryJS/plugin/daterangepicker-master/daterangepicker.js"></script>
+
+
 <script type="text/javascript">
+moment.locale("ko",{
+	
+	longDateFormat : {
+		LT : 'HH:mm',
+        LTS : 'HH:mm:ss',
+        L : 'YYYY.MM.DD',
+        LL : 'YYYY.MMMM.DD',
+        LLL : 'YYYY.MMMM.D HH:mm',
+        LLLL : 'YYYY.MMMM.D.dddd HH:mm',
+        LLT : 'YYYY.MM.DD HH:mm'
+	}
+})
 	/**
 	 * 컨텍스트 패스 획득
 	 */
@@ -78,28 +99,6 @@
 			cp = "/";
 		}
 		return '${cp}';
-	};
-	
-	/**
-	 * country 코드로 언어코드 획득
-	 * @param isCode true면 country 코드를 바로 반환
-	 * @return _lang 반환. kr 일 경우 "_kor"반환
-	 */
-	function getLang(isCode) {
-		var country = 'kr';
-		if (isCode === true) {
-			return !!country ? country : "kr";
-		}
-		
-		var lang = "_kor";
-		
-		if (country === "kr") {
-			lang = "_kor";
-		} else if (country === "en") {
-			lang = "_eng";
-		}
-		
-		return lang;
 	};
 	
 </script>
