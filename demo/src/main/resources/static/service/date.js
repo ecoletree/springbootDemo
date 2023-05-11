@@ -72,7 +72,6 @@
 	ctrl.btnClickHandler2 = function () {
 		var self = et.vc;
 		var aFun = function(ev, picker) {
-			debugger;
 			var val = picker.startDate.format(picker.locale.format) + picker.locale.separator +
 			picker.endDate.format(picker.locale.format);  
 		  //do something, like clearing an input
