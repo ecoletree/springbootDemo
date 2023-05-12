@@ -1,8 +1,10 @@
 package com.example.demo.code.web;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,10 +16,15 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.code.service.CodeService;
+import com.example.demo.util.LoginValidationUtil;
+import com.example.demo.util.LoginValidationUtil.LoginParam.LoginParamBuilder;
 
+import kr.co.ecoletree.common.ETCommonConst;
+import kr.co.ecoletree.common.auth.ETSessionManager;
 import kr.co.ecoletree.common.base.web.ETBaseController;
 import kr.co.ecoletree.common.util.FileUtil;
 import kr.co.ecoletree.common.util.ResultUtil;
+import kr.co.ecoletree.common.vo.ETSessionVO;
 
 
 @Controller
@@ -25,8 +32,13 @@ public class CodeController extends ETBaseController{
 
 	private static final String JSP_PATH = ".service.body";
 	
+	private static int count  = 0;
+	
 	@Autowired
 	CodeService service;
+	
+	@Autowired
+	LoginValidationUtil tUtil;
 	
 	@RequestMapping("/")
 	public String hello() {
@@ -75,9 +87,33 @@ public class CodeController extends ETBaseController{
 	}
 	
 	@RequestMapping("/getList2")
-	public @ResponseBody Map<String, Object> getList2(@RequestBody Map<String, Object> params) throws Exception {
-		int list = service.insertCode(params);
+	public @ResponseBody Map<String, Object> getList2(@RequestBody Map<String, Object> params, HttpServletRequest request) throws Exception {
+		//int list = service.insertCode(params);
+		String user_id = "mk";
+		String dbPW = "4b4f47574f305332456d48734b6c58734343756c4379766a336b6e6d5956417746432f6633713738695a413d";
+		//String dbPW = "4451596757654153364e5334584671396c6b42466266365170432f42614e4731754e38324f5574585747553d";
+		ETSessionVO etSessionVO = new ETSessionVO();
+		etSessionVO.setUser_id(user_id);
+		etSessionVO.setUser_pw(dbPW);
+		request.getSession().setAttribute(ETCommonConst.SESSION_VO, etSessionVO);
+		ETSessionManager.getInstance().setSession(request.getSession(), user_id);
 		
-		return ResultUtil.getResultMap(true,list);
+		if (5 < count) {
+			count = 0;
+		}
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, -89);
+		LoginParamBuilder builder =
+				LoginValidationUtil.LoginParam.builder()
+				.init_pw("ccc12345!!")
+				.last_login_dttm(cal.getTime())
+				.param_pw((String)params.get("password"))
+				.login_count(count)
+				.user_pw(dbPW)
+				.last_pw_change_dttm(cal.getTime())
+				;
+		tUtil.validation(builder);
+		count++;
+		return ResultUtil.getResultMap(true, 0);
 	}
 }
