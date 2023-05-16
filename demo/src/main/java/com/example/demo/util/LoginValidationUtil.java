@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import com.example.demo.util.LoginValidationUtil.LoginParam.LoginParamBuilder;
 
+import kr.co.ecoletree.common.ETCommonConst;
 import kr.co.ecoletree.common.auth.ETSessionManager;
 import kr.co.ecoletree.common.exception.ETException;
 import kr.co.ecoletree.common.util.CryptoUtil;
@@ -31,57 +32,60 @@ import lombok.extern.slf4j.Slf4j;
 public class LoginValidationUtil {
 
 	public static Map<String, Date> TIME_MEMORY = new HashMap<String, Date>();
-	private final int TIME_LIMIT = 1;
+	private final int TIME_LIMIT = 3;
 	private final int LOGIN_COUNT = 5;
 	
 	public final class VALIDATION_MSG {
-		public static final String LOGIN_USER = "orgName";
-		public static final String NewName = "newName";
-		public static final String Path = "path";
-		public static final String FiledownloadView = "fileDownloadView";
-		public static final String ImageView = "imageView";
+		public static final String LOGIN_USER = "login_user";
+		public static final String INITIALIZED_PW = "initialized_pw";
+		public static final String LOCKED_ACCOUNT = "locked_account";
+		public static final String DELETE_ACCOUNT = "delete_account";
+		public static final String CLOSE_ACCOUNT = "close_account";
+		public static final String CHANGE_PW = "change_pw";
+		public static final String NO_MATCH_DATA = "no_match_data";
 	} 
 	
 	@Builder
 	@SuppressWarnings("unused")
 	public static class LoginParam {
-		private final String user_id;
 		private final String init_pw;
-		private final String user_pw;
+		private final String user_id;
+		private final String user_db_pw;
 		private final String param_pw;
 		private final int login_count;
 		private final Date last_login_dttm;
 		private final Date last_pw_change_dttm;
 	}
 	
-	public void validation (LoginParamBuilder builder) throws NoSuchAlgorithmException, UnsupportedEncodingException, ETException {
-		String resultMsg = "";
+	public String validation (LoginParamBuilder builder) throws NoSuchAlgorithmException, UnsupportedEncodingException, ETException {
+		String resultMsg = ETCommonConst.SUCCESS;
 		
 //		if (ETSessionManager.getInstance().isLogon(builder.user_id)) {
 //			resultMsg = "login_user";
 //		}
-		log.info(resultMsg);
+		if (!(resultMsg = validationLoginCount(builder)).equals(""))
+			return resultMsg;
+		if (!(resultMsg = validationInitPW(builder)).equals(""))
+			return resultMsg;
+		if (!(resultMsg = validation1Year(builder)).equals(""))
+			return resultMsg;
+		if (!(resultMsg = validation90Day(builder)).equals(""))
+			return resultMsg;
+		if (!(resultMsg = validation90PW(builder)).equals(""))
+			return resultMsg;
+		if (!(resultMsg = validationPWCkeck(builder)).equals(""))
+			return resultMsg;
 		
-		resultMsg = validationLoginCount(builder);
-		log.info(resultMsg);
-		resultMsg = validationInitPW(builder);
-		log.info(resultMsg);
-		resultMsg = validation1Year(builder);
-		log.info(resultMsg);
-		resultMsg = validation90Day(builder);
-		log.info(resultMsg);
-		resultMsg = validation90PW(builder);
-		log.info(resultMsg);
-		resultMsg = validationPWCkeck(builder);
-		log.info(resultMsg);
+		return resultMsg;
 		
 	}
 	
 	private String validationInitPW (LoginParamBuilder builder) throws NoSuchAlgorithmException, UnsupportedEncodingException, ETException {
 		String resultMsg = "";
-		String initPw = CryptoUtil.encodePassword(getBase64String(builder.init_pw));
-		if (builder.user_pw.equals(initPw)) {
-			resultMsg = "initialized_pw";
+		String initPw1 = CryptoUtil.encodePasswordSha256(CryptoUtil.getBase64StringUTF8(builder.init_pw));
+		String initPw = CryptoUtil.encodePassword(CryptoUtil.getBase64StringUTF8(builder.init_pw));
+		if (builder.user_db_pw.equals(initPw)) {
+			resultMsg = VALIDATION_MSG.INITIALIZED_PW;
 		}
 		return resultMsg;
 	}
@@ -91,7 +95,7 @@ public class LoginValidationUtil {
 		if (LOGIN_COUNT <= builder.login_count) {
 			int min = timeChecker(builder.user_id);
 			if (0 < min) {
-				resultMsg = "locked_account"+min;
+				resultMsg = VALIDATION_MSG.LOCKED_ACCOUNT+min;
 			}
 		}
 		return resultMsg;
@@ -104,7 +108,7 @@ public class LoginValidationUtil {
 		dbCal.setTime(builder.last_login_dttm);
 		dbCal.add(Calendar.YEAR, 1);
 		if (now.after(dbCal)) {
-			resultMsg = "delete_account";
+			resultMsg = VALIDATION_MSG.DELETE_ACCOUNT;
 		}
 		return resultMsg;
 	}
@@ -116,7 +120,7 @@ public class LoginValidationUtil {
 		dbCal.setTime(builder.last_login_dttm);
 		dbCal.add(Calendar.DATE, 90);
 		if (now.after(dbCal)) {
-			resultMsg = "close_account";
+			resultMsg = VALIDATION_MSG.CLOSE_ACCOUNT;
 		}
 		return resultMsg;
 	}
@@ -129,7 +133,7 @@ public class LoginValidationUtil {
 			dbCal.setTime(builder.last_pw_change_dttm);
 			dbCal.add(Calendar.DAY_OF_MONTH, 90);
 			if (now.after(dbCal)) {
-				resultMsg = "change_pw";
+				resultMsg = VALIDATION_MSG.CHANGE_PW;
 			}
 		}
 		return resultMsg;
@@ -138,8 +142,8 @@ public class LoginValidationUtil {
 	private String validationPWCkeck(LoginParamBuilder builder) throws NoSuchAlgorithmException, UnsupportedEncodingException, ETException {
 		String resultMsg = "";
 		String cryptoPasswd = CryptoUtil.encodePassword(builder.param_pw);
-		if( !builder.user_pw.equals(cryptoPasswd)) {
-			resultMsg = "no_match_data";
+		if( !builder.user_db_pw.equals(cryptoPasswd)) {
+			resultMsg = VALIDATION_MSG.NO_MATCH_DATA;
 			setTimeout(builder.user_id);
 		}
 		return resultMsg;
@@ -194,16 +198,5 @@ public class LoginValidationUtil {
 		TIME_MEMORY.put(userId, Calendar.getInstance().getTime()); //최초실패 
 	}
 	
-	/**
-	 * string을 base64로 변경
-	 * @param str
-	 * @return
-	 * @throws UnsupportedEncodingException
-	 */
-	private String getBase64String(String str) throws UnsupportedEncodingException {
-		Base64 base = new Base64();
-		byte[] byteArr = base.encode(str.getBytes());
-		return new String(byteArr, "UTF-8");
-	}
 }
 
