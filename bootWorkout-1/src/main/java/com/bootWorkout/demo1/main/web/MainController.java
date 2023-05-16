@@ -141,7 +141,7 @@ public class MainController extends ETBaseController {
 
 	private String getLogMessage(String resultMsg) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		LOG_MESSAGE logMesssage = new LOG_MESSAGE();
-		Field fd = logMesssage.getClass().getDeclaredField("delete_account");
+		Field fd = logMesssage.getClass().getDeclaredField(resultMsg);
 		return (String)fd.get(logMesssage);
 	}
 	
