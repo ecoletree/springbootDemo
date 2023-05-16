@@ -139,9 +139,7 @@ public class LoginValidation {
 	 */
 	private String checkInitPassword(LoginParamBuilder builder) throws NoSuchAlgorithmException, UnsupportedEncodingException, ETException {
 		String resultMsg = ETCommonConst.SUCCESS;
-		Base64 base = new Base64();
-		byte[] byteArr = base.encode(builder.init_pwd.getBytes());
-		String initPwd = CryptoUtil.encodePassword(new String(byteArr, "UTF-8"));
+		String initPwd = CryptoUtil.encodePassword(CryptoUtil.getBase64String(builder.init_pwd));
 		if(builder.user_pwd.equals(initPwd)) {
 			resultMsg = "initialized_pw";
 		}
