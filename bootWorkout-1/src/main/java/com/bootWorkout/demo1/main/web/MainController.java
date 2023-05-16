@@ -9,6 +9,7 @@
 package com.bootWorkout.demo1.main.web;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -19,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,6 +50,16 @@ public class MainController extends ETBaseController {
 	LoginValidation loginValidation;
 	
 	private static int LOGIN_COUNT =0;
+	
+	public final class LOG_MESSAGE {
+		public static final String delete_account = "1년이 지나 '계정 삭제";
+		public static final String change_pw = "비밀번호 변경해야함";
+		public static final String close_account = "90일 지남";
+		public static final String initialized_pw = "최초 비번 변경";
+		public static final String locked_account = "계정잠김";
+		public static final String password_check_fail = "비밀번호 틀림";
+//		public static final String LOGOUT = "로그아웃";
+	}
 	
 	@RequestMapping("/")
 	public ModelAndView main(final ModelAndView mav,Map<String, Object> params) {
@@ -88,7 +98,7 @@ public class MainController extends ETBaseController {
 	
 	
 	@RequestMapping("/loginChk")
-	public @ResponseBody Map<String, Object> loginCheck(HttpServletRequest request, @RequestBody Map<String, Object> param) throws NoSuchAlgorithmException, UnsupportedEncodingException, ETException{
+	public @ResponseBody Map<String, Object> loginCheck(HttpServletRequest request, @RequestBody Map<String, Object> param) throws NoSuchAlgorithmException, UnsupportedEncodingException, ETException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException{
 		Map<String, Object> map = new HashMap<String,Object>();
 		String id = "kkh";
 		String  db_pwd = "686948483256794c5a465a2b7539454f3075332f79555430735175774635516f536d7055317231326f53593d";
@@ -122,12 +132,17 @@ public class MainController extends ETBaseController {
 		if(!resultMsg.equals(ETCommonConst.SUCCESS)) {
 			LOGIN_COUNT++;
 		}
-		//메세지 프로퍼티에서 가져와서 로그쌓기 
-//		String logMsg =messageSource.getMessage("delete_account");
-//		logger.info("messageTest::::"+messageSource.getMessage("delete_account"));
+		
+		String logMsg = getLogMessage(resultMsg);
 //		map.put("failCount", LOGIN_COUNT);
-//		map.put("logMessage", logMsg);
+		map.put("logMessage", logMsg);
 		return ResultUtil.getResultMap(true,map);
+	}
+
+	private String getLogMessage(String resultMsg) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		LOG_MESSAGE logMesssage = new LOG_MESSAGE();
+		Field fd = logMesssage.getClass().getDeclaredField("delete_account");
+		return (String)fd.get(logMesssage);
 	}
 	
 }
