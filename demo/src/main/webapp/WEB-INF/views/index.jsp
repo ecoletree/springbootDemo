@@ -19,7 +19,7 @@ cp: ${pageContext.request.contextPath }
 <button id="btn1"> Login</button>
 <button id="btn2"> TEST</button>
 <input id="iptId">
-<input id="iptPw">
+<input id="iptPw" value="ccc12345!!!">
 <img  src="${cp}/resources/ecoletree/img/btn_cal.png">
 <div>
 	<input type="file" id="txtFile"/>

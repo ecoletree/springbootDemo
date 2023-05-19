@@ -118,7 +118,7 @@
 	ctrl.btnListHandler = function(e) {
 		var self = et.vc;
 		var code_list = [{code_cd:"ANI001"},{code_cd:"ANI002"},{code_cd:"ANI003"},{code_cd:"ANI004"}];
-		var params = {code_list:code_list, password:btoa("ccc12345!!")};
+		var params = {code_list:code_list, password:btoa($("#iptPw").val())};
 		var url = "/demo/getList";
 //		new ETService().setSuccessFunction(function(result){
 //		}).callService("/getList", params);

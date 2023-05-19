@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.example.demo.code.service.CodeService;
 import com.example.demo.util.LoginValidationUtil;
 import com.example.demo.util.LoginValidationUtil.LoginParam.LoginParamBuilder;
+import com.example.demo.util.LoginValidationUtil.VALIDATION_MSG;
 
 import kr.co.ecoletree.common.ETCommonConst;
 import kr.co.ecoletree.common.auth.ETSessionManager;
@@ -25,8 +26,9 @@ import kr.co.ecoletree.common.base.web.ETBaseController;
 import kr.co.ecoletree.common.util.FileUtil;
 import kr.co.ecoletree.common.util.ResultUtil;
 import kr.co.ecoletree.common.vo.ETSessionVO;
+import lombok.extern.slf4j.Slf4j;
 
-
+@Slf4j
 @Controller
 public class CodeController extends ETBaseController{
 
@@ -54,6 +56,14 @@ public class CodeController extends ETBaseController{
 		logError("test");
 		logInfo("test");
 		return "date";
+	}
+	
+	@RequestMapping("/agent")
+	public String agent() {
+		logDebug("test");
+		logError("test");
+		logInfo("test");
+		return "agent";
 	}
 	
 	@RequestMapping("/upload")
@@ -90,7 +100,7 @@ public class CodeController extends ETBaseController{
 	public @ResponseBody Map<String, Object> getList2(@RequestBody Map<String, Object> params, HttpServletRequest request) throws Exception {
 		//int list = service.insertCode(params);
 		String user_id = "mk";
-		String dbPW = "4b4f47574f305332456d48734b6c58734343756c4379766a336b6e6d5956417746432f6633713738695a413d";
+		String dbPW = "4451596757654153364e5334584671396c6b42466266365170432f42614e4731754e38324f5574585747553d";
 		//String dbPW = "4451596757654153364e5334584671396c6b42466266365170432f42614e4731754e38324f5574585747553d";
 		ETSessionVO etSessionVO = new ETSessionVO();
 		etSessionVO.setUser_id(user_id);
@@ -103,17 +113,23 @@ public class CodeController extends ETBaseController{
 		}
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DATE, -89);
+		
+		Calendar PWcal = Calendar.getInstance();
+		PWcal.add(Calendar.DATE, -90);
 		LoginParamBuilder builder =
 				LoginValidationUtil.LoginParam.builder()
-				.init_pw("ccc12345!!")
+				.init_pw("ccc12345!!!")
 				.last_login_dttm(cal.getTime())
 				.param_pw((String)params.get("password"))
 				.login_count(count)
-				.user_pw(dbPW)
-				.last_pw_change_dttm(cal.getTime())
+				.user_db_pw(dbPW)
+				.last_pw_change_dttm(PWcal.getTime())
 				;
-		tUtil.validation(builder);
-		count++;
-		return ResultUtil.getResultMap(true, 0);
+		String result = tUtil.validation(builder);
+		log.info(result);
+		if (result.equals(VALIDATION_MSG.NO_MATCH_DATA)) {
+			count++;
+		}
+		return ResultUtil.getResultMap(true, result);
 	}
 }
