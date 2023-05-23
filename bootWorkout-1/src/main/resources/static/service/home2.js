@@ -30,11 +30,8 @@
 		
 //		4. jQuery date range picker
 
-//		self.defaultJQueryDateRangePicker("#divJQueryRange");
-//		self.defaultJQueryDateRangePicker("#divJQueryRange2");
-		new DateRangePicker("#divJQueryRange").setMaxDate(7).setPicker();
-		new DateRangePicker("#divJQueryRange2",true).setPicker(); // single
-		
+		self.defaultJQueryDateRangePicker("#divJQueryRange");
+		self.defaultJQueryDateRangePicker("#divJQueryRange2");
 	};
 	// ==================================================================================
 	ctrl.btnLoginHandler = function(){

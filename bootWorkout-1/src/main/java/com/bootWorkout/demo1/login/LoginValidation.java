@@ -54,10 +54,7 @@ public class LoginValidation {
 
 	public String doValidation(LoginParamBuilder builder) throws NoSuchAlgorithmException, UnsupportedEncodingException, ETException {
 		String resultMsg = ETCommonConst.SUCCESS;
-//		 2. 중복 체크 : 세션 로그인된 아이디와 체크 
-//		if (ETSessionManager.getInstance().isLogon(builder.user_id)) {
-//		resultMsg = "login_user";
-//	}
+		
 //		3.로그인 실패 카운트 체크 (5건 기준) 
 		if(!checkFailCount(builder).equals(ETCommonConst.SUCCESS)) return checkFailCount(builder);
 //		4. 초기 비밀번호 체크 (같으면 메세지)
