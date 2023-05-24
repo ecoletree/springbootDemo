@@ -30,14 +30,15 @@
 		
 //		4. jQuery date range picker
 
-//		self.defaultJQueryDateRangePicker("#divJQueryRange");
-//		self.defaultJQueryDateRangePicker("#divJQueryRange2");
 		// default
-//		new DateRangePicker("#divJQueryRange").setPicker();
-		// range
-		new DateRangePicker("#divJQueryRange").setMaxDate(31).setInitDate('2023-05-21',5).setPicker();
+//		new DateRangePicker("#divJQueryRange0").setPicker();
 		// single
-		new DateRangePicker("#divJQueryRange2",true).setInitDate('2023-05-25').setPicker(); // single
+		new DateRangePicker("#divJQueryRange0",true).setInitDate('2023.05.25').setPicker(); // single
+		// range
+		new DateRangePicker("#divJQueryRange1").setMaxDate(7).setInitDate('2023.05.21','2023.05.28').setPicker();
+		new DateRangePicker("#divJQueryRange2").setMaxDate(7).setInitDate(new Date(),5).setPicker();
+		new DateRangePicker("#divJQueryRange3").setExtendsCalendar(true).setDisableSelectForward().setPicker();
+		new DateRangePicker("#divJQueryRange4").setExtendsCalendar(true).setDisableSelectBackward().setPicker();
 		
 	};
 	// ==================================================================================

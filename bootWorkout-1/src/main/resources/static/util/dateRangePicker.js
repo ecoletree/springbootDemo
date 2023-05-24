@@ -39,9 +39,9 @@
 			
 			this.options = {
 				autoClose: false,
-				format: 'YYYY-MM-DD',
+				format: 'YYYY.MM.DD', // 포맷변경 이후로 deprecate 관련해서 질문
 				separator: ' ~ ',
-				language:'ko',
+				language: i18next.language,
 				startOfWeek: 'sunday',
 				startDate: false,
 				endDate: false,
@@ -89,9 +89,9 @@
 					var div =  $(this).find("input");
 					var result = "";
 					if(!!div.length){
-						result = $('#'+div[0]?.id).val() && $('#'+div[1]?.id).val() 
-								? $('#'+div[0]?.id).val() + ' ~ ' + $('#'+div[1]?.id).val() 
-								: $('#'+div[0]?.id).val();
+						result = div[0]?.value && div[1]?.value 
+								? div[0]?.value + ' ~ ' + div[1]?.value 
+								: div[0]?.value;
 					} 						
 					return result;
 				},
@@ -104,7 +104,7 @@
 					if(s.includes('~')) values = s.split('~');
 					
 					for(var i in values){
-						$('#'+div[i]?.id).val(values[i]);
+						div[i].value = values[i];
 					}
 					
 					
@@ -122,11 +122,11 @@
 				applyBtnClass: '',
 				hoveringTooltip: function(days, startTime, hoveringTime)
 				{
-					return days > 1 ? days + ' ' + /* lang('days')*/ "일" : '';
+					return days > 1 ? days + ' ' + /* lang('days')*/ $.dateRangePickerLanguages[this.language].day : '';
 				}, // 마우스 hover일때 일 수 세줌 
 				showTopbar: true, // 상단에 선택된 날짜 나타냄 (ex.기간:2023-05-02 부터 2023-05-04 (3일간))
 				swapTime: false,
-				selectForward: true, // true 일 경우에 전에 선택한 날짜 이후의 날짜만 선택 가능하다
+				selectForward: false, // true 일 경우에 전에 선택한 날짜 이후의 날짜만 선택 가능하다
 				selectBackward: false,
 				showWeekNumbers: false,
 				getWeekNumber: function(date) //date will be the first day of a week
@@ -180,17 +180,37 @@
 			var self = this;
 			var div =  $(self.$rangeDiv).find("input");
 			var format = self.options.format;
-			var start = moment(startDate).toDate();
 
-			$('#'+div[0]?.id).val(moment(start).format(format)); 
+			var start = moment(startDate).toDate();
+			div[0].value = moment(start).format(format);
+			
 			if(div.length >= 2){
-				var end = moment(startDate).add(days,'days').toDate();
-				$('#'+div[1]?.id).val(moment(end).format(format));	
+				var endDate = "";
+				if ((typeof days) == "number") {
+					endDate = moment(moment(startDate)
+								.add(days,'days').toDate())
+								.format(format);
+				} else if ((typeof days) == "string"){
+					endDate = moment(moment(days)).format(format);
+				}
+				div[1].value = endDate;
 			}
 
 			return self;
-		}
+		},
 		
+		/**
+		 * 달을 넘길때 다음달  혹은 이전의 달도 표시된다  
+		 * @param {Boolean} val
+		 * @returns {DateRangePicker}
+		 */
+		setExtendsCalendar : function(val){
+			var self = this;
+			self.options.stickyMonths=!val;
+			return self;
+		},
+		
+
 		
 		
 		
