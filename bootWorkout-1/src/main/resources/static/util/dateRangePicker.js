@@ -209,7 +209,34 @@
 			self.options.stickyMonths=!val;
 			return self;
 		},
-		
+
+        /**
+         * 이후(미래) 날짜 선택 불가  
+         *  별도 값 설정 없을 시 오늘 기준
+         * @param {Boolean} val
+         * @returns {DateRangePicker}
+         */
+        setDisableSelectForward : function(val){
+           var self = this;
+           var format = self.options.format;
+           var date = !!val ? val :moment().format(format);
+           self.options.endDate=date;
+           return self;
+        },
+        
+        /**
+         * 이전(과거) 날짜 선택 불가
+         * 별도 값 설정 없을 시 오늘 기준  
+         * @param {Boolean} val
+         * @returns {DateRangePicker}
+         */
+        setDisableSelectBackward : function(val){
+           var self = this;
+           var format = self.options.format;
+           var date = !!val ? val :moment().format(format);
+           self.options.startDate=date;
+           return self;
+        },		
 
 		
 		
