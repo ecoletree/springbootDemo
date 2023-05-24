@@ -4,7 +4,12 @@
 //	console.error("lodash util plugin is null or '_' overwrite other value. This Util need lodash plugin.");
 //} else {
 	"use strict";
-	
+			/**
+		 *  
+		 *  jquery date range picker
+		 * @param {String} rangeDiv  div id
+		 * @param {Boolean} isSingle single 선택 여부
+		 */
 	function DateRangePicker(rangeDiv,isSingle){
 		if (!(this instanceof DateRangePicker)) {
 			return new DateRangePicker(rangeDiv,isSingle);
