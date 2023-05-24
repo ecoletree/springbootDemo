@@ -32,8 +32,12 @@
 
 //		self.defaultJQueryDateRangePicker("#divJQueryRange");
 //		self.defaultJQueryDateRangePicker("#divJQueryRange2");
-		new DateRangePicker("#divJQueryRange").setMaxDate(7).setPicker();
-		new DateRangePicker("#divJQueryRange2",true).setPicker(); // single
+		// default
+//		new DateRangePicker("#divJQueryRange").setPicker();
+		// range
+		new DateRangePicker("#divJQueryRange").setMaxDate(31).setInitDate('2023-05-21',5).setPicker();
+		// single
+		new DateRangePicker("#divJQueryRange2",true).setInitDate('2023-05-25').setPicker(); // single
 		
 	};
 	// ==================================================================================

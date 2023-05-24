@@ -70,27 +70,40 @@
 								return [start,end];
 							}
 						},
+						{
+							name: 'a week from today',
+							dates : function()
+							{
+								var start = moment().toDate();
+								var end = moment().add(6,'days').toDate();
+								return [start,end];
+							}
+						},
 					], 
-					getValue: function() { 
-						var div =  $(this).find("input");
-						var result = "";
-						if(!!div.length){
-							result = $('#'+div[0]?.id).val() && $('#'+div[1]?.id).val() 
-									? $('#'+div[0]?.id).val() + ' ~ ' + $('#'+div[1]?.id).val() 
-									: $('#'+div[0]?.id).val();
-						} 						
-						return result;
-					},
-					setValue: function(s,s1,s2){
-						var div =  $(this).find("input");
-						console.log("getValue:"+s); 
-						if(!!div.length){
-							$('#'+div[0]?.id).val(s1);
-							if(div.length >= 2) $('#'+div[1]?.id).val(s2);
-						}
-						
-						
-					},
+				getValue: function() { 
+					var div =  $(this).find("input");
+					var result = "";
+					if(!!div.length){
+						result = $('#'+div[0]?.id).val() && $('#'+div[1]?.id).val() 
+								? $('#'+div[0]?.id).val() + ' ~ ' + $('#'+div[1]?.id).val() 
+								: $('#'+div[0]?.id).val();
+					} 						
+					return result;
+				},
+				setValue: function(s){
+					var div =  $(this).find("input");
+					
+					var values = [];
+					values.push(s);
+					
+					if(s.includes('~')) values = s.split('~');
+					
+					for(var i in values){
+						$('#'+div[i]?.id).val(values[i]);
+					}
+					
+					
+				},
 	 			inline:false, // true 면 화면에 계속 표시
 				container:'body',
 				alwaysOpen:false,
@@ -145,7 +158,31 @@
 		 */
 		setMaxDate : function(days){
 			var self = this;
-			self.options.maxDays = days;	
+			self.options.maxDays = days+1;	
+			return self;
+		},
+		
+		/**
+		 * 초기 날짜 설정  
+		 * 시작일로 부터 몇일, 혹은 선택 날짜 
+		 * (ex. new DateRangePicker("#divJQueryRange").setInitDate(시작일, 일수)
+		 * (ex. new DateRangePicker("#divJQueryRange").setInitDate(선택일)
+		 * @param {String} startDate
+		 * @param {String} days
+		 * @returns {DateRangePicker}
+		 */
+		setInitDate : function(startDate,days){
+			var self = this;
+			var div =  $(self.$rangeDiv).find("input");
+			var format = self.options.format;
+			var start = moment(startDate).toDate();
+
+			$('#'+div[0]?.id).val(moment(start).format(format)); 
+			if(div.length >= 2){
+				var end = moment(startDate).add(days,'days').toDate();
+				$('#'+div[1]?.id).val(moment(end).format(format));	
+			}
+
 			return self;
 		}
 		
