@@ -24,13 +24,8 @@
 	ctrl.init = function(initData) {
 		var self = et.vc;
 		
-		$("#btnSelectGroupSample").click(self.btnSelectGroupSampleHandler);
-		$("#btnCompareDateRangePickers").click(self.btnCompareDateRangePickersHandler);
-		$("#btnJqueryDateRangePickers").click(self.btnJqueryDateRangePickersHandler);
-		$("#btnLogin").click(self.btnLoginHandler);
 		
 //		4. jQuery date range picker
-
 		// default
 //		new DateRangePicker("#divJQueryRange0").setPicker();
 		// single
@@ -42,21 +37,6 @@
 		new DateRangePicker("#divJQueryRange4").setExtendsCalendar(true).setDisableSelectBackward().setPicker();
 		
 	};
-	// ==================================================================================
-	ctrl.btnLoginHandler = function(){
-		var self = et.vc;
-		var param = {};
-		param.pwd = btoa($("#iptPwd").val()); 
-		new ETService().setSuccessFunction(self.loginSuccessHandler).callService(self.path + "loginChk", param);
-		
-	}
-	ctrl.loginSuccessHandler = function(result){
-		var self = et.vc;
-		
-		console.log(result.data);
-		debugger;
-	}
-	
 	// ==================== 4. jQuery Date Range Picker ======================
 	
 	ctrl.defaultJQueryDateRangePicker = function(id){
@@ -178,27 +158,6 @@
 	
 	
 	// ======================================================================
-	/**
-	 * 셀렉트 화면으로 이동
-	 */
-	ctrl.btnSelectGroupSampleHandler = function(){
-		var self = et.vc;
-		new ETService().callView(self.path + "select", {});
-	}
-	/**
-	 * 데이트 피커 비교 화면으로 이동
-	 */
-	ctrl.btnCompareDateRangePickersHandler = function(){
-		var self = et.vc;
-		new ETService().callView(self.path + "datePickers", {});
-	}
-	/**
-	 * 데이트 피커 비교 화면으로 이동
-	 */
-	ctrl.btnJqueryDateRangePickersHandler = function(){
-		var self = et.vc;
-		new ETService().callView(self.path + "datePickers", {});
-	}
 	
 	return ctrl;
 }));

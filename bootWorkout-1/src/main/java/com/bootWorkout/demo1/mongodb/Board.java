@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Getter;
 import lombok.Setter;
-@Document(collection="firstcol")
+@Document(collection="firstCol")
 @Getter
 @Setter
 public class Board {

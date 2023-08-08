@@ -9,6 +9,7 @@
 package com.bootWorkout.demo1.mongodb;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
@@ -16,8 +17,10 @@ import org.springframework.data.mongodb.repository.Query;
 public interface BoardRepository extends MongoRepository<Board, String> {
 
 	Board findByTitle(String title);
-	Board findByTitleOrContent(String title, String content);
 	
 	@Query("{ $or:[{'title':{$regex:?0}},{'content':{$regex:?0}}] }")
 	List<Board> findLikeByText(String title);
+
+	@Query("{ $or:[{'title':{$regex:?0}},{'content':{$regex:?0}}] }")
+	List<Board> findLikeByMap(Map<String, Object> param);
 }
