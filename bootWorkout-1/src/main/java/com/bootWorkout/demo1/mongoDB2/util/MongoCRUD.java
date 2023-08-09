@@ -1,17 +1,12 @@
 package com.bootWorkout.demo1.mongoDB2.util;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
@@ -20,7 +15,6 @@ import com.bootWorkout.demo1.mongoDB2.mapper.UserCollections;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 
-import kr.co.ecoletree.common.util.MapBuilder;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -44,7 +38,7 @@ public class MongoCRUD<T> {
 		Map<String, Object> result = new HashMap<>();
 		
 		MongoQuery.setParam(param);
-		Query query = new Query(MongoQuery.is(findKey,findKey));
+		Query query = new Query(MongoQuery.is(findKey));
 		Update update = new Update();
 		
 		param.forEach((key,value)->{
@@ -115,7 +109,7 @@ public class MongoCRUD<T> {
 		Map<String, Object> result = new HashMap<>();
 
 		MongoQuery.setParam(param);
-		Query query = new Query(MongoQuery.is(findKey,findKey));
+		Query query = new Query(MongoQuery.is(findKey));
 		
 		DeleteResult delete = mongoTemplate.remove(query, COLLECTION_CLASS, COLLECTION_NAME);
 		

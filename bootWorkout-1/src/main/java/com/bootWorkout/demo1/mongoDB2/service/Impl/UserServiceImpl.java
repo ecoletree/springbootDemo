@@ -1,26 +1,21 @@
 package com.bootWorkout.demo1.mongoDB2.service.Impl;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import com.bootWorkout.demo1.mongoDB2.mapper.UserCollections;
 import com.bootWorkout.demo1.mongoDB2.service.UserService;
 import com.bootWorkout.demo1.mongoDB2.util.MongoCRUD;
 import com.bootWorkout.demo1.mongoDB2.util.MongoQuery;
-import com.mongodb.client.result.UpdateResult;
 
 import kr.co.ecoletree.common.base.service.ETBaseService;
 
@@ -101,13 +96,12 @@ public class UserServiceImpl extends ETBaseService implements UserService {
 		
 		Criteria criteria = Criteria.where("");
 		
+		List<Criteria> criteria_arr = new ArrayList<>();
+		
 		switch(param.get("type").toString()) {
-			case "or": // or + is
-				criteria.orOperator(MongoQuery.is("_id","_id")
-						,MongoQuery.is("userName","userName"));
-				break;
 			case "like":
-				criteria = MongoQuery.like("userName");
+				criteria = MongoQuery.like("userId");
+//				criteria = MongoQuery.notLike("userId");
 				break;
 			case "in":
 				List<String> list = (List<String>) param.get("findList");
@@ -116,13 +110,24 @@ public class UserServiceImpl extends ETBaseService implements UserService {
 			case "dateBetween" : 
 				criteria = MongoQuery.dateBetween("createDate", "startDate", "endDate");
 				break;
+			case "or": // or + is
+				criteria_arr.add(MongoQuery.is("_id"));
+				criteria_arr.add(MongoQuery.is("userName"));
+				criteria_arr.add(MongoQuery.dateBetween("createDate", "startDate", "endDate"));
+				criteria = MongoQuery.or(criteria_arr);
+				break;
+			case "and": // or + is
+				criteria_arr.add(MongoQuery.dateBetween("createDate", "startDate", "endDate"));
+				criteria_arr.add(MongoQuery.like("userName"));
+				criteria = MongoQuery.and(criteria_arr);
+				break;
 			default : 
-				criteria = MongoQuery.is("_id","_id");
+				criteria = MongoQuery.is("!"+"_id");
+//				criteria = MongoQuery.isNot("!"+"_id");
 		}
 			
 		query.addCriteria(criteria);
 		// or and 쿼리 만들기
-		// query를 리턴하게 바꾸기
 		List<UserCollections> list = mongoUtil.find(query);
 		
 		return list;
