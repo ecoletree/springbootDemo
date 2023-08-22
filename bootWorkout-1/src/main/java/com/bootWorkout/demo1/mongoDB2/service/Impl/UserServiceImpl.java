@@ -12,10 +12,10 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import com.bootWorkout.demo1.mogoDButil.MongoCRUD;
+import com.bootWorkout.demo1.mogoDButil.MongoQuery;
 import com.bootWorkout.demo1.mongoDB2.mapper.UserCollections;
 import com.bootWorkout.demo1.mongoDB2.service.UserService;
-import com.bootWorkout.demo1.mongoDB2.util.MongoCRUD;
-import com.bootWorkout.demo1.mongoDB2.util.MongoQuery;
 
 import kr.co.ecoletree.common.base.service.ETBaseService;
 
@@ -37,7 +37,7 @@ public class UserServiceImpl extends ETBaseService implements UserService {
 	public Map<String, Object> saveOneUser(Map<String, Object> param) throws ParseException {
 		String create_time = param.get("createDate").toString();
 		param.replace("createDate", MongoQuery.dateTime(create_time));
-		Map<String, Object> result =  mongoUtil.save(param);
+		Map<String, Object> result =  mongoUtil.save(param,COLLECTION_NAME);
 		return result;
 	}
 
@@ -53,7 +53,7 @@ public class UserServiceImpl extends ETBaseService implements UserService {
 				String create_time = param.get("createDate").toString();
 				param.replace("createDate", MongoQuery.dateTime(create_time));
 			}
-			result =   mongoUtil.save(paramList);
+			result =   mongoUtil.save(paramList,COLLECTION_NAME);
 		}
 		return result;
 	}
@@ -65,7 +65,7 @@ public class UserServiceImpl extends ETBaseService implements UserService {
 	public Map<String, Object> updateOneUser(Map<String, Object> param) {
 		String create_time = param.get("createDate").toString();
 		param.replace("createDate", MongoQuery.dateTime(create_time));
-		Map<String, Object> result = mongoUtil.update("_id",param);
+		Map<String, Object> result = mongoUtil.update("_id",param,COLLECTION_CLASS);
 		
 		return result;
 	}
@@ -80,7 +80,7 @@ public class UserServiceImpl extends ETBaseService implements UserService {
 			String create_time = param.get("createDate").toString();
 			param.replace("createDate", MongoQuery.dateTime(create_time));
 		}
-		result = mongoUtil.update("_id",paramList);
+		result = mongoUtil.update("_id",paramList,COLLECTION_CLASS);
 		return result;
 	}
 
@@ -128,7 +128,7 @@ public class UserServiceImpl extends ETBaseService implements UserService {
 			
 		query.addCriteria(criteria);
 		// or and 쿼리 만들기
-		List<UserCollections> list = mongoUtil.find(query);
+		List<UserCollections> list = mongoUtil.find(query,COLLECTION_NAME,COLLECTION_CLASS);
 		
 		return list;
 	}
@@ -137,13 +137,13 @@ public class UserServiceImpl extends ETBaseService implements UserService {
 	 */
 	@Override
 	public Map<String, Object> deleteOne(Map<String, Object> param) {
-		Map<String, Object> result = mongoUtil.delete("_id",param);
+		Map<String, Object> result = mongoUtil.delete("_id",param,COLLECTION_NAME,COLLECTION_CLASS);
 		return result;
 	}
 
 	@Override
 	public Map<String, Object> deleteList(List<Map<String, Object>> paramList) {
-		Map<String, Object> result = mongoUtil.delete("_id",paramList);
+		Map<String, Object> result = mongoUtil.delete("_id",paramList,COLLECTION_NAME,COLLECTION_CLASS);
 		return result;
 	}
 }

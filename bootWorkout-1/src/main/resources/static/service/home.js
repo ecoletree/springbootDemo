@@ -18,6 +18,7 @@
 	
 	
 	// ============================== 화면 컨트롤 ==============================
+	
 	/**
 	 * init VIEW
 	 */
@@ -29,20 +30,37 @@
 		$("#btnJqueryDateRangePickers").click(self.btnJqueryDateRangePickersHandler);
 		$("#btnLogin").click(self.btnLoginHandler);
 		
+		
+		$("#btnSendPushAlert").click(self.btnSendPushAlertHandler);
+		
 //		4. jQuery date range picker
 
 		// default
 //		new DateRangePicker("#divJQueryRange0").setPicker();
 		// single
-		new DateRangePicker("#divJQueryRange0",true).setInitDate('2023.05.25').setPicker(); // single
+//		new DateRangePicker("#divJQueryRange0",true).setInitDate('2023.05.25').setPicker(); // single
 		// range
-		new DateRangePicker("#divJQueryRange1").setMaxDate(7).setInitDate('2023.05.21','2023.05.28').setPicker();
-		new DateRangePicker("#divJQueryRange2").setMaxDate(7).setInitDate(new Date(),5).setPicker();
-		new DateRangePicker("#divJQueryRange3").setExtendsCalendar(true).setDisableSelectForward().setPicker();
-		new DateRangePicker("#divJQueryRange4").setExtendsCalendar(true).setDisableSelectBackward().setPicker();
+//		new DateRangePicker("#divJQueryRange1").setMaxDate(7).setInitDate('2023.05.21','2023.05.28').setPicker();
+//		new DateRangePicker("#divJQueryRange2").setMaxDate(7).setInitDate(new Date(),5).setPicker();
+//		new DateRangePicker("#divJQueryRange3").setExtendsCalendar(true).setDisableSelectForward().setPicker();
+//		new DateRangePicker("#divJQueryRange4").setExtendsCalendar(true).setDisableSelectBackward().setPicker();
 		
 	};
 	// ==================================================================================
+	ctrl.btnSendPushAlertHandler = function(){
+		var self = et.vc;
+		var param = {};
+		param.message_title = $("#iptTitle").val(); 
+		param.message_text = $("#iptText").val(); 
+		param.message_name = $("#iptName").val(); 
+		new ETService().setSuccessFunction(self.sendMsgSuccessHandler).callService("/flutter/sendMsg", param);
+		
+	}
+	ctrl.sendMsgSuccessHandler = function(result){
+		var self= et.vc;
+		console.log(result.data);
+		debugger;
+	}
 	ctrl.btnLoginHandler = function(){
 		var self = et.vc;
 		var param = {};

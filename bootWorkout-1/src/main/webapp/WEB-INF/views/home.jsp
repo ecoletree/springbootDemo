@@ -24,13 +24,34 @@
 <button id="btnJqueryDateRangePickers">jquery date picker --></button>
 <button id="btnCompareDateRangePickers">데이트 피커 플러그인 비교 --></button>
 <br><br>
-<div style="margin-left : 20px ">
-<input id="iptPwd" value="6003">
-	<button id="btnLogin">login</button>
+<div style="margin-left : 20px; width:400px " >
+<!-- <input id="iptPwd" value="6003"> -->
+<!-- 	<button id="btnLogin">login</button> -->
+<!-- </div> -->
+<div class="formWrap">
+	<label class="formLabel">알림 제목</label>
+	<div class="formInput">
+		<input type="text" id="iptTitle" name="message_title" maxlength="30" />
+	</div>
 </div>
-<br><br>
-<div>
-
+<div class="formWrap">
+	<label class="formLabel">알림 텍스트</label>
+	<div class="formInput">
+		<textarea type="text" id="iptText" name="message_text" rows="5" cols="" maxlength="150"></textarea>
+	</div>
+</div>
+<div class="formWrap">
+	<label class="formLabel">알림 이름</label>
+	<div class="formInput">
+		<input type="text" id="iptName" name="message_name" maxlength="30"/>
+	</div>
+</div>
+<div class="formWrap">
+	<label class="formLabel"></label>
+	<div class="formInput">
+		<button id ="btnSendPushAlert" type="button" class="btnGray btnBlock">알림 전송</button>
+		
+	</div>
 </div>
 <!-- <script src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->
 <!-- 끝: 작성하기 -->

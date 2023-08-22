@@ -2,26 +2,21 @@ package com.bootWorkout.demo1.mongoDB2.web;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bootWorkout.demo1.mogoDButil.MongoQuery;
 import com.bootWorkout.demo1.mongoDB2.mapper.UserCollections;
 import com.bootWorkout.demo1.mongoDB2.service.UserService;
-import com.bootWorkout.demo1.mongoDB2.util.MongoQuery;
-import com.mongodb.client.result.DeleteResult;
 
 import kr.co.ecoletree.common.base.web.ETBaseController;
 import kr.co.ecoletree.common.util.ResultUtil;
@@ -30,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin(origins="*")
 @RequestMapping("/user")
 @Slf4j
 public class UserController extends ETBaseController{
@@ -48,7 +44,7 @@ public class UserController extends ETBaseController{
 	 * @return
 	 * @throws ParseException 
 	 */
-	@RequestMapping("/save") 
+	@RequestMapping(value="/save", method = RequestMethod.POST) 
 	public @ResponseBody Map<String,Object> save(@RequestBody Map<String,Object> param) throws ParseException{
 		log.info("create");
 		Map<String, Object> result = userService.saveOneUser(param);

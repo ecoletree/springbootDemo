@@ -16,15 +16,17 @@ public class UserCollections {
 	private String userName;
 	private String userPW;
 	private Date createDate;
+	private String fcmToken;
 	
 	@Builder
-	public UserCollections(String userId, String userName, String userPW,Date createDate) {
+	public UserCollections(String userId, String userName, String userPW,Date createDate,String fcmToken) {
 		this.setUserId(userId);
 		this.setUserName(userName);
 		this.setUserPW(userPW);
 		this.setCreateDate(createDate);
+		this.setFcmToken(fcmToken);
 	}
-	
+
 	public String get_id() {
 		return _id;
 	}
@@ -64,5 +66,11 @@ public class UserCollections {
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
+	public String getFcmToken() {
+		return fcmToken;
+	}
 
+	public void setFcmToken(String fcmToken) {
+		this.fcmToken = fcmToken;
+	}
 }
