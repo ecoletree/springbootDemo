@@ -29,9 +29,11 @@
 		$("#btnCompareDateRangePickers").click(self.btnCompareDateRangePickersHandler);
 		$("#btnJqueryDateRangePickers").click(self.btnJqueryDateRangePickersHandler);
 		$("#btnLogin").click(self.btnLoginHandler);
+		$("#btnWebtoApp").click(self.btnWebtoAppHandler);
 		
 		
 		$("#btnSendPushAlert").click(self.btnSendPushAlertHandler);
+		self.fromAppToWeb(msg);
 		
 //		4. jQuery date range picker
 
@@ -47,6 +49,19 @@
 		
 	};
 	// ==================================================================================
+	ctrl.fromAppToWeb = function(msg){
+		
+		var self = et.vc;
+		console.log('test');
+		document.querySelector("#flutterMessageTitle").innerText = msg;
+	}
+	ctrl.btnWebtoAppHandler = function(){
+		var self= et.vc;
+		var msg = "web to app";
+		toApp.postMessage(msg);
+		
+	}
+	
 	ctrl.btnSendPushAlertHandler = function(){
 		var self = et.vc;
 		var param = {};

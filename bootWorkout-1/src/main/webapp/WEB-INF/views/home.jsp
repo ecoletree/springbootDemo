@@ -53,6 +53,10 @@
 		
 	</div>
 </div>
+<div class="formInput">
+	<button id ="btnWebtoApp" type="button" class="btnGray btnBlock">돌아가기</button>
+	
+</div>
 <!-- <script src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->
 <!-- 끝: 작성하기 -->
 <script type="text/javascript">
