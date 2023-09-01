@@ -46,4 +46,14 @@ public class SaveTokenController extends ETBaseController{
 		Map<String, Object> result = service.saveToken(param);
 		return ResultUtil.getResultMap(true, result);
 	}
+	/** insert
+	 * @return
+	 * @throws ParseException 
+	 */
+	@RequestMapping(value="/saveData", method = RequestMethod.POST) 
+	public @ResponseBody Map<String,Object> saveData(@RequestBody Map<String,Object> param) throws ParseException{
+		log.info("save data");
+		Map<String, Object> result = service.saveBoardData(param);
+		return ResultUtil.getResultMap(true, result);
+	}
 }
