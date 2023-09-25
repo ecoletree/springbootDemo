@@ -30,6 +30,7 @@
 		$("#btnJqueryDateRangePickers").click(self.btnJqueryDateRangePickersHandler);
 		$("#btnLogin").click(self.btnLoginHandler);
 		$("#btnWebtoApp").click(self.btnWebtoAppHandler);
+		$("#btnCheckLink").click(self.btnCheckLinkHandler);
 		
 		
 		$("#btnSendPushAlert").click(self.btnSendPushAlertHandler);
@@ -49,6 +50,17 @@
 		
 	};
 	// ==================================================================================
+	ctrl.btnCheckLinkHandler = function(){
+		var self = et.vc;
+		var param = {};
+		param.url = $("#iptSiteUrl").val();
+		new ETService().setSuccessFunction(self.checkLinkSuccessHandler).callService("/checkLink", param);
+	}
+	ctrl.checkLinkSuccessHandler = function(result){
+		var self = et.vc;
+		
+	}
+	
 	ctrl.fromAppToWeb = function(msg){
 		
 		var self = et.vc;

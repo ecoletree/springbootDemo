@@ -55,8 +55,16 @@
 </div>
 <div class="formInput">
 	<button id ="btnWebtoApp" type="button" class="btnGray btnBlock">돌아가기</button>
-	
 </div>
+
+<br><br><br><br>
+<div class="formWrap">
+	<label class="formLabel">링크 체크할 사이트</label>
+	<div class="formInput">
+		<input type="text" id="iptSiteUrl" name="message_title" value="http://www.ecoletree.com/"/>
+	</div>
+</div>
+	<button id ="btnCheckLink" type="button" class="btnGray btnBlock">check link</button>
 <!-- <script src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->
 <!-- 끝: 작성하기 -->
 <script type="text/javascript">
