@@ -10,12 +10,6 @@
 		if (!et.vc || et.vc.name !== "home") {
 			et.vc= ctrl(et);
 		}
-		var inter = setInterval(function(){
-			et.promiseInit().then(function(){
-				et.vc.init();
-				clearInterval(inter);
-			}, function (){})
-		},300);
 	} else {
 		console.error("ecoletree OR ETCONST is not valid. please check that common.js file was imported.");
 	}
@@ -42,10 +36,21 @@
 		$("#btnList").click(self.btnListHandler);
 		$("#btnList2").click(self.btnListHandler);
 		$("#btnFile").click(self.fileUpload);
+		$("#btnLink").click(function () {
+			var url = $("#iptLink").val();
+			$.ajax({
+                url: "http://localhost:3000/main",
+                method: "get",
+                data: {
+                    url: url
+                }
+            }).done(function (data) {
+				debugger;
+                self.createDataGrid(data);
+            })
+		});
 		
-		
-         debugger;
-		self.createDataGrid();
+		//self.createDataGrid();
 	};
 	
 	ctrl.fileUpload = function(){
@@ -61,17 +66,33 @@
 		 }).callService("/upload", formData, ajaxOption);
 	}
 	
-	ctrl.createDataGrid = function(){
-		var grid = canvasDatagrid();
-		$("#divGrid").append(grid);
-		grid.data = [
-		  { col1: 'row 1 column 1', col2: 'row 1 column 2', col3: 'row 1 column 3' },
-		  { col1: 'row 2 column 1', col2: 'row 2 column 2', col3: 'row 2 column 3' },
+	ctrl.createDataGrid = function(data){
+		var self = et.vc;
+		var columns = [
+			{
+				data : "status",
+				render : function( data) {
+					return data+"";
+				}
+			},{
+				data : "pathname",
+			},{
+				data : "url",
+			},{
+				data : "message",
+			}
 		];
+
+		var table = et.createDataTableSettings(columns, null, {}, function(){},"",false,data );
+		table.paging = false;
+		table.ordering = false;
+		$("#tbList").DataTable(table);
 	}
 	
 	ctrl.clickHandler = function() {
-		et.alert.show(ETCONST.ALERT_TYPE_INFO, "", et.message("button.delete_faile"));
+		var tables = $("#tbList").DataTable();
+		$.etExcelUtil.excelDownload(tables.columns(),tables.data(),"테스트",false,false);
+		//et.alert.show(ETCONST.ALERT_TYPE_INFO, "", et.message("button.delete_faile"));
 	}
 	
 	ctrl.clickHandler1 = function() {
