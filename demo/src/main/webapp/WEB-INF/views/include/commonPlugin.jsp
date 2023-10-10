@@ -71,25 +71,9 @@
 <script src="${cp }/resources/canvas-grid/canvas-datagrid.js"></script>
 
 
-<!-- daterangefield CSS -->
-<script src="${cp }/jslib/ecoletreeLibraryJS/plugin/daterangepicker-master/moment-with-locales.min.js"></script>
-<!-- <script src="https://momentjs.com/downloads/moment-with-locales.min.js"></script> -->
-<script src="${cp }/jslib/ecoletreeLibraryJS/plugin/daterangepicker-master/daterangepicker.js"></script>
-
 
 <script type="text/javascript">
-moment.locale("ko",{
-	
-	longDateFormat : {
-		LT : 'HH:mm',
-        LTS : 'HH:mm:ss',
-        L : 'YYYY.MM.DD',
-        LL : 'YYYY.MMMM.DD',
-        LLL : 'YYYY.MMMM.D HH:mm',
-        LLLL : 'YYYY.MMMM.D.dddd HH:mm',
-        LLT : 'YYYY.MM.DD HH:mm'
-	}
-})
+
 	/**
 	 * 컨텍스트 패스 획득
 	 */

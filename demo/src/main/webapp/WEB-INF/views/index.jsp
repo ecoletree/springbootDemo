@@ -26,14 +26,43 @@ cp: ${pageContext.request.contextPath }
 	<button id="btnFile">upload</button>
 </div>
 
-<div id="divGrid">
+<div>
+	<input type="text" id="iptLink"/>
+	<button id="btnLink">브로큰</button>
+</div>
 
+<div id="divGrid">
+	<table id="tbList" class="ecoleScrollTable table table-hover dataTable" style="width: 100%;margin-top: 0px !important;">
+		<thead>
+			<tr>
+				<th style="width: 8%" title="캠페인 ID"><div>상태</div></th>
+				<th style="width: 32%" title="캠페인 ID"><div>페이지</div></th>
+				<th style="width: 40%" title="캠페인 명"><div>링크</div></th>
+				<th style="width: 20%" title="캠페인 명"><div>메시지</div></th>
+			</tr>
+		</thead>
+		<tbody class="cursorPoint">
+		</tbody>
+	</table>
 </div>
 
 <script type="text/javascript">
-$.getScript(getContextPath() + "/resources/service/index.js");
+
+$.getScript(getContextPath() + "/resources/service/index.js").done(function(script, textStatus) {
+	if (!!ecoletree.vc && ecoletree.vc.name === "home") {
+		var inter = setInterval(function(){
+			ecoletree.promiseInit().then(function(){
+				ecoletree.vc.init();
+				clearInterval(inter);
+			}, function (){})
+		},300);
+	} else {
+		console.log("vc's name is not home : " + ecoletree.vc.name);
+	}
+}).fail(function(jqxhr, settings, exception) {
+	console.log(arguments);
+});
 </script>
 <!-- alert 모달 -->
-<c:import url="/common.alert.sp" charEncoding="UTF-8" />
 </body>
 </html>
