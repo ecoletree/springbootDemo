@@ -34,7 +34,7 @@
 		
 		
 		$("#btnSendPushAlert").click(self.btnSendPushAlertHandler);
-		self.fromAppToWeb(msg);
+//		self.fromAppToWeb(msg);
 		
 //		4. jQuery date range picker
 
@@ -52,9 +52,23 @@
 	// ==================================================================================
 	ctrl.btnCheckLinkHandler = function(){
 		var self = et.vc;
-		var param = {};
-		param.url = $("#iptSiteUrl").val();
-		new ETService().setSuccessFunction(self.checkLinkSuccessHandler).callService("/checkLink", param);
+//		var param = {};
+//		param.url = $("#iptSiteUrl").val();
+//		new ETService().setSuccessFunction(self.checkLinkSuccessHandler).callService("/checkLink", param);
+
+		$.ajax({
+			url:"http://localhost:3000/main",
+			data:{url:$("#iptSiteUrl").val()},
+			method:"GET",
+			dataType:"json"
+			
+		})
+		.done(function(json){
+			self.setLinkCheckTable(json);
+		})
+		.fail(function(xhr,status,errorthrown){
+			console.log("fail");
+		});
 	}
 	ctrl.checkLinkSuccessHandler = function(result){
 		var self = et.vc;

@@ -62,6 +62,7 @@
 	<label class="formLabel">링크 체크할 사이트</label>
 	<div class="formInput">
 		<input type="text" id="iptSiteUrl" name="message_title" value="http://www.ecoletree.com/"/>
+<!-- 		<input type="text" id="iptSiteUrl" name="message_title" value="https://www.samsung.com/nl"/> -->
 	</div>
 </div>
 	<button id ="btnCheckLink" type="button" class="btnGray btnBlock">check link</button>
