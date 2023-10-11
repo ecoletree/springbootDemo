@@ -25,6 +25,7 @@
 <button id="btnCompareDateRangePickers">데이트 피커 플러그인 비교 --></button>
 <br><br>
 <div style="margin-left : 20px; width:400px " >
+
 <!-- <input id="iptPwd" value="6003"> -->
 <!-- 	<button id="btnLogin">login</button> -->
 <!-- </div> -->
@@ -61,11 +62,31 @@
 <div class="formWrap">
 	<label class="formLabel">링크 체크할 사이트</label>
 	<div class="formInput">
-		<input type="text" id="iptSiteUrl" name="message_title" value="http://www.ecoletree.com/"/>
-<!-- 		<input type="text" id="iptSiteUrl" name="message_title" value="https://www.samsung.com/nl"/> -->
+<!-- 		<input type="text" id="iptSiteUrl" name="message_title" value="http://www.ecoletree.com/"/> -->
+		<input type="text" id="iptSiteUrl" name="message_title" value="https://www.samsung.com/nl"/>
+		<button id ="btnCheckLink" type="button" class="btnGray btnBlock">check link</button>
 	</div>
 </div>
-	<button id ="btnCheckLink" type="button" class="btnGray btnBlock">check link</button>
+	
+	<button id ="btnExcelDown" type="button" class="btnGray btnBlock">엑셀 다운로드</button>
+</div>
+<div class="ecloeScrollTableContainer">
+			<div class="ecloeScrollTableHeader"></div>
+			<div class="ecloeScrollTableWrap dataTables_wrapper form-inline">
+				<table id="tbList" class="ecloeScrollTable table table-hover dataTable" style="width: 100%;margin-top: 0px !important;">
+					<thead>
+						<tr>
+							<th style="width: 5%" title="status"><div>status</div></th>
+							<th style="width: 15%" title="state"><div>state</div></th>
+							<th style="width: 30%" title="url"><div>url</div></th>
+							<th style="width: 30%" title="parent"><div>parent</div></th>
+							<th style="width: 20%" title="source"><div>source</div></th>
+					</thead>
+					<tbody class="cursorPoint">
+					</tbody>
+				</table>
+			</div>
+		</div>
 <!-- <script src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->
 <!-- 끝: 작성하기 -->
 <script type="text/javascript">

@@ -15,7 +15,26 @@
 	ctrl.path = "/";
 	ctrl.groupList= null;
 	ctrl.optionList = {};
-	
+	ctrl.linkData = null;
+	ctrl.linkColumns = [
+				{
+					data : "status",
+					headerText:"status",
+				},{
+					data : "state",
+					headerText:"state",
+				},{
+					data : "url",
+					headerText:"url",
+				},{
+					data : "parent",
+					headerText:"parent",
+				},{
+					data : "source",
+					headerText:"source",
+				}
+			
+			];
 	
 	// ============================== 화면 컨트롤 ==============================
 	
@@ -34,6 +53,7 @@
 		
 		
 		$("#btnSendPushAlert").click(self.btnSendPushAlertHandler);
+		$("#btnExcelDown").click(self.btnExcelDownHandler);
 //		self.fromAppToWeb(msg);
 		
 //		4. jQuery date range picker
@@ -50,8 +70,9 @@
 		
 	};
 	// ==================================================================================
+	/*broken link handler*/
 	ctrl.btnCheckLinkHandler = function(){
-		var self = et.vc;
+		
 //		var param = {};
 //		param.url = $("#iptSiteUrl").val();
 //		new ETService().setSuccessFunction(self.checkLinkSuccessHandler).callService("/checkLink", param);
@@ -64,17 +85,52 @@
 			
 		})
 		.done(function(json){
-			self.setLinkCheckTable(json);
+			var self = et.vc;
+			if(json.resultMsg === "success"){
+				var links = json.data;
+				self.createDataTable(links);
+			}else{
+				console.log(json.resultMsg);
+			}
 		})
 		.fail(function(xhr,status,errorthrown){
 			console.log("fail");
 		});
 	}
-	ctrl.checkLinkSuccessHandler = function(result){
+	ctrl.createDataTable = function(postData){
 		var self = et.vc;
+		self.linkData = postData;
+		var columns = [
+				{
+					data : "status",
+				},{
+					data : "state",
+				},{
+					data : "url",
+				},{
+					data : "parent",
+				},{
+					data : "source",
+				}
+			
+			];
+		
+		var table = et.createDataTableSettings(columns, null, postData, self.dataTableDrawCallback,"",false,postData);
+		table.paging = false;
+		$("#tbList").DataTable(table);
+	}
+	ctrl.btnExcelDownHandler = function(){
+		var self = et.vc;
+		var columns = self.linkColumns;
+		
+		$.etExcelUtil.excelDownload(columns,self.linkData,"broken link list",false,false);
+	}
+	ctrl.dataTableDrawCallback = function(settings){
 		
 	}
 	
+	
+	/*flutter 모바일-웹 화면 전환*/
 	ctrl.fromAppToWeb = function(msg){
 		
 		var self = et.vc;
@@ -88,6 +144,7 @@
 		
 	}
 	
+	/* firebaseMessage 보내기*/
 	ctrl.btnSendPushAlertHandler = function(){
 		var self = et.vc;
 		var param = {};
