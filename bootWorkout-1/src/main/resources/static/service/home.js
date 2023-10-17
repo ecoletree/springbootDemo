@@ -21,9 +21,6 @@
 					data : "status",
 					headerText:"status",
 				},{
-					data : "state",
-					headerText:"state",
-				},{
 					data : "url",
 					headerText:"url",
 				},{
@@ -103,8 +100,6 @@
 		var columns = [
 				{
 					data : "status",
-				},{
-					data : "state",
 				},{
 					data : "url",
 				},{

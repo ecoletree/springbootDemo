@@ -62,8 +62,9 @@
 <div class="formWrap">
 	<label class="formLabel">링크 체크할 사이트</label>
 	<div class="formInput">
-<!-- 		<input type="text" id="iptSiteUrl" name="message_title" value="http://www.ecoletree.com/"/> -->
-		<input type="text" id="iptSiteUrl" name="message_title" value="https://www.samsung.com/nl"/>
+		<input type="text" id="iptSiteUrl" name="message_title" value="http://www.ecoletree.com/"/>
+<!-- 		<input type="text" id="iptSiteUrl" name="message_title" value="http://ecoletree.com:8080"/> -->
+<!-- 		<input type="text" id="iptSiteUrl" name="message_title" value="https://www.samsung.com/nl"/> -->
 		<button id ="btnCheckLink" type="button" class="btnGray btnBlock">check link</button>
 	</div>
 </div>
@@ -77,9 +78,9 @@
 					<thead>
 						<tr>
 							<th style="width: 5%" title="status"><div>status</div></th>
-							<th style="width: 15%" title="state"><div>state</div></th>
+<!-- 							<th style="width: 15%" title="state"><div>state</div></th> -->
 							<th style="width: 30%" title="url"><div>url</div></th>
-							<th style="width: 30%" title="parent"><div>parent</div></th>
+							<th style="width: 30%" title="parent"><div>linked from</div></th>
 							<th style="width: 20%" title="source"><div>source</div></th>
 					</thead>
 					<tbody class="cursorPoint">
