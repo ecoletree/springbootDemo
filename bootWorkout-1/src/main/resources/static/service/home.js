@@ -308,7 +308,7 @@
 	 */
 	ctrl.btnJqueryDateRangePickersHandler = function(){
 		var self = et.vc;
-		new ETService().callView(self.path + "JquerydatePicker", {});
+		new ETService().callView(self.path + "jquerydatePicker", {});
 	}
 	
 	return ctrl;

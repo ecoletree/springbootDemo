@@ -95,7 +95,7 @@ public class MainController extends ETBaseController {
 				);
 		return mav;
 	}
-	@RequestMapping("/JquerydatePicker")
+	@RequestMapping("/jquerydatePicker")
 	public ModelAndView JquerydatePicker(final ModelAndView mav,Map<String, Object> params) {
 		
 		mav.setViewName("jqueryDatePicker");

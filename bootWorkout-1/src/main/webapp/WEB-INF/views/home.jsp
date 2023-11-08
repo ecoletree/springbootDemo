@@ -22,7 +22,7 @@
 <body>
 <button id="btnSelectGroupSample">트리구조 셀렉트 유틸 샘플 페이지 --></button>
 <button id="btnJqueryDateRangePickers">jquery date picker --></button>
-<button id="btnCompareDateRangePickers">데이트 피커 플러그인 비교 --></button>
+<!-- <button id="btnCompareDateRangePickers">데이트 피커 플러그인 비교 --></button> -->
 <br><br>
 <div style="margin-left : 20px; width:400px " >
 

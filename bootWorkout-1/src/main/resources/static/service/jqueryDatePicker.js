@@ -11,7 +11,7 @@
 	
 	var ctrl = {};
 	
-	ctrl.name = "home";
+	ctrl.name = "jqueryDatePicker";
 	ctrl.path = "/";
 	ctrl.groupList= null;
 	ctrl.optionList = {};
@@ -24,7 +24,6 @@
 	ctrl.init = function(initData) {
 		var self = et.vc;
 		
-		debugger;
 		
 //		4. jQuery date range picker
 		// default
@@ -36,7 +35,7 @@
 		new DateRangePicker("#divJQueryRange2").setMaxDate(7).setInitDate(new Date(),5).setPicker();
 		new DateRangePicker("#divJQueryRange3").setExtendsCalendar(true).setDisableSelectForward().setPicker();
 		new DateRangePicker("#divJQueryRange4").setExtendsCalendar(true).setDisableSelectBackward().setPicker();
-		$("#divJQueryRange0").click(self.btnJqOpenHandler);
+//		$("#divJQueryRange0").click(self.btnJqOpenHandler);
 	};
 	// ==================== 4. jQuery Date Range Picker ======================
 	
