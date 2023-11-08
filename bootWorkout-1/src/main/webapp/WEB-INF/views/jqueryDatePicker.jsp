@@ -24,8 +24,8 @@
 	<h4>4. jQuery Date Range Picker</h4>
 	<br><br>
 	<ul style="list-style-type: circle; margin-left : 20px ;">
-	<li>https://github.com/longbill/jquery-date-range-picker</li>
-	<li>사용법 : https://longbill.github.io/jquery-date-range-picker/</li>
+	<li><a href="https://github.com/longbill/jquery-date-range-picker">https://github.com/longbill/jquery-date-range-picker</a></li>
+	<li>사용법 : <a href="https://longbill.github.io/jquery-date-range-picker/"> https://longbill.github.io/jquery-date-range-picker/</a></li>
 	</ul>
 	<br><br>
 	<div>
