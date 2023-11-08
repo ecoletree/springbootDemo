@@ -11,6 +11,7 @@
 		 * @param {Boolean} isSingle single 선택 여부
 		 */
 	function DateRangePicker(rangeDiv,isSingle){
+		debugger;
 		if (!(this instanceof DateRangePicker)) {
 			return new DateRangePicker(rangeDiv,isSingle);
 		}

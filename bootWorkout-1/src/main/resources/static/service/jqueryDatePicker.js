@@ -1,6 +1,6 @@
 (function(et, ctrl) {
 	if (_.isObject(et) && et.name === ETCONST.PROJECT_NAME) {
-		if (!et.vc || et.vc.name !== "home") {
+		if (!et.vc || et.vc.name !== "jqueryDatePicker") {
 			et.vc= ctrl(et);
 		}
 	} else {
@@ -24,6 +24,7 @@
 	ctrl.init = function(initData) {
 		var self = et.vc;
 		
+		debugger;
 		
 //		4. jQuery date range picker
 		// default
@@ -35,7 +36,7 @@
 		new DateRangePicker("#divJQueryRange2").setMaxDate(7).setInitDate(new Date(),5).setPicker();
 		new DateRangePicker("#divJQueryRange3").setExtendsCalendar(true).setDisableSelectForward().setPicker();
 		new DateRangePicker("#divJQueryRange4").setExtendsCalendar(true).setDisableSelectBackward().setPicker();
-		
+		$("#divJQueryRange0").click(self.btnJqOpenHandler);
 	};
 	// ==================== 4. jQuery Date Range Picker ======================
 	
@@ -158,6 +159,11 @@
 	
 	
 	// ======================================================================
+	
+	ctrl.btnJqOpenHandler = function(e){
+		e.stopPropagation();
+		$('#divJQueryRange').data('dateRangePicker').open();
+	}
 	
 	return ctrl;
 }));
