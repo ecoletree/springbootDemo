@@ -23,6 +23,11 @@
 <div style="margin-left : 20px ">
 	<h4>4. jQuery Date Range Picker</h4>
 	<br><br>
+	<ul style="list-style-type: circle; margin-left : 20px ;">
+	<li>https://github.com/longbill/jquery-date-range-picker</li>
+	<li>사용법 : https://longbill.github.io/jquery-date-range-picker/</li>
+	</ul>
+	<br><br>
 	<div>
 		<div>
 			<ul style="list-style-type: circle; margin-left : 20px ;">
