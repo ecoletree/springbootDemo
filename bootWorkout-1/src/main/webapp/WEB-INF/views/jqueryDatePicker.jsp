@@ -27,6 +27,7 @@
 	<li><a href="https://github.com/longbill/jquery-date-range-picker">https://github.com/longbill/jquery-date-range-picker</a></li>
 	<li>사용법 : <a href="https://longbill.github.io/jquery-date-range-picker/"> https://longbill.github.io/jquery-date-range-picker/</a></li>
 	<br>
+	<li>사용된 파일명</li>
 	<li>jqueryDatePicker.jsp</li>
 	<li>/service/jqueryDatePicker.js</li>
 	<li>/util/dateRangePicker.js</li>
