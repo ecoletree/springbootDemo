@@ -47,6 +47,8 @@
 		$("#btnLogin").click(self.btnLoginHandler);
 		$("#btnWebtoApp").click(self.btnWebtoAppHandler);
 		$("#btnCheckLink").click(self.btnCheckLinkHandler);
+		$("#btnCBCEncrypt").click(self.btnCBCEncryptHandler);
+//		$("#btnCBCDecrypt").click(self.btnCBCDecripttHandler);
 		
 		
 		$("#btnSendPushAlert").click(self.btnSendPushAlertHandler);
@@ -67,6 +69,23 @@
 		
 	};
 	// ==================================================================================
+	ctrl.btnCBCEncryptHandler = function(){
+		var self = et.vc;
+		var param = {};
+		
+		param.text = $("#iptEncryptText").val();
+		param.type = this.name;
+		if(text.length > 0){
+			new ETService().setSuccessFunction(self.cbcEncryptSuccessHandler).callService("/encrypt/CBC", param);
+		}
+	}
+	
+	ctrl.cbcEncryptSuccessHandler = function(result){
+		var self = et.vc;
+		console.log(result.data);
+		debugger;
+		
+	}
 	/*broken link handler*/
 	ctrl.btnCheckLinkHandler = function(){
 		

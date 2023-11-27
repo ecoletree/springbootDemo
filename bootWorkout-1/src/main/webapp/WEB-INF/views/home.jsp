@@ -59,35 +59,43 @@
 </div>
 
 <br><br><br><br>
-<div class="formWrap">
-	<label class="formLabel">링크 체크할 사이트</label>
+<div class="formInput">
+	<label class="formLabel">암호화 내용</label>
 	<div class="formInput">
-		<input type="text" id="iptSiteUrl" name="message_title" value="http://www.ecoletree.com/"/>
-<!-- 		<input type="text" id="iptSiteUrl" name="message_title" value="http://ecoletree.com:8080"/> -->
-<!-- 		<input type="text" id="iptSiteUrl" name="message_title" value="https://www.samsung.com/nl"/> -->
-		<button id ="btnCheckLink" type="button" class="btnGray btnBlock">check link</button>
+		<input type="text" id="iptEncryptText"  maxlength="30" />
 	</div>
+	<button id ="btnCBCEncrypt" type="button" name="cbc_encrypt" class="btnGray btnBlock">CBC암호화</button>
+	<button id ="btnCBCDecrypt" type="button" name="cbc_decrypt" class="btnGray btnBlock">CBC복호화</button>
 </div>
+<!-- <div class="formWrap"> -->
+<!-- 	<label class="formLabel">링크 체크할 사이트</label> -->
+<!-- 	<div class="formInput"> -->
+<!-- 		<input type="text" id="iptSiteUrl" name="message_title" value="http://www.ecoletree.com/"/> -->
+<!-- <!-- 		<input type="text" id="iptSiteUrl" name="message_title" value="http://ecoletree.com:8080"/> -->
+<!-- <!-- 		<input type="text" id="iptSiteUrl" name="message_title" value="https://www.samsung.com/nl"/> -->
+<!-- 		<button id ="btnCheckLink" type="button" class="btnGray btnBlock">check link</button> -->
+<!-- 	</div> -->
+<!-- </div> -->
 	
-	<button id ="btnExcelDown" type="button" class="btnGray btnBlock">엑셀 다운로드</button>
-</div>
-<div class="ecloeScrollTableContainer">
-			<div class="ecloeScrollTableHeader"></div>
-			<div class="ecloeScrollTableWrap dataTables_wrapper form-inline">
-				<table id="tbList" class="ecloeScrollTable table table-hover dataTable" style="width: 100%;margin-top: 0px !important;">
-					<thead>
-						<tr>
-							<th style="width: 5%" title="status"><div>status</div></th>
-<!-- 							<th style="width: 15%" title="state"><div>state</div></th> -->
-							<th style="width: 30%" title="url"><div>url</div></th>
-							<th style="width: 30%" title="parent"><div>linked from</div></th>
-							<th style="width: 20%" title="source"><div>source</div></th>
-					</thead>
-					<tbody class="cursorPoint">
-					</tbody>
-				</table>
-			</div>
-		</div>
+<!-- 	<button id ="btnExcelDown" type="button" class="btnGray btnBlock">엑셀 다운로드</button> -->
+<!-- </div> -->
+<!-- <div class="ecloeScrollTableContainer"> -->
+<!-- 			<div class="ecloeScrollTableHeader"></div> -->
+<!-- 			<div class="ecloeScrollTableWrap dataTables_wrapper form-inline"> -->
+<!-- 				<table id="tbList" class="ecloeScrollTable table table-hover dataTable" style="width: 100%;margin-top: 0px !important;"> -->
+<!-- 					<thead> -->
+<!-- 						<tr> -->
+<!-- 							<th style="width: 5%" title="status"><div>status</div></th> -->
+<!-- <!-- 							<th style="width: 15%" title="state"><div>state</div></th> -->
+<!-- 							<th style="width: 30%" title="url"><div>url</div></th> -->
+<!-- 							<th style="width: 30%" title="parent"><div>linked from</div></th> -->
+<!-- 							<th style="width: 20%" title="source"><div>source</div></th> -->
+<!-- 					</thead> -->
+<!-- 					<tbody class="cursorPoint"> -->
+<!-- 					</tbody> -->
+<!-- 				</table> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
 <!-- <script src="//code.jquery.com/jquery-1.11.0.min.js"></script> -->
 <!-- 끝: 작성하기 -->
 <script type="text/javascript">
