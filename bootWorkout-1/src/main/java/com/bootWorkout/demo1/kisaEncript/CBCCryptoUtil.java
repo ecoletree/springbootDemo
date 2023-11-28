@@ -77,10 +77,10 @@ public class CBCCryptoUtil {
 	 * @param outFileName
 	 * @return
 	 */
-	public String fileEncrypt(String saveTargetPath, String infileName, String outFileName) {
+	public String fileEncrypt(String infilePath, String outfilePath) {
 		
-		File inFile = new File(saveTargetPath+infileName);
-		File outFile = new File(saveTargetPath+outFileName);
+		File inFile = new File(infilePath);
+		File outFile = new File(outfilePath);
 		String resultMsg="";
 		try {
 			Cipher cipher = setCipher(Cipher.ENCRYPT_MODE);
@@ -97,10 +97,10 @@ public class CBCCryptoUtil {
 	 * @param outFileName
 	 * @return
 	 */
-	public String fileDecrypt(String saveTargetPath, String infileName, String outFileName) {
+	public String fileDecrypt(String infilePath, String outfilePath) {
 		
-		File inFile = new File(saveTargetPath+infileName);
-		File outFile = new File(saveTargetPath+outFileName);
+		File inFile = new File(infilePath);
+		File outFile = new File(outfilePath);
 		
 		String resultMsg="";
 		try {

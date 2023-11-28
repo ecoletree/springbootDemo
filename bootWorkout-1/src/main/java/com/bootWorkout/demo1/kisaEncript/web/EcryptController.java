@@ -46,11 +46,11 @@ public class EcryptController extends ETBaseController {
 		if(crypto_type.equals("cbc_encrypt")) {
 			
 			result = type.equals("file") 
-					? cbcUtil.fileEncrypt(FILE_PATH,file_name,"encryptedFile22.aes")
+					? cbcUtil.fileEncrypt(FILE_PATH+file_name,FILE_PATH+"encryptedFile22.aes")
 					: cbcUtil.encryptCBCString(origin);
 		}else {
 			result = type.equals("file") 
-					? cbcUtil.fileDecrypt(FILE_PATH,"encryptedFile22.aes","decryptintesttest.txt")
+					? cbcUtil.fileDecrypt(FILE_PATH+"encryptedFile22.aes",FILE_PATH+"decryptintesttest.txt")
 					: cbcUtil.decryptCBCString(origin);
 		}
 		logInfo("encript_result:::"+result);
