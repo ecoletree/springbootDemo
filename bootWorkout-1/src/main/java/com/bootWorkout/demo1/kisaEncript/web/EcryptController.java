@@ -39,14 +39,15 @@ public class EcryptController extends ETBaseController {
 		 * type: 암호화 대상 file 인지 text 인지 구분
 		 * crypto_type : 암/복호화 구분
 		 * text: text 일때 암복호화 대상
+		 *  파일명 지정방식 바꾸기
+		 *		
 		 */
 		String result = "";
 		
-		String file_name = "textEncryptTest.txt";
 		if(crypto_type.equals("cbc_encrypt")) {
 			
 			result = type.equals("file") 
-					? cbcUtil.fileEncrypt(FILE_PATH+file_name,FILE_PATH+"encryptedFile22.aes")
+					? cbcUtil.fileEncrypt(FILE_PATH+origin,FILE_PATH+"encryptedFile22.aes")
 					: cbcUtil.encryptCBCString(origin);
 		}else {
 			result = type.equals("file") 
