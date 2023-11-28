@@ -8,6 +8,9 @@
 *****************************************************************/
 package com.bootWorkout.demo1.kisaEncript.web;
 
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,14 +48,18 @@ public class EcryptController extends ETBaseController {
 		String result = "";
 		
 		if(crypto_type.equals("cbc_encrypt")) {
-			
+			Date now = new Date();
+			SimpleDateFormat fm = new SimpleDateFormat("yyyy_MM_dd_HHmmss");
+			String outFileName = fm.format(now);
 			result = type.equals("file") 
-					? cbcUtil.fileEncrypt(FILE_PATH+origin,FILE_PATH+"encryptedFile22.aes")
+					? cbcUtil.fileEncrypt(FILE_PATH+origin,FILE_PATH+outFileName+".aes")
 					: cbcUtil.encryptCBCString(origin);
 		}else {
-			result = type.equals("file") 
-					? cbcUtil.fileDecrypt(FILE_PATH+"encryptedFile22.aes",FILE_PATH+"decryptintesttest.txt")
-					: cbcUtil.decryptCBCString(origin);
+			if(type.equals("file") ) {
+				result = cbcUtil.fileDecrypt(FILE_PATH+origin,FILE_PATH+(origin.replace(".aes", ""))+".txt");
+			}else {
+				result = cbcUtil.decryptCBCString(origin);
+			}
 		}
 		logInfo("encript_result:::"+result);
 		resultMap.put("resultTxt", result);
