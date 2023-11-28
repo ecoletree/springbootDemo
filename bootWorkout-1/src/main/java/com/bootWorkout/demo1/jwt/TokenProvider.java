@@ -56,7 +56,7 @@ public class TokenProvider {
 		// Access Token 
 		String accessToken = Jwts.builder() //header나 claim 정보를 넣을 수 있다. 
 				.claim("email",id)
-				.setSubject(id) // dbwj dkdlelrkxdmsrj
+				.setSubject(id) // user id 같은거
 				.setExpiration(accessTokenExpiresIn)
 				.signWith(key, SignatureAlgorithm.HS256) // 암호화할 키와, 알고리즘
 				.compact();// String으로 단순화
