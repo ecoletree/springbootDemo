@@ -6,7 +6,7 @@
  * File Name : CBCCryptoUtil.java
  * DESC : 
 *****************************************************************/
-package com.bootWorkout.demo1.kisaEncript;
+package com.bootWorkout.demo1.encrypt;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,17 +27,29 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Setter
 @Component
-public class CBCCryptoUtil {
+public class CryptoUtil {
 	
+	private String MODE = CRYPTO_MODE.CBC;
 	
+	public void CBC() {
+		this.MODE = CRYPTO_MODE.CBC;
+	}
+	
+	public void ECB() {
+		this.MODE = CRYPTO_MODE.ECB;
+	}
+	
+	public final class 	CRYPTO_MODE {
+		public static final String CBC = "CBC";
+		public static final String ECB = "ECB";
+	}
 	/** CBC 암호화 
 	 * Initial Vector를 암호문 대신 사용
 	 * String to String
 	 * @param origin
 	 * @return
 	 */
-	public String encryptCBCString(String origin) {
-		log.info("testtest"+CryptoKeySets.CBC_KEY);
+	public String encryptString(String origin) {
 		try {
 	        Cipher cipher = setCipher(Cipher.ENCRYPT_MODE); 
 	 
@@ -55,7 +67,7 @@ public class CBCCryptoUtil {
 	 * @param encrypted
 	 * @return
 	 */
-	public String decryptCBCString(String encrypted) {
+	public String decryptString(String encrypted) {
 		
 		try {
 			Cipher cipher = setCipher(Cipher.DECRYPT_MODE);
@@ -148,10 +160,17 @@ public class CBCCryptoUtil {
 	public Cipher setCipher(int cipherMode) {
 		Cipher cipher = null;
 		try {
-			IvParameterSpec iv = new IvParameterSpec(CryptoKeySets.CBC_INIT_VECTOR.getBytes("UTF-8"));
-			Key secretKey = new SecretKeySpec(CryptoKeySets.CBC_KEY.getBytes(), "AES");
-			cipher = Cipher.getInstance(CryptoKeySets.CBC_CRYPTO_TYPE);
-			cipher.init(cipherMode, secretKey,iv);
+			Key secretKey = new SecretKeySpec(CryptoKeySets.CRYPTO_KEY.getBytes(), "AES");
+			if(MODE.equals(CRYPTO_MODE.CBC)) {
+				log.info("cipher 생성 CBC");
+				IvParameterSpec iv = new IvParameterSpec(CryptoKeySets.INIT_VECTOR.getBytes("UTF-8"));
+				cipher = Cipher.getInstance(CryptoKeySets.CBC_MODE);
+				cipher.init(cipherMode, secretKey,iv);
+			}else {
+				log.info("cipher 생성 ECB");
+				cipher = Cipher.getInstance(CryptoKeySets.ECB_MODE);
+				cipher.init(cipherMode, secretKey);
+			}
 		} catch (Exception e) {
 			log.info("cbcCipher_error::"+ e.getMessage());
 		}

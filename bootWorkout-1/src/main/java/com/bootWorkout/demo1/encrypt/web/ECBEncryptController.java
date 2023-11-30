@@ -6,7 +6,7 @@
  * File Name : ECBEncryptController.java
  * DESC : 
 *****************************************************************/
-package com.bootWorkout.demo1.kisaEncript.web;
+package com.bootWorkout.demo1.encrypt.web;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -6,7 +6,7 @@
  * File Name : EcriptController.java
  * DESC : 
 *****************************************************************/
-package com.bootWorkout.demo1.kisaEncript.web;
+package com.bootWorkout.demo1.encrypt.web;
 
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bootWorkout.demo1.kisaEncript.CBCCryptoUtil;
+import com.bootWorkout.demo1.encrypt.CryptoUtil;
 
 import kr.co.ecoletree.common.base.web.ETBaseController;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +31,7 @@ public class CBCEcryptController {
 
 	private static final String FILE_PATH = "C:/Users/User/OneDrive/바탕 화면/실습/";
 	
-	CBCCryptoUtil cbcUtil = new CBCCryptoUtil();
+	CryptoUtil cbcUtil = new CryptoUtil();
 	
 	/** text cbc 암호화 {"encrypt" : "Y/N" , "text" : "sample" }
 	 * @param param
@@ -43,10 +43,10 @@ public class CBCEcryptController {
 		
 		String encryptYN =  param.get("encrypt").toString();
 		String text = param.get("text").toString();
-		
+		cbcUtil.CBC();
 		String result = encryptYN.equals("Y") 
-				? cbcUtil.encryptCBCString(text)
-				:cbcUtil.decryptCBCString(text);
+				? cbcUtil.encryptString(text)
+				: cbcUtil.decryptString(text);
 		
 		log.info("encript_result:::"+result);
 		

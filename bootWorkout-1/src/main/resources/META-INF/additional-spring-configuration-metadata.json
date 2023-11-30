@@ -1,0 +1,27 @@
+{"properties": [
+  {
+    "name": "crypto.type",
+    "type": "java.lang.String",
+    "description": "A description for 'crypto.type'"
+  },
+  {
+    "name": "crypto.key",
+    "type": "java.lang.String",
+    "description": "A description for 'crypto.key'"
+  },
+  {
+    "name": "crypto.vector",
+    "type": "java.lang.String",
+    "description": "A description for 'crypto.vector'"
+  },
+  {
+    "name": "crypto.cbc-mode",
+    "type": "java.lang.String",
+    "description": "A description for 'crypto.cbc-mode'"
+  },
+  {
+    "name": "crypto.ecb-mode",
+    "type": "java.lang.String",
+    "description": "A description for 'crypto.ecb-mode'"
+  }
+]}
