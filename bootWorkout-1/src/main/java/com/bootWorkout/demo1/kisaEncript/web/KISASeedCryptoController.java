@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bootWorkout.demo1.kisaEncript.SeedCBCCryptoUtil;
+import com.bootWorkout.demo1.kisaEncript.SeedECBCryptoUtil;
 
 @RestController
 @RequestMapping("/seed")
@@ -27,6 +28,7 @@ public class KISASeedCryptoController {
 	private static final String FILE_PATH = "C:/Users/User/OneDrive/바탕 화면/실습/";
 	
 	SeedCBCCryptoUtil cbc = new SeedCBCCryptoUtil();
+	SeedECBCryptoUtil ecb = new SeedECBCryptoUtil(); 
 	
 	/** text cbc 암호화 {"encrypt" : "Y/N" , "text" : "sample" }
 	 * @param param
@@ -38,13 +40,22 @@ public class KISASeedCryptoController {
 		
 		String origin = param.get("text").toString();
 		String encrypt = param.get("encrypt").toString();
+		String type = param.get("type").toString();
 		
 		
 		String result = "";
-		if(encrypt.equals("Y")) {
-			result = cbc.encryptString(origin);
+		if(type.equals("CBC")) {
+			if(encrypt.equals("Y")) {
+				result = cbc.encryptString(origin);
+			}else {
+				result = cbc.decryptString(origin);
+			}
 		}else {
-			result = cbc.decryptString(origin);
+			if(encrypt.equals("Y")) {
+				result = ecb.encryptString(origin);
+			}else {
+				result = ecb.decryptString(origin);
+			}
 		}
 			
 		resultMap.put("result", result);

@@ -8,17 +8,15 @@
 *****************************************************************/
 package com.bootWorkout.demo1.kisaEncript;
 
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Base64;
 
 import org.springframework.stereotype.Component;
 
 import com.bootWorkout.demo1.common.util.KISA_SEED_CBC;
 import com.bootWorkout.demo1.encrypt.CryptoKeySets;
+import com.google.common.io.ByteStreams;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -76,56 +74,55 @@ public class SeedCBCCryptoUtil {
 
 	}
 	
-	/**
-	 * 
+	/** 파일 암호화
+	 * @param inputFile
+	 * @param outputFile
+	 * @return
 	 */
 	public String encryptFile(String inputFile, String outputFile) {
-		String result = "fail";
-		
-		
-		try {
-			
-			FileInputStream fis = new FileInputStream(inputFile);
-			byte[] inputBytes = new byte[(int) inputFile.length()];
-			fis.read(inputBytes);
-			
-			byte[] outputBytes = KISA_SEED_CBC.SEED_CBC_Encrypt(pbszUserKey, bsxIV, inputBytes, 0, inputBytes.length);
-			FileOutputStream fos = new FileOutputStream(outputFile);
-			fos.write(outputBytes);
-			
-			fis.close();
-			fos.close();
-			result = "success";
-		} catch (Exception e) {
-			log.info(e.getMessage());
-		}
-		
-		return result;
+		return doCryptFile(inputFile,outputFile, true );
 	}
-	/**
-	 * 
+	
+	/** 파일 복호화
+	 * @param inputFile
+	 * @param outputFile
+	 * @return
 	 */
 	public String decryptFile(String inputFile, String outputFile) {
+		return doCryptFile(inputFile,outputFile, false );
+	}
+	
+	/** 파일 암/복호화
+	 * @param inputFile
+	 * @param outputFile
+	 * @param crypt
+	 * @return
+	 */
+	public String doCryptFile(String inputFile, String outputFile, boolean crypt ) {
 		String result = "fail";
 		
-		log.info("decrypt file");
-		try {
+		try {	
 			
 			FileInputStream fis = new FileInputStream(inputFile);
-			byte[] inputBytes = new byte[(int) inputFile.length()];
-			fis.read(inputBytes);
 			
-			byte[] outputBytes = KISA_SEED_CBC.SEED_CBC_Decrypt(pbszUserKey, bsxIV, inputBytes, 0, inputBytes.length);
+			byte[] inputBytes = ByteStreams.toByteArray(fis);
+			
+			byte[] outputBytes = crypt ? KISA_SEED_CBC.SEED_CBC_Encrypt(pbszUserKey, bsxIV, inputBytes, 0, inputBytes.length) 
+											: KISA_SEED_CBC.SEED_CBC_Decrypt(pbszUserKey, bsxIV, inputBytes, 0, inputBytes.length);
 			FileOutputStream fos = new FileOutputStream(outputFile);
 			fos.write(outputBytes);
 			
 			fis.close();
 			fos.close();
 			result = "success";
+			
 		} catch (Exception e) {
 			log.info(e.getMessage());
 		}
 		
 		return result;
 	}
+	
+	
+	
 }
