@@ -71,17 +71,25 @@ public class KISASeedCryptoController {
 		Map<String, Object> resultMap = new HashMap<>();
 		String encryptYN =  param.get("encrypt").toString();
 		String fileName = param.get("text").toString();
+		String type = param.get("type").toString();
 		
 		SimpleDateFormat fm = new SimpleDateFormat("yyyyMMddHHmmss");
 		String outFileName = fm.format(new Date());
 		
 		String inputFilePath = FILE_PATH+fileName;
 		String result = "fail";
-		
-		if(encryptYN.equals("Y")) {
-			result = cbc.encryptFile(inputFilePath,FILE_PATH+outFileName+".aes");
+		if(type.equals("CBC")) {
+			if(encryptYN.equals("Y")) {
+				result = cbc.encryptFile(inputFilePath,FILE_PATH+outFileName+".aes");
+			}else {
+				result = cbc.decryptFile(inputFilePath,FILE_PATH+(fileName.replace(".aes", ""))+".txt");
+			}
 		}else {
-			result = cbc.decryptFile(inputFilePath,FILE_PATH+(fileName.replace(".aes", ""))+".txt");
+			if(encryptYN.equals("Y")) {
+				result = ecb.encryptFile(inputFilePath,FILE_PATH+outFileName+".aes");
+			}else {
+				result = ecb.decryptFile(inputFilePath,FILE_PATH+(fileName.replace(".aes", ""))+".txt");
+			}
 		}
 		
 		
