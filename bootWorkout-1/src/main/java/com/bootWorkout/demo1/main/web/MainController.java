@@ -101,6 +101,17 @@ public class MainController extends ETBaseController {
 		mav.setViewName("jqueryDatePicker");
 		return mav;
 	}
+	/** 캘린더 화면
+	 * @param mav
+	 * @param params
+	 * @return
+	 */
+	@RequestMapping("/jsfullCalendar")
+	public ModelAndView jsfullCalendar(final ModelAndView mav,Map<String, Object> params) {
+		
+		mav.setViewName("fullCalendarTest");
+		return mav;
+	}
 	
 	
 	@RequestMapping("/loginChk")

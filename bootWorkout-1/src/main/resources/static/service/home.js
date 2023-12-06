@@ -44,6 +44,7 @@
 		$("#btnSelectGroupSample").click(self.btnSelectGroupSampleHandler);
 		$("#btnCompareDateRangePickers").click(self.btnCompareDateRangePickersHandler);
 		$("#btnJqueryDateRangePickers").click(self.btnJqueryDateRangePickersHandler);
+		$("#btnFullCalendar").click(self.btnFullCalendarHandler);
 		$("#btnLogin").click(self.btnLoginHandler);
 		$("#btnWebtoApp").click(self.btnWebtoAppHandler);
 		$("#btnCheckLink").click(self.btnCheckLinkHandler);
@@ -318,16 +319,16 @@
 	/**
 	 * 데이트 피커 비교 화면으로 이동
 	 */
-	ctrl.btnCompareDateRangePickersHandler = function(){
-		var self = et.vc;
-		new ETService().callView(self.path + "datePickers", {});
-	}
-	/**
-	 * 데이트 피커 비교 화면으로 이동
-	 */
 	ctrl.btnJqueryDateRangePickersHandler = function(){
 		var self = et.vc;
 		new ETService().callView(self.path + "jquerydatePicker", {});
+	}
+	/**
+	 * full calendar 화면으로 이동
+	 */
+	ctrl.btnFullCalendarHandler = function(){
+		var self = et.vc;
+		new ETService().callView(self.path + "jsfullCalendar", {});
 	}
 	
 	return ctrl;

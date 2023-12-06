@@ -22,7 +22,8 @@
 <body>
 <button id="btnSelectGroupSample">트리구조 셀렉트 유틸 샘플 페이지 --></button>
 <button id="btnJqueryDateRangePickers">jquery date picker --></button>
-<!-- <button id="btnCompareDateRangePickers">데이트 피커 플러그인 비교 --></button> -->
+<button id="btnFullCalendar">full Calendar --></button>
+<!-- <button id="btnCompareDateRangePickers">데이트 피커 플러그인 비교 </button>  -->
 <br><br>
 <div style="margin-left : 20px; width:400px " >
 
@@ -59,14 +60,6 @@
 </div>
 
 <br><br><br><br>
-<div class="formInput">
-	<label class="formLabel">암호화 내용</label>
-	<div class="formInput">
-		<input type="text" id="iptEncryptText"  maxlength="30" />
-	</div>
-	<button id ="btnCBCEncrypt" type="button" name="cbc_encrypt" class="btnGray btnBlock">CBC암호화</button>
-	<button id ="btnCBCDecrypt" type="button" name="cbc_decrypt" class="btnGray btnBlock">CBC복호화</button>
-</div>
 <!-- <div class="formWrap"> -->
 <!-- 	<label class="formLabel">링크 체크할 사이트</label> -->
 <!-- 	<div class="formInput"> -->
