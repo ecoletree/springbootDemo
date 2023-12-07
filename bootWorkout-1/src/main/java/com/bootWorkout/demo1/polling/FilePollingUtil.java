@@ -26,6 +26,9 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class FilePollingUtil {
 	
+	/** 파일 변경 감지
+	 * @param dir
+	 */
 	public void watchFiles(String dir) {
 		log.info("변경 감지 유틸");
 		log.info("변경 감지할 디렉토리::"+dir);
