@@ -112,6 +112,17 @@ public class MainController extends ETBaseController {
 		mav.setViewName("fullCalendarTest");
 		return mav;
 	}
+	/** 캘린더 화면
+	 * @param mav
+	 * @param params
+	 * @return
+	 */
+	@RequestMapping("/formValidation")
+	public ModelAndView formValidation(final ModelAndView mav,Map<String, Object> params) {
+		
+		mav.setViewName("formValidation");
+		return mav;
+	}
 	
 	
 	@RequestMapping("/loginChk")

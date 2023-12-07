@@ -9,9 +9,12 @@
 <c:import url="/include.commonPlugin.sp" charEncoding="UTF-8" />
 
 <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
-<!-- <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script> -->
-<script type="text/javascript" src="/full-calendar/full-calendar-core.js"></script>
-<script type="text/javascript" src="/full-calendar/full-calendar-daygrid.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.js"></script> -->
+<script type="text/javascript" src="/full-calendar/core/index.global.js"></script>
+<script type="text/javascript" src="/full-calendar/daygrid/index.global.js"></script>
+<script type="text/javascript" src="/full-calendar/timegrid/index.global.js"></script>
+<script type="text/javascript" src="/full-calendar/interaction/index.global.js"></script>
+<script type="text/javascript" src="/full-calendar/multimonth/index.global.js"></script>
 <!-- 4.jQuery Date Range Picker -->
 <!--  -->
 
@@ -31,7 +34,7 @@
 	 <div id="yrModal" style="display: none;" >
         <div id="cont" style="text-align: center;  ">
             <br>
-            <h1>예린 모달 모달</h1>
+            <h1>  모달</h1>
             시작일 <input type="text" id="schStart" value=""><br>
             종료일 <input type="text" id="schEnd" value=""><br>
             제목 <input type="text" id="schTitle" value=""><br>
@@ -41,6 +44,8 @@
             <button onclick="fCalAdd()">추가</button><br>
             <button onclick="fMClose()">X</button>
         </div>
+        
+        
     </div>
 		<div id="calendar"></div>
 	</div>

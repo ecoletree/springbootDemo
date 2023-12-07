@@ -114,114 +114,117 @@
 		var self = et.vc;
 		
 		self.commonEvents = [
-    {
-        "id": "common001",
-        "title": "추석",
-        "start": "2023-09-28",
-        "end":"2023-10-01",
-        "allDay": true,
-        "backgroundColor":"black",
-        "textColor":"pink",
-        "extendedProps": {
-            "comment": "명절"
-        }
-    },
-    {
-        "id": "common002",
-        "title": "임시휴일",
-        "start": "2023-10-02",
-        "allDay": true,
-        "backgroundColor":"black",
-        "textColor":"pink",
-        "extendedProps": {
-            "comment": "징검다리"
-        }
-    },
-    {
-        "id": "common003",
-        "title": "개천절",
-        "start": "2023-10-03",
-        "allDay": true,
-        "backgroundColor":"black",
-        "textColor":"pink",
-        "extendedProps": {
-            "comment": "국가휴일"
-        }
-    }
-];
+		    {
+		        "id": "common001",
+		        "title": "추석",
+		        "start": "2023-09-28",
+		        "end":"2023-10-01",
+		        "allDay": true,
+		        "backgroundColor":"black",
+		        "textColor":"pink",
+		        "extendedProps": {
+		            "comment": "명절"
+		        }
+		    },
+		    {
+		        "id": "common002",
+		        "title": "임시휴일",
+		        "start": "2023-10-02",
+		        "allDay": true,
+		        "backgroundColor":"black",
+		        "textColor":"pink",
+		        "extendedProps": {
+		            "comment": "징검다리"
+		        }
+		    },
+		    {
+		        "id": "common003",
+		        "title": "개천절",
+		        "start": "2023-10-03",
+		        "allDay": true,
+		        "backgroundColor":"black",
+		        "textColor":"pink",
+		        "extendedProps": {
+		            "comment": "국가휴일"
+		        }
+		    }
+		];
+	//=========================================================
 		self.KYREvents = [
-    {
-        "id": "kyr001",
-        "title": "스케줄구현",
-        "start": "2023-12-06",
-        "end":"2023-12-09",
-        "allDay": true,
-        "backgroundColor":"black",
-        "textColor":"yellow",
-        "extendedProps": {
-            "comment": "FullCal사용"
-        }
-    },
-    {
-        "id": "kyr002",
-        "title": "최프착수보고",
-        "start": "2023-12-07T14:00",
-        "end":"2023-12-07T15:00",
-        "backgroundColor":"black",
-        "textColor":"yellow",
-        "extendedProps": {
-            "comment": "최프발표"
-        }
-    },
-    {
-        "id": "kyr003",
-        "title": "모달구현",
-        "start": "2023-12-06",
-        "end":"2023-12-07",
-        "backgroundColor":"black",
-        "textColor":"yellow",
-        "allDay": true,
-        "extendedProps": {
-            "comment": "스케줄기능확장"
-        }
-    }
-];
+		    {
+		        "id": "kyr001",
+		        "title": "스케줄구현",
+		        "start": "2023-12-06",
+		        "end":"2023-12-09",
+		        "allDay": true,
+		        "backgroundColor":"black",
+		        "textColor":"yellow",
+		        "extendedProps": {
+		            "comment": "FullCal사용"
+		        }
+		    },
+		    {
+		        "id": "kyr002",
+		        "title": "최프착수보고",
+		        "start": "2023-12-07T14:00",
+		        "end":"2023-12-07T15:00",
+		        "backgroundColor":"black",
+		        "textColor":"yellow",
+		        "extendedProps": {
+		            "comment": "최프발표"
+		        }
+		    },
+		    {
+		        "id": "kyr003",
+		        "title": "모달구현",
+		        "start": "2023-12-06",
+		        "end":"2023-12-07",
+		        "backgroundColor":"black",
+		        "textColor":"yellow",
+		        "allDay": true,
+		        "extendedProps": {
+		            "comment": "스케줄기능확장"
+		        }
+		    }
+		];
+
+	//=========================================================
 		self.SYREvents = [
-    {
-        "id": "syr001",
-        "title": "기숙사구현",
-        "start": "2023-12-06",
-        "end":"2023-12-09",
-        "allDay": true,
-        "backgroundColor":"magenta",
-        "textColor":"white",
-        "extendedProps": {
-            "comment": "기숙사가고팡"
-        }
-    },
-    {
-        "id": "syr002",
-        "title": "최프착수보고",
-        "start": "2023-12-07T14:00",
-        "end":"2023-12-07T15:00",
-        "textColor":"magenta",
-        "extendedProps": {
-            "comment": "최프발표"
-        }
-    },
-    {
-        "id": "syr003",
-        "title": "기숙사사용통계",
-        "start": "2023-12-06",
-        "end":"2023-12-07",
-        "backgroundColor":"magenta",
-        "textColor":"white",
-        "allDay": true,
-        "extendedProps": {
-            "comment": "기숙사기능확장"
-        }
-    }
-];
+		    {
+		        "id": "syr001",
+		        "title": "기숙사구현",
+		        "start": "2023-12-06",
+		        "end":"2023-12-09",
+		        "allDay": true,
+		        "backgroundColor":"magenta",
+		        "textColor":"white",
+		        "extendedProps": {
+		            "comment": "기숙사가고팡"
+		        }
+		    },
+		    {
+		        "id": "syr002",
+		        "title": "최프착수보고",
+		        "start": "2023-12-07T14:00",
+		        "end":"2023-12-07T15:00",
+		        "textColor":"magenta",
+		        "extendedProps": {
+		            "comment": "최프발표"
+		        }
+		    },
+		    {
+		        "id": "syr003",
+		        "title": "기숙사사용통계",
+		        "start": "2023-12-06",
+		        "end":"2023-12-07",
+		        "backgroundColor":"magenta",
+		        "textColor":"white",
+		        "allDay": true,
+		        "extendedProps": {
+		            "comment": "기숙사기능확장"
+		        }
+		    }
+		];
 		
 	}
 	

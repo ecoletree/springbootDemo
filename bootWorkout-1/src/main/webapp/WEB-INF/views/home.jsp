@@ -8,58 +8,51 @@
 <title>Insert title here</title>
 <c:import url="/include.commonPlugin.sp" charEncoding="UTF-8" />
 
-<!-- <script  src="http://code.jquery.com/jquery-latest.min.js"></script> -->
-<!-- 4.jQuery Date Range Picker -->
-<link rel="stylesheet" href="/date_range_picker/jquery-date-range-picker/dist/daterangepicker.min.css">
-<script type="text/javascript" src="/date_range_picker/moment/min/moment.min.js"></script>
-<!-- <script type="text/javascript" src="jquery.min.js"></script> -->
-<script type="text/javascript" src="/date_range_picker/jquery-date-range-picker/src/jquery.daterangepicker.js"></script>
-<script type="text/javascript"  src="/util/dateRangePicker.js"></script>
-<!--  -->
-
 
 </head> 
 <body>
-<button id="btnSelectGroupSample">트리구조 셀렉트 유틸 샘플 페이지 --></button>
-<button id="btnJqueryDateRangePickers">jquery date picker --></button>
-<button id="btnFullCalendar">full Calendar --></button>
+<div style="margin-left : 20px; width:400px " >
+ <br><br>
+<button id="btnSelectGroupSample">트리구조 셀렉트 유틸 샘플 페이지 --></button> <br><br>
+<button id="btnJqueryDateRangePickers">jquery date picker --></button> <br><br>
+<button id="btnJqueryFormValidation">form validation --></button><br><br>
+<button id="btnFullCalendar">full Calendar --></button><br><br>
 <!-- <button id="btnCompareDateRangePickers">데이트 피커 플러그인 비교 </button>  -->
 <br><br>
-<div style="margin-left : 20px; width:400px " >
 
 <!-- <input id="iptPwd" value="6003"> -->
 <!-- 	<button id="btnLogin">login</button> -->
 <!-- </div> -->
-<div class="formWrap">
-	<label class="formLabel">알림 제목</label>
-	<div class="formInput">
-		<input type="text" id="iptTitle" name="message_title" maxlength="30" />
-	</div>
-</div>
-<div class="formWrap">
-	<label class="formLabel">알림 텍스트</label>
-	<div class="formInput">
-		<textarea type="text" id="iptText" name="message_text" rows="5" cols="" maxlength="150"></textarea>
-	</div>
-</div>
-<div class="formWrap">
-	<label class="formLabel">알림 이름</label>
-	<div class="formInput">
-		<input type="text" id="iptName" name="message_name" maxlength="30"/>
-	</div>
-</div>
-<div class="formWrap">
-	<label class="formLabel"></label>
-	<div class="formInput">
-		<button id ="btnSendPushAlert" type="button" class="btnGray btnBlock">알림 전송</button>
+<!-- <div class="formWrap"> -->
+<!-- 	<label class="formLabel">알림 제목</label> -->
+<!-- 	<div class="formInput"> -->
+<!-- 		<input type="text" id="iptTitle" name="message_title" maxlength="30" /> -->
+<!-- 	</div> -->
+<!-- </div> -->
+<!-- <div class="formWrap"> -->
+<!-- 	<label class="formLabel">알림 텍스트</label> -->
+<!-- 	<div class="formInput"> -->
+<!-- 		<textarea type="text" id="iptText" name="message_text" rows="5" cols="" maxlength="150"></textarea> -->
+<!-- 	</div> -->
+<!-- </div> -->
+<!-- <div class="formWrap"> -->
+<!-- 	<label class="formLabel">알림 이름</label> -->
+<!-- 	<div class="formInput"> -->
+<!-- 		<input type="text" id="iptName" name="message_name" maxlength="30"/> -->
+<!-- 	</div> -->
+<!-- </div> -->
+<!-- <div class="formWrap"> -->
+<!-- 	<label class="formLabel"></label> -->
+<!-- 	<div class="formInput"> -->
+<!-- 		<button id ="btnSendPushAlert" type="button" class="btnGray btnBlock">알림 전송</button> -->
 		
-	</div>
-</div>
-<div class="formInput">
-	<button id ="btnWebtoApp" type="button" class="btnGray btnBlock">돌아가기</button>
-</div>
+<!-- 	</div> -->
+<!-- </div> -->
+<!-- <div class="formInput"> -->
+<!-- 	<button id ="btnWebtoApp" type="button" class="btnGray btnBlock">돌아가기</button> -->
+<!-- </div> -->
 
-<br><br><br><br>
+<!-- <br><br><br><br> -->
 <!-- <div class="formWrap"> -->
 <!-- 	<label class="formLabel">링크 체크할 사이트</label> -->
 <!-- 	<div class="formInput"> -->

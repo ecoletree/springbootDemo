@@ -45,6 +45,7 @@
 		$("#btnCompareDateRangePickers").click(self.btnCompareDateRangePickersHandler);
 		$("#btnJqueryDateRangePickers").click(self.btnJqueryDateRangePickersHandler);
 		$("#btnFullCalendar").click(self.btnFullCalendarHandler);
+		$("#btnJqueryFormValidation").click(self.btnJqueryFormValidationHandler);
 		$("#btnLogin").click(self.btnLoginHandler);
 		$("#btnWebtoApp").click(self.btnWebtoAppHandler);
 		$("#btnCheckLink").click(self.btnCheckLinkHandler);
@@ -329,6 +330,13 @@
 	ctrl.btnFullCalendarHandler = function(){
 		var self = et.vc;
 		new ETService().callView(self.path + "jsfullCalendar", {});
+	}
+	/**
+	 * form validation 화면으로 이동
+	 */
+	ctrl.btnJqueryFormValidationHandler = function(){
+		var self = et.vc;
+		new ETService().callView(self.path + "formValidation", {});
 	}
 	
 	return ctrl;
