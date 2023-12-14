@@ -8,7 +8,7 @@
 <title>Insert title here</title>
 <c:import url="/include.commonPlugin.sp" charEncoding="UTF-8" />
 
-<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+<!-- <script  src="http://code.jquery.com/jquery-latest.min.js"></script> -->
 <!-- 4.jQuery Date Range Picker -->
 <link rel="stylesheet" href="/date_range_picker/jquery-date-range-picker/dist/daterangepicker.min.css">
 <script type="text/javascript" src="/date_range_picker/moment/min/moment.min.js"></script>

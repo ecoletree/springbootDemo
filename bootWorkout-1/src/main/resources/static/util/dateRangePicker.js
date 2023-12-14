@@ -181,7 +181,7 @@
 			var div =  $(self.$rangeDiv).find("input");
 			var format = self.options.format;
 
-			var start = moment(startDate).toDate();
+			var start = moment(startDate, 'YYYY.MM.DD').toDate();
 			div[0].value = moment(start).format(format);
 			
 			if(div.length >= 2){
@@ -191,7 +191,7 @@
 								.add(days,'days').toDate())
 								.format(format);
 				} else if ((typeof days) == "string"){
-					endDate = moment(moment(days)).format(format);
+					endDate = moment(moment(days, 'YYYY.MM.DD')).format(format);
 				}
 				div[1].value = endDate;
 			}
