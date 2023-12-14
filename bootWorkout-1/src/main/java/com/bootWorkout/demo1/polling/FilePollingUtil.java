@@ -8,7 +8,6 @@
 *****************************************************************/
 package com.bootWorkout.demo1.polling;
 
-import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;

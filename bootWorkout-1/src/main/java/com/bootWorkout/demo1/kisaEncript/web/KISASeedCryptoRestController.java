@@ -18,17 +18,37 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bootWorkout.demo1.cryptoFinal.CryptoCommon;
+import com.bootWorkout.demo1.cryptoFinal.CryptoCommon.CryptoType;
 import com.bootWorkout.demo1.kisaEncript.SeedCBCCryptoUtil;
 import com.bootWorkout.demo1.kisaEncript.SeedECBCryptoUtil;
 
+import kr.co.ecoletree.common.util.MapBuilder;
+
 @RestController
 @RequestMapping("/seed")
-public class KISASeedCryptoController {
+public class KISASeedCryptoRestController {
+
+	@RequestMapping("/test") // --> cryptoFinal 패키지
+	public @ResponseBody Map<String,Object> cryptoTest(@RequestBody Map<String,Object> param){
+		
+		CryptoType typeSet = CryptoType.builder()
+				.aes_type(param.get("aes_type").toString()) //CBC/ECB
+				.is_kisa(param.get("is_kisa").toString()) //Y/N
+				.build();
+		String result = CryptoCommon.setCryptoType(typeSet).decryptString(param.get("origin").toString());
+		
+		return MapBuilder.of("result",result);
+	}
+	
+	
+	/////////////////////////////////////////////////////////////////////////////////////////
 	
 	private static final String FILE_PATH = "C:/Users/User/OneDrive/바탕 화면/실습/";
 	
 	SeedCBCCryptoUtil cbc = new SeedCBCCryptoUtil();
 	SeedECBCryptoUtil ecb = new SeedECBCryptoUtil(); 
+	
 	
 	/** text cbc 암호화 {"encrypt" : "Y/N" , "text" : "sample" }
 	 * @param param
@@ -37,6 +57,8 @@ public class KISASeedCryptoController {
 	@RequestMapping("/text")
 	public @ResponseBody Map<String, Object> textCrypto(@RequestBody Map<String,Object> param){
 		Map<String, Object> resultMap = new HashMap<>();
+		
+		
 		
 		String origin = param.get("text").toString();
 		String encrypt = param.get("encrypt").toString();
