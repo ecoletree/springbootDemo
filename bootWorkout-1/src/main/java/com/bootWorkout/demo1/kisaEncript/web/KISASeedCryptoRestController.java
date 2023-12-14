@@ -33,8 +33,8 @@ public class KISASeedCryptoRestController {
 	public @ResponseBody Map<String,Object> cryptoTest(@RequestBody Map<String,Object> param){
 		
 		CryptoType typeSet = CryptoType.builder()
+				.is_kisa(param.get("is_kisa").toString()) //SEED/AES
 				.aes_type(param.get("aes_type").toString()) //CBC/ECB
-				.is_kisa(param.get("is_kisa").toString()) //Y/N
 				.build();
 		String result = CryptoCommon.setCryptoType(typeSet).decryptString(param.get("origin").toString());
 		
