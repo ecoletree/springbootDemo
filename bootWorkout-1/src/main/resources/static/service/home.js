@@ -8,9 +8,9 @@
 	}
 }(this.ecoletree, function(et) {
 	"use strict";
-	
+
 	var ctrl = {};
-	
+
 	ctrl.name = "home";
 	ctrl.path = "/";
 	ctrl.groupList= null;
@@ -30,33 +30,35 @@
 					data : "source",
 					headerText:"source",
 				}
-			
+
 			];
-	
+
 	// ============================== 화면 컨트롤 ==============================
-	
+
 	/**
 	 * init VIEW
 	 */
 	ctrl.init = function(initData) {
 		var self = et.vc;
-		
+
 		$("#btnSelectGroupSample").click(self.btnSelectGroupSampleHandler);
 		$("#btnCompareDateRangePickers").click(self.btnCompareDateRangePickersHandler);
 		$("#btnJqueryDateRangePickers").click(self.btnJqueryDateRangePickersHandler);
 		$("#btnFullCalendar").click(self.btnFullCalendarHandler);
+		$("#btnDataTablesMerging").click(self.btnDataTablesMergingHandler);
+
 		$("#btnJqueryFormValidation").click(self.btnJqueryFormValidationHandler);
 		$("#btnLogin").click(self.btnLoginHandler);
 		$("#btnWebtoApp").click(self.btnWebtoAppHandler);
 		$("#btnCheckLink").click(self.btnCheckLinkHandler);
 		$("#btnCBCEncrypt").click(self.btnCBCEncryptHandler);
 //		$("#btnCBCDecrypt").click(self.btnCBCDecripttHandler);
-		
-		
+
+
 		$("#btnSendPushAlert").click(self.btnSendPushAlertHandler);
 		$("#btnExcelDown").click(self.btnExcelDownHandler);
 //		self.fromAppToWeb(msg);
-		
+
 //		4. jQuery date range picker
 
 		// default
@@ -68,29 +70,29 @@
 //		new DateRangePicker("#divJQueryRange2").setMaxDate(7).setInitDate(new Date(),5).setPicker();
 //		new DateRangePicker("#divJQueryRange3").setExtendsCalendar(true).setDisableSelectForward().setPicker();
 //		new DateRangePicker("#divJQueryRange4").setExtendsCalendar(true).setDisableSelectBackward().setPicker();
-		
+
 	};
 	// ==================================================================================
 	ctrl.btnCBCEncryptHandler = function(){
 		var self = et.vc;
 		var param = {};
-		
+
 		param.text = $("#iptEncryptText").val();
 		param.type = this.name;
 		if(text.length > 0){
 			new ETService().setSuccessFunction(self.cbcEncryptSuccessHandler).callService("/encrypt/CBC", param);
 		}
 	}
-	
+
 	ctrl.cbcEncryptSuccessHandler = function(result){
 		var self = et.vc;
 		console.log(result.data);
 		debugger;
-		
+
 	}
 	/*broken link handler*/
 	ctrl.btnCheckLinkHandler = function(){
-		
+
 //		var param = {};
 //		param.url = $("#iptSiteUrl").val();
 //		new ETService().setSuccessFunction(self.checkLinkSuccessHandler).callService("/checkLink", param);
@@ -100,7 +102,7 @@
 			data:{url:$("#iptSiteUrl").val()},
 			method:"GET",
 			dataType:"json"
-			
+
 		})
 		.done(function(json){
 			var self = et.vc;
@@ -128,9 +130,9 @@
 				},{
 					data : "source",
 				}
-			
+
 			];
-		
+
 		var table = et.createDataTableSettings(columns, null, postData, self.dataTableDrawCallback,"",false,postData);
 		table.paging = false;
 		$("#tbList").DataTable(table);
@@ -138,17 +140,17 @@
 	ctrl.btnExcelDownHandler = function(){
 		var self = et.vc;
 		var columns = self.linkColumns;
-		
+
 		$.etExcelUtil.excelDownload(columns,self.linkData,"broken link list",false,false);
 	}
 	ctrl.dataTableDrawCallback = function(settings){
-		
+
 	}
-	
-	
+
+
 	/*flutter 모바일-웹 화면 전환*/
 	ctrl.fromAppToWeb = function(msg){
-		
+
 		var self = et.vc;
 		console.log('test');
 		document.querySelector("#flutterMessageTitle").innerText = msg;
@@ -157,18 +159,18 @@
 		var self= et.vc;
 		var msg = "web to app";
 		toApp.postMessage(msg);
-		
+
 	}
-	
+
 	/* firebaseMessage 보내기*/
 	ctrl.btnSendPushAlertHandler = function(){
 		var self = et.vc;
 		var param = {};
-		param.message_title = $("#iptTitle").val(); 
-		param.message_text = $("#iptText").val(); 
-		param.message_name = $("#iptName").val(); 
+		param.message_title = $("#iptTitle").val();
+		param.message_text = $("#iptText").val();
+		param.message_name = $("#iptName").val();
 		new ETService().setSuccessFunction(self.sendMsgSuccessHandler).callService("/flutter/sendMsg", param);
-		
+
 	}
 	ctrl.sendMsgSuccessHandler = function(result){
 		var self= et.vc;
@@ -178,27 +180,27 @@
 	ctrl.btnLoginHandler = function(){
 		var self = et.vc;
 		var param = {};
-		param.pwd = btoa($("#iptPwd").val()); 
+		param.pwd = btoa($("#iptPwd").val());
 		new ETService().setSuccessFunction(self.loginSuccessHandler).callService(self.path + "loginChk", param);
-		
+
 	}
 	ctrl.loginSuccessHandler = function(result){
 		var self = et.vc;
-		
+
 		console.log(result.data);
 		debugger;
 	}
-	
+
 	// ==================== 4. jQuery Date Range Picker ======================
-	
+
 	ctrl.defaultJQueryDateRangePicker = function(id){
 		var self = et.vc;
-		
+
 		var picker = {
 			autoClose: false,
 			format: 'YYYY-MM-DD',
 			separator: ' 부터 ', // 캘린더 상단에 라벨에 들어가는 구분자
-			language: 'ko', // ko로 설정해야함 
+			language: 'ko', // ko로 설정해야함
 			startOfWeek: 'sunday',// or monday
 			getValue: function() // --> 이거뭔데
 			{
@@ -231,7 +233,7 @@
 			},
 			minDays: 0, // 최소 선택 일자
 			maxDays: 0, // 최대 선택일자
-			showShortcuts: true, // true/false : true면 보여 
+			showShortcuts: true, // true/false : true면 보여
 			shortcuts: // shortCut 설정 가능 <-- custom 시에 null *********************
 			{
 				//'prev-days': [1,3,5,7],
@@ -269,7 +271,7 @@
 //						return [movetodate];
 //					}
 //				}
-				
+
 			], // shortCut 설정 가능 *********************
  			inline:false, // true 면 화면에 계속 표시
 			container:'body',
@@ -282,11 +284,11 @@
 			dayDivAttrs: [],
 			dayTdAttrs: [],
 			applyBtnClass: '',
-			singleMonth: 'auto', // true 면 한달씩 나옴 
+			singleMonth: 'auto', // true 면 한달씩 나옴
 			hoveringTooltip: function(days, startTime, hoveringTime)
 			{
 				return days > 1 ? days + ' ' + /* lang('days')*/ "일" : '';
-			}, // 마우스 hover일때 일 수 세줌 
+			}, // 마우스 hover일때 일 수 세줌
 			showTopbar: true, // 상단에 선택된 날짜 나타냄 (ex.기간:2023-05-02 부터 2023-05-04 (3일간))
 			swapTime: false,
 			selectForward: true, // true 일 경우에 전에 선택한 날짜 이후의 날짜만 선택 가능하다
@@ -298,17 +300,17 @@
 			},
 			monthSelect: true, // 월 드롭박스로 별도 선택 *********************
 			yearSelect: true // 년도 드롭박스로 별도 선택 *********************
-		}; 
-		
+		};
+
 //		picker = $.extend(picker,options)
 
 		$(id).dateRangePicker(picker);
-		
+
 	}
-	
-	
-	
-	
+
+
+
+
 	// ======================================================================
 	/**
 	 * 셀렉트 화면으로 이동
@@ -338,6 +340,13 @@
 		var self = et.vc;
 		new ETService().callView(self.path + "formValidation", {});
 	}
-	
+	/**
+	 * full calendar 화면으로 이동
+	 */
+	ctrl.btnDataTablesMergingHandler = function(){
+		var self = et.vc;
+		new ETService().callView(self.path + "dataTablesMerging", {});
+	}
+
 	return ctrl;
 }));

@@ -1,10 +1,10 @@
 /*****************************************************************
  * Copyright (c) 2017 EcoleTree. All Rights Reserved.
- * 
- * Author : Kim Kyung Hyun 
+ *
+ * Author : Kim Kyung Hyun
  * Create Date : 2023. 4. 27.
  * File Name : MainController.java
- * DESC : 
+ * DESC :
 *****************************************************************/
 package com.bootWorkout.demo1.main.web;
 
@@ -39,18 +39,18 @@ import net.sf.json.JSONObject;
 
 @Controller
 public class MainController extends ETBaseController {
-	
+
 	Logger logger = LoggerFactory.getLogger(getClass());
-	
-	
+
+
 	@Autowired
 	MainService service;
-	
-	@Autowired 
+
+	@Autowired
 	LoginValidation loginValidation;
-	
+
 	private static int LOGIN_COUNT =0;
-	
+
 	public final class LOG_MESSAGE {
 		public static final String delete_account = "1년이 지나 '계정 삭제";
 		public static final String change_pw = "비밀번호 변경해야함";
@@ -60,10 +60,10 @@ public class MainController extends ETBaseController {
 		public static final String password_check_fail = "비밀번호 틀림";
 //		public static final String LOGOUT = "로그아웃";
 	}
-	
+
 	@RequestMapping("/")
 	public ModelAndView main(final ModelAndView mav,Map<String, Object> params) {
-		
+
 		mav.setViewName("home");
 		mav.addObject("initData", JSONObject.fromObject(
 				MapBuilder.<String, Object>of(
@@ -72,10 +72,10 @@ public class MainController extends ETBaseController {
 				);
 		return mav;
 	}
-	
+
 	@RequestMapping("/select")
 	public ModelAndView selectPage(final ModelAndView mav,Map<String, Object> params) {
-		
+
 		mav.setViewName("makeSelect");
 		mav.addObject("initData", JSONObject.fromObject(
 				MapBuilder.<String, Object>of(
@@ -86,7 +86,7 @@ public class MainController extends ETBaseController {
 	}
 	@RequestMapping("/datePickers")
 	public ModelAndView datePickers(final ModelAndView mav,Map<String, Object> params) {
-		
+
 		mav.setViewName("datePickers");
 		mav.addObject("initData", JSONObject.fromObject(
 				MapBuilder.<String, Object>of(
@@ -97,7 +97,7 @@ public class MainController extends ETBaseController {
 	}
 	@RequestMapping("/jquerydatePicker")
 	public ModelAndView JquerydatePicker(final ModelAndView mav,Map<String, Object> params) {
-		
+
 		mav.setViewName("jqueryDatePicker");
 		return mav;
 	}
@@ -108,23 +108,34 @@ public class MainController extends ETBaseController {
 	 */
 	@RequestMapping("/jsfullCalendar")
 	public ModelAndView jsfullCalendar(final ModelAndView mav,Map<String, Object> params) {
-		
+
 		mav.setViewName("fullCalendarTest");
 		return mav;
 	}
-	/** 캘린더 화면
+	/** jquery validation 화면
 	 * @param mav
 	 * @param params
 	 * @return
 	 */
 	@RequestMapping("/formValidation")
 	public ModelAndView formValidation(final ModelAndView mav,Map<String, Object> params) {
-		
+
 		mav.setViewName("formValidation");
 		return mav;
 	}
-	
-	
+	/** jquery validation 화면
+	 * @param mav
+	 * @param params
+	 * @return
+	 */
+	@RequestMapping("/dataTablesMerging")
+	public ModelAndView dataTablesMerging(final ModelAndView mav,Map<String, Object> params) {
+
+		mav.setViewName("dataTablesMerge");
+		return mav;
+	}
+
+
 	@RequestMapping("/loginChk")
 	public @ResponseBody Map<String, Object> loginCheck(HttpServletRequest request, @RequestBody Map<String, Object> param) throws NoSuchAlgorithmException, UnsupportedEncodingException, ETException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException{
 		Map<String, Object> map = new HashMap<String,Object>();
@@ -133,9 +144,9 @@ public class MainController extends ETBaseController {
 		/**
 		 * 1. 아이디 유무 체크
 		 * 2. 중복 로그인 체크
-		 * 3. 로그인 실패 카운트 (5건) -> 타임 아웃 체크 (1분)  
+		 * 3. 로그인 실패 카운트 (5건) -> 타임 아웃 체크 (1분)
 		 * 4. 초기 비밀번호 체크 (같으면 메세지 ->js)
-		 * 5. 마지막 로그인 날자 (1년/90일/90일비번변경없음) 
+		 * 5. 마지막 로그인 날자 (1년/90일/90일비번변경없음)
 		 * 6. 비밀번호 체크
 		 */
 		if( 5 < LOGIN_COUNT) {
@@ -153,14 +164,14 @@ public class MainController extends ETBaseController {
 				.last_login_dttm(cal.getTime())
 				.last_pw_change_dttm(cal.getTime())
 				;
-		
+
 		String resultMsg = loginValidation.doValidation(builder);
-		
+
 		map.put("resultMsg", resultMsg);
 		if(!resultMsg.equals(ETCommonConst.SUCCESS)) {
 			LOGIN_COUNT++;
 		}
-		
+
 		String logMsg = getLogMessage(resultMsg);
 //		map.put("failCount", LOGIN_COUNT);
 		map.put("logMessage", logMsg);
@@ -172,5 +183,5 @@ public class MainController extends ETBaseController {
 		Field fd = logMesssage.getClass().getDeclaredField(resultMsg);
 		return (String)fd.get(logMesssage);
 	}
-	
+
 }

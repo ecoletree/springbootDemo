@@ -85,6 +85,8 @@
         calendar.on("eventChange", info => console.log("Change:", info));
         calendar.on("eventRemove", info => console.log("Remove:", info));
         calendar.on("eventClick", info => {
+	// 이벤트 클릭시에 여기에 나옴
+	debugger;
             console.log("eClick:", info);
             console.log('Event_title: ', info.event.title);
             console.log('Event_comment: ', info.event.extendedProps.comment);
@@ -140,10 +142,11 @@
 		    {
 		        "id": "common003",
 		        "title": "개천절",
-		        "start": "2023-10-03",
+		        "start": "2023-12-03",
+		        "display":"background",
 		        "allDay": true,
-		        "backgroundColor":"black",
-		        "textColor":"pink",
+		        "backgroundColor":"green",
+		        "textColor":"black",
 		        "extendedProps": {
 		            "comment": "국가휴일"
 		        }
@@ -151,18 +154,18 @@
 		];
 	//=========================================================
 		self.KYREvents = [
-		    {
-		        "id": "kyr001",
-		        "title": "스케줄구현",
-		        "start": "2023-12-06",
-		        "end":"2023-12-09",
-		        "allDay": true,
-		        "backgroundColor":"black",
-		        "textColor":"yellow",
-		        "extendedProps": {
-		            "comment": "FullCal사용"
-		        }
-		    },
+//		    {
+//		        "id": "kyr001",
+//		        "title": "스케줄구현",
+//		        "start": "2023-12-06",
+//		        "end":"2023-12-09",
+//		        "allDay": true,
+//		        "backgroundColor":"black",
+//		        "textColor":"yellow",
+//		        "extendedProps": {
+//		            "comment": "FullCal사용"
+//		        }
+//		    },
 		    {
 		        "id": "kyr002",
 		        "title": "최프착수보고",
@@ -174,56 +177,78 @@
 		            "comment": "최프발표"
 		        }
 		    },
-		    {
-		        "id": "kyr003",
-		        "title": "모달구현",
+		     {
+		        "id": "syr001",
+		        "title": "김경현",
 		        "start": "2023-12-06",
-		        "end":"2023-12-07",
-		        "backgroundColor":"black",
-		        "textColor":"yellow",
+		        "end":"2023-12-06",
 		        "allDay": true,
+		        "backgroundColor":"#ffb3f6",
+		        "textColor":"black",
 		        "extendedProps": {
-		            "comment": "스케줄기능확장"
-		        }
-		    }
+		            "comment": "asdf",
+		        },
+		        
+		    },
+//		    {
+//		        "id": "kyr003",
+//		        "title": "모달구현",
+//		        "start": "2023-12-06",
+//		        "end":"2023-12-07",
+//		        "backgroundColor":"black",
+//		        "textColor":"yellow",
+//		        "allDay": true,
+//		        "extendedProps": {
+//		            "comment": "스케줄기능확장"
+//		        }
+//		    }
 		];
+// 출근 - 본사, 재택, 그외
+// 휴가 - 오후/오전 반차 , 유급 휴가
+// 미출근 퇴근 
 
 	//=========================================================
 		self.SYREvents = [
 		    {
 		        "id": "syr001",
-		        "title": "기숙사구현",
+		        "title": "출근 9명",
 		        "start": "2023-12-06",
-		        "end":"2023-12-09",
+		        "end":"2023-12-06",
 		        "allDay": true,
-		        "backgroundColor":"magenta",
-		        "textColor":"white",
+		        "backgroundColor":"#9dfaa8",
+		        "textColor":"black",
 		        "extendedProps": {
-		            "comment": "기숙사가고팡"
-		        }
+		            "comment": "asdf",
+		            "details":{"본사":["김형석","장윤석","장미혜","곽동숙","김경현","이승미"], "재택":["허윤선","장성우"],"그외":["김민석"]}
+		        },
+		        
 		    },
 		    {
 		        "id": "syr002",
-		        "title": "최프착수보고",
-		        "start": "2023-12-07T14:00",
-		        "end":"2023-12-07T15:00",
-		        "textColor":"magenta",
+		        "title": "휴가 3명",
+		        "start": "2023-12-06",
+		        "end":"2023-12-06",
+		        "allDay": true,
+		        "backgroundColor":"#78b0ff",
+		        "textColor":"black",
 		        "extendedProps": {
-		            "comment": "최프발표"
-		        }
+		            "comment": "asdf",
+		            "details":{"휴가":["박은중"], "오전반차":["박한빈"],"오후반차":["김준희"]}
+		        },
 		    },
 		    {
 		        "id": "syr003",
-		        "title": "기숙사사용통계",
+		        "title": "퇴근/미출근 2명",
 		        "start": "2023-12-06",
-		        "end":"2023-12-07",
-		        "backgroundColor":"magenta",
-		        "textColor":"white",
+		        "end":"2023-12-06",
 		        "allDay": true,
+		        "backgroundColor":"#e3e3e3",
+		        "textColor":"black",
 		        "extendedProps": {
-		            "comment": "기숙사기능확장"
-		        }
-		    }
+		            "comment": "asdf",
+		            "details":{"퇴근":["최준혁"],"미출근":["배성균","추원호"]}
+		        },
+		    },
 		];
 		
 	}

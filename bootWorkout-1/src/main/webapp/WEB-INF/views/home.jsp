@@ -9,7 +9,7 @@
 <c:import url="/include.commonPlugin.sp" charEncoding="UTF-8" />
 
 
-</head> 
+</head>
 <body>
 <div style="margin-left : 20px; width:400px " >
  <br><br>
@@ -17,6 +17,7 @@
 <button id="btnJqueryDateRangePickers">jquery date picker --></button> <br><br>
 <button id="btnJqueryFormValidation">form validation --></button><br><br>
 <button id="btnFullCalendar">full Calendar --></button><br><br>
+<button id="btnDataTablesMerging">데이터 테이블즈 머징 --></button><br><br>
 <!-- <button id="btnCompareDateRangePickers">데이트 피커 플러그인 비교 </button>  -->
 <br><br>
 
@@ -45,7 +46,7 @@
 <!-- 	<label class="formLabel"></label> -->
 <!-- 	<div class="formInput"> -->
 <!-- 		<button id ="btnSendPushAlert" type="button" class="btnGray btnBlock">알림 전송</button> -->
-		
+
 <!-- 	</div> -->
 <!-- </div> -->
 <!-- <div class="formInput"> -->
@@ -62,7 +63,7 @@
 <!-- 		<button id ="btnCheckLink" type="button" class="btnGray btnBlock">check link</button> -->
 <!-- 	</div> -->
 <!-- </div> -->
-	
+
 <!-- 	<button id ="btnExcelDown" type="button" class="btnGray btnBlock">엑셀 다운로드</button> -->
 <!-- </div> -->
 <!-- <div class="ecloeScrollTableContainer"> -->
@@ -94,7 +95,7 @@
 					ecoletree.vc.init(${initData});
 				}, function (){})
 			},300);
-			
+
 		} else {
 			console.log("vc's name is not index : " + ecoletree.vc.name);
 		}
