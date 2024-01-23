@@ -7,7 +7,7 @@
 <c:import url="/include.commonHeader.sp" charEncoding="UTF-8" />
 <title>Insert title here</title>
 <c:import url="/include.commonPlugin.sp" charEncoding="UTF-8" />
-
+<script type="text/javascript" src="/dataTables_excel/tableExport.js"></script>
 
 </head>
 <body>
@@ -21,11 +21,11 @@
 				<table id="tbList" class="ecloeScrollTable table table-hover dataTable" style="width: 100%;margin-top: 0px !important;">
 					<thead>
 						<tr>
-							<th style="width: 5%" title="status"><div>status</div></th>
- 							<th style="width: 15%" title="state"><div>state</div></th>
-							<th style="width: 30%" title="url"><div>url</div></th>
-							<th style="width: 30%" title="parent"><div>linked from</div></th>
-							<th style="width: 20%" title="source"><div>source</div></th>
+							<th style="width: 30%" title="start_date"><div>start_date</div></th>
+							<th style="width: 15%" title="position"><div>position</div></th>
+ 							<th style="width: 20%" title="user_name"><div>user_name</div></th>
+							<th style="width: 5%" title="age"><div>age</div></th>
+							<th style="width: 20%" title="salary"><div>salary</div></th>
 					</thead>
 					<tbody class="cursorPoint">
 					</tbody>

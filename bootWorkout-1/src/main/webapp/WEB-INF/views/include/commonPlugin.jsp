@@ -79,7 +79,7 @@
 		}
 		return '${cp}';
 	};
-	
+
 	/**
 	 * country 코드로 언어코드 획득
 	 * @param isCode true면 country 코드를 바로 반환
@@ -90,16 +90,16 @@
 		if (isCode === true) {
 			return !!country ? country : "kr";
 		}
-		
+
 		var lang = "_kor";
-		
+
 		if (country === "kr") {
 			lang = "_kor";
 		} else if (country === "en") {
 			lang = "_eng";
 		}
-		
+
 		return lang;
 	};
-	
+
 </script>
