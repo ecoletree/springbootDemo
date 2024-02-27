@@ -15,7 +15,7 @@
 
 (function ($) {
   $.fn.tableExport = function (options) {
-	debugger;
+
     let docData;
     const defaults = {
       csvEnclosure: '"',
