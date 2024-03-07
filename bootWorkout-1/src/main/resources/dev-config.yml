@@ -1,0 +1,5 @@
+sse:
+  message:           
+    stream-create: EventStream Create           
+    success : success
+    fail: fail

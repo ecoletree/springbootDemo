@@ -6,7 +6,7 @@
  * File Name : EmitterRepository.java
  * DESC :
 *****************************************************************/
-package com.bootWorkout.demo1.sse.repository;
+package com.bootWorkout.demo1.sseUtil;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
