@@ -1,10 +1,10 @@
 /*****************************************************************
  * Copyright (c) 2017 EcoleTree. All Rights Reserved.
- * 
- * Author : Kim Kyung Hyun 
+ *
+ * Author : Kim Kyung Hyun
  * Create Date : 2023. 2. 6.
  * File Name : WebMvcConfig.java
- * DESC : 
+ * DESC :
 *****************************************************************/
 package com.bootWorkout.demo1.common.config;
 
@@ -24,7 +24,7 @@ import kr.co.ecoletree.common.auth.ETLoginCheckInterceptor;
 public class WebMVCConfig implements WebMvcConfigurer{
 
 	Logger log = LoggerFactory.getLogger(getClass());
-	
+
 	/**
 	 * 인터셉터 설정
 	 * interceptor는 이콜트리 공통라이브러리에서 가져옴
@@ -37,7 +37,7 @@ public class WebMVCConfig implements WebMvcConfigurer{
 				.excludePathPatterns("/resources/**")
 				.excludePathPatterns("/jslib/**");
 	}
-	
+
 	/**
 	 * js등 리소스 핸들러 설정
 	 */
@@ -51,7 +51,7 @@ public class WebMVCConfig implements WebMvcConfigurer{
 		.addResourceLocations("/webjars/")
 		.resourceChain(false);
 	}
-	
+
     /**
      * CommonsMultipartResolver : 파일 업/다운로드 관련
      * MultipartFile클래스를 이용하여 업로드한 파일정보를 얻어온다.
@@ -66,7 +66,7 @@ public class WebMVCConfig implements WebMvcConfigurer{
 //        commonsMultipartResolver.setMaxUploadSize(50 * 1024 * 1024);
 //        return commonsMultipartResolver;
 //    }
-    
+
 	/**
 	 * cross origin 설정(필요nono)
 	 */
@@ -74,10 +74,11 @@ public class WebMVCConfig implements WebMvcConfigurer{
     public void addCorsMappings(CorsRegistry registry) {
 			 registry.addMapping("/**")
 					 .allowedOrigins("http://localhost:8080")
+					 .allowedOrigins("http://localhost:8090")
 					 .allowedMethods("GET", "POST")
 //  		 			 .allowedOrigins("http://localhost:8080", "http://localhost:8081");
 				 	;
 	}
-    
-	
+
+
 }

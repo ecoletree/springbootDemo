@@ -23,14 +23,22 @@ public class NotificationServiceImpl implements NotificationService {
 	private final NotificationCommon notificationCommon;
 
 	@Override
-	public SseEmitter subscribe(Long id) {
+	public SseEmitter subscribe(String id) {
 		return notificationCommon.subscribe(id);
 	}
 
 
 	@Override
-	public void notify(Long id,Object event) {
-		notificationCommon.sendToClient(id,event);
+	public void notify(String id,Object event) {
+		notificationCommon.notify(id,event);
+
+	}
+
+
+	@Override
+	public void remove(String id) {
+		notificationCommon.expire(id);
+
 
 	}
 

@@ -16,12 +16,17 @@ public interface NotificationService {
 	 * @param id
 	 * @return
 	 */
-	public SseEmitter subscribe(Long id);
+	public SseEmitter subscribe(String id);
 
 	/**
 	 * @param id
 	 * @param string
 	 */
-	public void notify(Long id, Object event);
+	public void notify(String id, Object event);
+
+	/**
+	 * @param sseId
+	 */
+	public void remove(String sseId);
 
 }

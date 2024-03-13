@@ -134,6 +134,17 @@ public class MainController extends ETBaseController {
 		mav.setViewName("dataTablesMerge");
 		return mav;
 	}
+	/** sseEmitterManual 화면
+	 * @param mav
+	 * @param params
+	 * @return
+	 */
+	@RequestMapping("/sseEmitterManual")
+	public ModelAndView sseEmitterManual(final ModelAndView mav,Map<String, Object> params) {
+
+		mav.setViewName("sseEmitterManual");
+		return mav;
+	}
 
 
 	@RequestMapping("/loginChk")

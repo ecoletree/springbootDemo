@@ -57,6 +57,7 @@
 
 		$("#btnSendPushAlert").click(self.btnSendPushAlertHandler);
 		$("#btnExcelDown").click(self.btnExcelDownHandler);
+		$("#btnDeleteSseEmitters").click(self.btnDeleteSseEmittersHandler);
 //		self.fromAppToWeb(msg);
 
 //		4. jQuery date range picker
@@ -73,6 +74,8 @@
 
 	};
 	// ==================================================================================
+
+
 	ctrl.btnCBCEncryptHandler = function(){
 		var self = et.vc;
 		var param = {};
@@ -348,5 +351,12 @@
 		new ETService().callView(self.path + "dataTablesMerging", {});
 	}
 
+/**
+	 * sse emitter 수동 편집 화면으로 이동
+	 */
+	ctrl.btnDeleteSseEmittersHandler = function(){
+		var self = et.vc;
+		new ETService().callView(self.path + "sseEmitterManual", {});
+	}
 	return ctrl;
 }));

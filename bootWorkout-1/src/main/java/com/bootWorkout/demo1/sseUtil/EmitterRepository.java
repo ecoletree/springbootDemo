@@ -19,13 +19,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EmitterRepository {
 	 // 모든 Emitters를 저장하는 ConcurrentHashMap
-	private final Map<Long, SseEmitter> emitters = new ConcurrentHashMap<>();
-
+	private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
+//String으로 id변경
 	/**
 	 * @param id
 	 * @return
 	 */
-	public void deleteById(Long id) {
+	public void deleteById(String id) {
 		emitters.remove(id);
 	}
 
@@ -35,7 +35,7 @@ public class EmitterRepository {
      * @param id      - 사용자 아이디.
      * @param emitter - 이벤트 Emitter.
      */
-    public void save(Long id, SseEmitter emitter) {
+    public void save(String id, SseEmitter emitter) {
         emitters.put(id, emitter);
     }
     /**
@@ -44,7 +44,7 @@ public class EmitterRepository {
      * @param id      - 사용자 아이디.
      * @param emitter - 이벤트 Emitter.
      */
-    public SseEmitter get(Long id) {
+    public SseEmitter get(String id) {
     	return emitters.get(id);
     }
 

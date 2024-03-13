@@ -8,22 +8,22 @@
 	}
 }(this.ecoletree, function(et) {
 	"use strict";
-	
+
 	var ctrl = {};
-	
+
 	ctrl.name = "jqueryDatePicker";
 	ctrl.path = "/";
 	ctrl.groupList= null;
 	ctrl.optionList = {};
-	
-	
+
+
 	// ============================== 화면 컨트롤 ==============================
 	/**
 	 * init VIEW
 	 */
 	ctrl.init = function(initData) {
 		var self = et.vc;
-		
+
 		//single
 		new DateRangePicker("#divJQueryRange0",true).setInitDate('2023.05.25').setPicker(); // single
 		// range
@@ -33,13 +33,13 @@
 		new DateRangePicker("#divJQueryRange4").setExtendsCalendar(true).setDisableSelectBackward().setPicker();
 	};
 	// ==================== 4. jQuery Date Range Picker ======================
-	
-	
-	
-	
-	
+
+
+
+
+
 	// ======================================================================
-	
-	
+
+
 	return ctrl;
 }));
