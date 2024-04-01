@@ -12,6 +12,17 @@
 </head>
 <body>
 <div class="container">
+<br><br>
+<ul style="list-style-type: circle; margin-left : 20px ;">
+	<li><a href="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.3/purify.js"> dom_purify 사용</a></li>
+	<br>
+	<li>XSS validation : validationUtil.js 라이브러리에 메소드 추가, 상수 추가해서 처리 -> 공통라이브러리에서 가져옴</li>
+	<li>convertXSSFormToObject 메소드 추가 : 폼데이터에서 컨버팅할때 replace하는 식으로 처리</li>
+	<li>사용 라이브러리 내부 경로</li>
+	<p>/util/validationUtil.js</p>
+	<p>/dom_purify/purify.js</p>
+	</ul>
+<div></div>
 <br>
 <br>
 <form id="xssForm">
