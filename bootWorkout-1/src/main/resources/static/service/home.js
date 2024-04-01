@@ -52,6 +52,7 @@
 		$("#btnWebtoApp").click(self.btnWebtoAppHandler);
 		$("#btnCheckLink").click(self.btnCheckLinkHandler);
 		$("#btnCBCEncrypt").click(self.btnCBCEncryptHandler);
+		$("#btnDefendXSS").click(self.btnDefendXSSHandler);
 //		$("#btnCBCDecrypt").click(self.btnCBCDecripttHandler);
 
 
@@ -349,6 +350,13 @@
 	ctrl.btnDataTablesMergingHandler = function(){
 		var self = et.vc;
 		new ETService().callView(self.path + "dataTablesMerging", {});
+	}
+	/**
+	 * full calendar 화면으로 이동
+	 */
+	ctrl.btnDefendXSSHandler = function(){
+		var self = et.vc;
+		new ETService().callView(self.path + "defendXSS", {});
 	}
 
 /**

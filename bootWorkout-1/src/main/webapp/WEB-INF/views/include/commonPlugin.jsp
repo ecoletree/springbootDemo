@@ -60,11 +60,13 @@
 <script src="${cp }/jslib/ecoletreeLibraryJS/util/objectUtil.js"></script>
 <script src="${cp }/jslib/ecoletreeLibraryJS/util/dateUtil.js"></script>
 <script src="${cp }/jslib/ecoletreeLibraryJS/util/stringUtil.js"></script>
-<script src="${cp }/jslib/ecoletreeLibraryJS/util/validationUtil.js"></script>
 <script src="${cp }/jslib/ecoletreeLibraryJS/util/i18nextUtil.js"></script>
 <script src="${cp }/jslib/ecoletreeLibraryJS/util/aesUtil.js"></script>
 <script src="${cp }/jslib/ecoletreeLibraryJS/util/excelUtil.js"></script>
 
+<script src="${cp }/util/validationUtil.js"></script>
+<script src="${cp }/dom_purify/purify.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.3/purify.min.js"></script> -->
 <!-- App VIEW Controller -->
 <script src="${cp }/jslib/ecoletreeLibraryJS/common/common.js"></script>
 

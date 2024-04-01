@@ -145,6 +145,17 @@ public class MainController extends ETBaseController {
 		mav.setViewName("sseEmitterManual");
 		return mav;
 	}
+	/** sseEmitterManual 화면
+	 * @param mav
+	 * @param params
+	 * @return
+	 */
+	@RequestMapping("/defendXSS")
+	public ModelAndView defendXSS(final ModelAndView mav,Map<String, Object> params) {
+
+		mav.setViewName("defendXSS");
+		return mav;
+	}
 
 
 	@RequestMapping("/loginChk")
