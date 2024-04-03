@@ -142,7 +142,7 @@ ETValidate.prototype = {
 	 * @param {String} message 스크립트 기입 불가에 대한 밸리데이션 메세지
 	 * @returns {ETValidate}
 	 */
-	defenseXSS : function(message){
+	defendXSS : function(message){
 		var self = this;
 
 		var elementNames = self.$form.find("input[type='text'],textarea").map(function(){
@@ -164,7 +164,7 @@ ETValidate.prototype = {
 	 * @param {List} elementNameList ["name1","name2"]
 	 * @returns {ETValidate}
 	 */
-	xssExcludeRules : function(elementNameList){
+	excludeXSSRules : function(elementNameList){
 		var self = this;
 		for(var i in elementNameList){
 			delete self.validate.rules[elementNameList[i]];

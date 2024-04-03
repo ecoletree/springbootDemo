@@ -49,14 +49,10 @@
 	ctrl.setValidation = function(){
 		var self = et.vc;
 
-		var validation = new ETValidate("#xssForm").setSubmitHandler(self.setSuccessSubmitHandler).setShowErrors(self.setErrorFunction);
+		var validation = new ETValidate("#xssForm").setSubmitHandler(self.setSuccessSubmitHandler).setShowErrors(self.setErrorFunction).defendXSS("스크립트는 기입할 수 없습니다.").excludeXSSRules(["xss_test2","xss_test3"]);
 
-		/*
-		 * rule - remove
-		 * https://jqueryvalidation.org/rules/
-		 */
-//		validation.defenseXSS(); // -> xss 체크 input,textarea (폼 룰 추가 후에 삭제할 룰만 기입)
-		validation.defenseXSS("스크립트는 기입할 수 없습니다.").xssExcludeRules(["xss_test2","xss_test3"]); // -> xss 체크 input,textarea (폼 룰 추가 후에 삭제할 룰만 기입)
+//		validation.defendXSS(); // -> xss 체크 input,textarea (폼 룰 추가 후에 삭제할 룰만 기입)
+//		validation.defendXSS("스크립트는 기입할 수 없습니다.").excludeXSSRules(["xss_test2","xss_test3"]); // -> xss 체크 input,textarea (폼 룰 추가 후에 삭제할 룰만 기입)
 		validation.validateRules("xss_test",validation.REQUIRED,"필수입니다.");
 		validation.validateRules("xss_test2",validation.REQUIRED,"필수입니다.");
 		validation.validateRules("xss_test3",validation.REQUIRED,"필수입니다.");
