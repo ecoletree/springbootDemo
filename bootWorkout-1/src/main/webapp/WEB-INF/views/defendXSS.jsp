@@ -16,11 +16,16 @@
 <ul style="list-style-type: circle; margin-left : 20px ;">
 	<li><a href="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.3/purify.js"> dom_purify 사용</a></li>
 	<br>
+	 <ul style="list-style-type: circle; margin-left : 20px ;">
 	<li>XSS validation : validationUtil.js 라이브러리에 메소드 추가, 상수 추가해서 처리 -> 공통라이브러리에서 가져옴</li>
 	<li>convertXSSFormToObject 메소드 추가 : 폼데이터에서 컨버팅할때 replace하는 식으로 처리</li>
+	<li>이스케이프 사용법 (he.js) : <a href="https://github.com/mathiasbynens/he/tree/master">https://github.com/mathiasbynens/he/tree/master</a></li>
+
 	<li>사용 라이브러리 내부 경로</li>
 	<p>/util/validationUtil.js</p>
-	<p>/dom_purify/purify.js</p>
+	<p>/xss/dom-purify.js</p>
+	<p>/xss/he.js</p>
+	 </ul>
 	</ul>
 <div></div>
 <br>
@@ -40,15 +45,25 @@
 <!-- 			</div> -->
 <!-- 		</div> -->
 		<div class="formWrap">
-			<label class="formLabel">convert<span class="require" style="color:red;">*</span></label>
+			<label class="formLabel">convert(escape)<span class="require" style="color:red;">*</span></label>
 			<div class="formInput">
 				<input type="text" name="xss_test2" >
+			</div>
+		</div>
+		<div class="formWrap">
+			<label class="formLabel">convert(escape)<span class="require" style="color:red;">*</span></label>
+			<div class="formInput">
+				<textarea name="xss_test3" rows="" cols=""></textarea>
 			</div>
 		</div>
 	</fieldset>
 </form>
 <div>
 <input id="btnSubmit" type="button" value ="DEFEND">
+			<label class="formLabel">unescape</label>
+			<div class="formInput">
+				<input type="text" name="xss_test4" >
+			</div>
 </div>
 	<div id="divResult"></div>
 </div>

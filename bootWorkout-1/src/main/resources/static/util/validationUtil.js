@@ -135,6 +135,44 @@ ETValidate.prototype = {
 		return self;
 	},
 
+	/**
+	 * 폼의 input과 textarea에 XSS 공격에 대한 방지 밸리데이션을 일괄 설정합니다.
+	 * 개별 밸리데이션 설정 이전에 설정합니다.
+	 *
+	 * @param {String} message 스크립트 기입 불가에 대한 밸리데이션 메세지
+	 * @returns {ETValidate}
+	 */
+	defenseXSS : function(message){
+		var self = this;
+
+		var elementNames = self.$form.find("input[type='text'],textarea").map(function(){
+			return $(this).attr('name');
+		}).get();
+
+		if(elementNames.length > 0){
+			for(var i in elementNames){
+				self.validateRules(elementNames[i],self.XSS,message);
+			}
+		}
+
+		return self;
+	},
+	/**
+	 * 일괄 설정된 XSS방지 밸리데이션을 개별적으로 해제할때 사용합니다.
+	 * defenseXSS()메소드에 체인으로 연결하여 사용합니다
+	 *
+	 * @param {List} elementNameList ["name1","name2"]
+	 * @returns {ETValidate}
+	 */
+	xssExcludeRules : function(elementNameList){
+		var self = this;
+		for(var i in elementNameList){
+			delete self.validate.rules[elementNameList[i]];
+		}
+		return self;
+	}
+
+
 }//prototype
 	/**
 	 * 폼 데이터를 object로 변환한다.
@@ -223,7 +261,7 @@ ETValidate.prototype = {
 			if (isReplaceEnter) {
 				value = value.replace(/(\r)*\n/g, '<br>');
 			}
-			value = value.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+			value = he.escape(value);
 			_.set(output, item.name, value);
 		}, {});
 
@@ -304,6 +342,6 @@ $.validator.addMethod("extension",function(value, element, params) {
 
 $.validator.addMethod("xss_script",function(value, element, params) {
 	var xss = DOMPurify.sanitize(value);
-	return xss.length !== 0;
+	return xss.length === value.length;
 });
 

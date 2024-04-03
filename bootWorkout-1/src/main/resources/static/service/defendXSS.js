@@ -23,29 +23,45 @@
 		var self = et.vc;
 		self.setValidation();
 		$("#btnSubmit").click(self.btnSubmitHandler);
-//		var test = DOMPurify.sanitize("test");
-//		var test = DOMPurify.sanitize('<img src="x" onerror="alert(\'XSS 공격 예제\')" />');
-//		var test = DOMPurify.text('<script>alert("XSS 공격 예제");</script>');
-//		var test = DOMPurify.sanitizeWithoutDOM('<script>alert("test!!!");</script>');
-//		console.log(test);
+
+		self.xssEscapingTest();
+
 	};
+
+	/**
+	 * he.js 사용
+	 */
+	ctrl.xssEscapingTest = function(){
+		var test = he.escape('<script>alert("test!!!");</script>');
+		var test22 = he.unescape(test);
+		console.log("he:"+test);
+		console.log("adsf:"+test22);
+	}
 
 	ctrl.btnSubmitHandler = function(){
 		var self = et.vc;
 		$("#xssForm").submit();
 	}
 
-
+	/**
+	 * xss 방어
+	 */
 	ctrl.setValidation = function(){
 		var self = et.vc;
 
-		ETValidate.addMethod("sanitize_script",function(value, element, params) {
-			var xss = DOMPurify.sanitize(value);
-			return xss.length !== 0;
-		});
-
 		var validation = new ETValidate("#xssForm").setSubmitHandler(self.setSuccessSubmitHandler).setShowErrors(self.setErrorFunction);
-		validation.validateRules("xss_test",validation.XSS,"스크립트는 기입할 수 없습니다.");
+
+		/*
+		 * rule - remove
+		 * https://jqueryvalidation.org/rules/
+		 */
+//		validation.defenseXSS(); // -> xss 체크 input,textarea (폼 룰 추가 후에 삭제할 룰만 기입)
+		validation.defenseXSS("스크립트는 기입할 수 없습니다.").xssExcludeRules(["xss_test2","xss_test3"]); // -> xss 체크 input,textarea (폼 룰 추가 후에 삭제할 룰만 기입)
+		validation.validateRules("xss_test",validation.REQUIRED,"필수입니다.");
+		validation.validateRules("xss_test2",validation.REQUIRED,"필수입니다.");
+		validation.validateRules("xss_test3",validation.REQUIRED,"필수입니다.");
+
+
 		validation.apply();
 	};
 

@@ -65,7 +65,8 @@
 <script src="${cp }/jslib/ecoletreeLibraryJS/util/excelUtil.js"></script>
 
 <script src="${cp }/util/validationUtil.js"></script>
-<script src="${cp }/dom_purify/purify.js"></script>
+<script src="${cp }/xss/dom-purify.js"></script>
+<script src="${cp }/xss/he.js"></script>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.3/purify.min.js"></script> -->
 <!-- App VIEW Controller -->
 <script src="${cp }/jslib/ecoletreeLibraryJS/common/common.js"></script>
