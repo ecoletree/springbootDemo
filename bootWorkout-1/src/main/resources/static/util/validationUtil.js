@@ -26,7 +26,7 @@ ETValidate.prototype = {
 	EMAIL : "email",
 	FOURNUMBER : "fourNumber",
 	FILE_EXTENSION : "extension",
-	XSS : "xss_script",
+	XSS : "xssScript",
 
 	init : function(formId) {
 		if (formId.charAt(0) !== "#") {
@@ -340,7 +340,7 @@ $.validator.addMethod("extension",function(value, element, params) {
     return this.optional(element) || value.match(new RegExp(".(" + params + ")$", "i"));
 });
 
-$.validator.addMethod("xss_script",function(value, element, params) {
+$.validator.addMethod("xssScript",function(value, element, params) {
 	var xss = DOMPurify.sanitize(value);
 	return xss.length === value.length;
 });
