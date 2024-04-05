@@ -53,6 +53,7 @@
 		$("#btnCheckLink").click(self.btnCheckLinkHandler);
 		$("#btnCBCEncrypt").click(self.btnCBCEncryptHandler);
 		$("#btnDefendXSS").click(self.btnDefendXSSHandler);
+		$("#btnJSModule").click(self.btnJSModuleHandler);
 //		$("#btnCBCDecrypt").click(self.btnCBCDecripttHandler);
 
 
@@ -359,12 +360,19 @@
 		new ETService().callView(self.path + "defendXSS", {});
 	}
 
-/**
+	/**
 	 * sse emitter 수동 편집 화면으로 이동
 	 */
 	ctrl.btnDeleteSseEmittersHandler = function(){
 		var self = et.vc;
 		new ETService().callView(self.path + "sseEmitterManual", {});
+	}
+	/**
+	 * sse emitter 수동 편집 화면으로 이동
+	 */
+	ctrl.btnJSModuleHandler = function(){
+		var self = et.vc;
+		new ETService().callView(self.path + "jsModule", {});
 	}
 	return ctrl;
 }));

@@ -156,6 +156,28 @@ public class MainController extends ETBaseController {
 		mav.setViewName("defendXSS");
 		return mav;
 	}
+	/** jsModule 화면
+	 * @param mav
+	 * @param params
+	 * @return
+	 */
+	@RequestMapping("/jsModule")
+	public ModelAndView jsModule(final ModelAndView mav,Map<String, Object> params) {
+
+		mav.setViewName("createJSModule");
+		return mav;
+	}
+	/** jsModule 화면
+	 * @param mav
+	 * @param params
+	 * @return
+	 */
+	@RequestMapping("/jsModuleTest")
+	public ModelAndView jsModuleTest(final ModelAndView mav,Map<String, Object> params) {
+
+		mav.setViewName("jsModuleTest");
+		return mav;
+	}
 
 
 	@RequestMapping("/loginChk")

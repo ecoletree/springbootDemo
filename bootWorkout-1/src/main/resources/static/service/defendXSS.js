@@ -25,7 +25,7 @@
 		$("#btnSubmit").click(self.btnSubmitHandler);
 
 		self.xssEscapingTest();
-
+		debugger;
 	};
 
 	/**

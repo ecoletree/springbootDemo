@@ -20,6 +20,7 @@
 <button id="btnDataTablesMerging">데이터 테이블즈 머징 --></button><br><br>
 <button id="btnDeleteSseEmitters">SSE emitter 수동 페이지</button><br><br>
 <button id="btnDefendXSS">XSS 공격 대응</button><br><br>
+<button id="btnJSModule">Javascript create module util</button><br><br>
 <!-- <button id="btnCompareDateRangePickers">데이트 피커 플러그인 비교 </button>  -->
 <br><br>
 
