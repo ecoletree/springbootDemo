@@ -14,16 +14,10 @@
 <br>
 <br>
 <div id="result1"></div>
-<!-- <div id="templete1" type="x-tmpl-mustache" class="hide"> -->
-<!-- 	<b>{{name}}</b> is babo. <br /> -->
-<!-- 	<span style="font-size:11pt;color:red">{{age}} years old.</span> -->
-<!-- </div> -->
 
 <div id="result2"></div>
 
-
-
-<div id="container">{{#peoples}}</div>
+<div id="container"></div>
 
 <br>
 <br>

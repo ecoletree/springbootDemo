@@ -28,13 +28,14 @@
   </div>
 </script>
 
-<script id="boxTemplate2" type="text/x-template">
+<div id="boxTemplate2"  type="text/x-template">
 	{{#dataSets}}
-	<div class="person-info" style="width: 400px;border: 1px solid {{color}};padding: 10px;margin-bottom: 10px;">
+	<div class="person-info" style="width: 400px;border: 1px solid {{color}}; padding: 10px;margin-bottom: 10px;" >
   		<h2>{{name}}</h2>
   		<p>성별: {{gender}}</p>
   		<p>전화번호: {{phone}}</p>
 	</div>
 	{{/dataSets}}
-</script>
+
+</div>
 
