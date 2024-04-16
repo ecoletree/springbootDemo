@@ -57,12 +57,11 @@ public class NotificationCommon {
 		sendToClient(id,SEND_DATA,data);
 	}
 
-	/**
+	/** 수동으로 종료
 	 * @param id
 	 */
 	public void expire(String id) {
 		SseEmitter emitter = emitterRepository.get(id);
-		boolean isComplete = true;
 		if(emitter != null) {
 			emitter.complete();
 		}
@@ -103,7 +102,6 @@ public class NotificationCommon {
 		SseEmitter emitter = new SseEmitter(DEFAULT_TIMEOUT);
 		// Emitter가 완료될 때(모든 데이터가 성공적으로 전송된 상태) Emitter를 삭제한다.
         emitter.onCompletion(() ->{
-
         	 emitterRepository.deleteById(id);
         });
         // Emitter가 타임아웃 되었을 때(지정된 시간동안 어떠한 이벤트도 전송되지 않았을 때) Emitter를 삭제한다.

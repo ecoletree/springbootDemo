@@ -20,7 +20,7 @@ public class AntiXssAttackDefender {
         String userInput = "asdfasfd";
 //        userInput = "<script>alert('XSS 공격 예제');</script>";
 //        userInput = "<img src='#' onerror='alert('xss공격!')'>";
-//        userInput = "<iframe src='106 097 118 097 115 099 114 105 112 116 058 097 108 101 114 116 040 039 088 083 083 032 234 179 181 234 178 169 032 236 152 136 236 160 156 039 041 059;'>";
+        userInput = "<iframe src='&#106;&#097;&#118;&#097;&#115;&#099;&#114;&#105;&#112;&#116;&#058;&#097;&#108;&#101;&#114;&#116;&#040;&#034;&#097;&#115;&#100;&#102;&#097;&#115;&#102;&#100;&#097;&#034;&#041;&#059;'></iframe>";
 
         // AntiXSS 라이브러리를 사용하여 XSS 공격 방어 : 안전한 값으로 변환
         String sanitizeddText = AntiXSShtmlSanitizer(userInput);

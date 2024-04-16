@@ -21,7 +21,8 @@ public class EmitterRepository {
 	 // 모든 Emitters를 저장하는 ConcurrentHashMap
 	private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
 //String으로 id변경
-	/**
+
+	/** onComplete()에 펑션으로 지정 - timeOut,error일때 complete() 트리거 하도록 설정.
 	 * @param id
 	 * @return
 	 */

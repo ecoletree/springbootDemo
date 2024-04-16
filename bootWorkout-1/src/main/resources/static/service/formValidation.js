@@ -22,6 +22,7 @@
 	ctrl.init = function(initData) {
 		var self = et.vc;
 		console.log("test");
+		//required 하나 추가하고 
 		
 		
 	};
