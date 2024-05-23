@@ -4,7 +4,7 @@
  * Author : kh201
  * Create Date : 2024. 4. 16.
  * File Name : MethodTimeoutControl.java
- * DESC : 메소드에 타임아웃 걸기
+ * DESC : 메소드에 타임아웃 걸기(외부 api)
 *****************************************************************/
 package com.bootWorkout.demo1.schedule;
 

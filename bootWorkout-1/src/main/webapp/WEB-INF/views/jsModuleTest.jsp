@@ -8,7 +8,8 @@
 <title>dynamic DOM - bootWorkout</title>
 <c:import url="/include.commonPlugin.sp" charEncoding="UTF-8" />
 <c:import url="/common.moduleItem.sp" charEncoding="UTF-8" />
-<script src="https://unpkg.com/mustache@latest"></script>
+<!-- <script src="https://unpkg.com/mustache@latest"></script> -->
+<script type="text/javascript" src="/mustache/mustache.js"></script>
 </head>
 <body>
 <br>
