@@ -1,0 +1,27 @@
+{
+  "mappings": {
+    "properties": {
+      "id": {
+        "type": "keyword"
+      },
+      "user": {
+        "type": "keyword"
+      },
+      "name": {
+        "type": "text"
+      },
+      "description": {
+        "type": "text"
+      },
+      "category": {
+        "type": "text"
+      },
+      "price": {
+        "type": "integer"
+      },
+      "itemImage": {
+        "type": "text"
+      }
+    }
+  }
+}
